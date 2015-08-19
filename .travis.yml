@@ -11,5 +11,9 @@ android:
     - android-22
 
     # Additional components
-    - add-on
-    - extra
+    ## Google Cloud Messaging for Android Library
+    - extra-google-gcm
+    ## Android Support Library (appcompat)
+    - extra-android-support
+    ## Android Support Repository
+    - extra-android-m2repository
