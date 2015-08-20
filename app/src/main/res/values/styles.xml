@@ -1,8 +1,17 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
+        <item name="android:background">#394689</item>
+        <item name="android:actionBarStyle">@style/HeaderBar</item>
+        <item name="actionBarStyle">@style/HeaderBar</item>
+    </style>
+
+    <style name="HeaderBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">#00014a</item>
+        <item name="colorPrimary">#00014a</item>
+        <item name="colorPrimaryDark">#00014a</item>
     </style>
 
 </resources>
