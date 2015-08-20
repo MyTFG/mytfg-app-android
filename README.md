@@ -1,27 +1,29 @@
 # MyTFG Android App
 
-Android App für [MyTFG](https://www.mytfg.de/).
+Android app for [MyTFG](https://www.mytfg.de/).
 
-Diese App soll Zugriff auf alle Funktionen der Schulplattform MyTFG inklusiv Lernräumen mit Diskussionsforen, Nachrichtenfunktion, Vertretungsplan, WLAN-Verwaltung sowie IT-Support und Helpdesk ermöglichen.
+This app will provide access to the school platform MyTFG including learning rooms, forums, messages, cover timetables, WiFi management and IT support.
 
 
 ## Status
 
-| Branch | Status |
+| branch | status |
 |--------|--------|
 | master | [![Build Status](https://travis-ci.org/MyTFG/mytfg-app-android.svg?branch=master)](https://travis-ci.org/MyTFG/mytfg-app-android) |
 | develop | [![Build Status](https://travis-ci.org/MyTFG/mytfg-app-android.svg?branch=develop)](https://travis-ci.org/MyTFG/mytfg-app-android) |
 
 
-## Mithelfen
+## [Contributing](docs/CONTRIBUTING.md)
 
-* Helfer sind herzlich willkommen, gerne auch für die Portierung auf andere Plattformen (iOS, ...)
-* Einfach das Repo forken und Pull-Requests stellen, oder noch besser uns anschreiben und Zugriff auf dieses Repo erhalten
-* Diese App ist eine native Android App und daher in Java programmiert
-* Wir halten uns an [dieses Git Branching Modell](http://nvie.com/posts/a-successful-git-branching-model/)
-* Codestyle: https://google-styleguide.googlecode.com/svn/trunk/javaguide.html
-* Scheinbar schreiben wir hier hauptsächlich auf Deutsch :wink:
-* Wir nutzen [Travis CI](https://travis-ci.org/) zur kontinuierlichen Qualitätskontrolle
+see also [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md).
+
+* Contributors are welcome
+* Fork this repository and do Pull Requests, or contact us to get write access to this repository
+* This app is an native Android app programmed in java
+* We use [this Git branching model](http://nvie.com/posts/a-successful-git-branching-model/)
+* Code style: https://google-styleguide.googlecode.com/svn/trunk/javaguide.html
+* Language: documentation and code comments in english, issues in german (?)
+* We use [Travis CI](https://travis-ci.org/) for continuous integration
 
 
 ## TODO
@@ -31,13 +33,13 @@ Diese App soll Zugriff auf alle Funktionen der Schulplattform MyTFG inklusiv Ler
 - [ ] Schöne und legale Icons selber machen (lassen) oder suchen
 
 
-## App herunterladen
+## How to get the app
 
-Sobald die App stabil läuft werden wir hier eine Anleitung zur Installation einfügen.
+As soon as the app is stable we will provide installation instructions.
 
 
-## Copyright / Lizenz
+## Copyright / License
 
 &copy; 2015 Lennart Bader, Raphael Lehmann, Leonard Rapp
 
-Siehe [LICENSE](LICENSE) Datei zu Lizenzrechten und Einschränkungen (GPL v3).
+See the [LICENSE](LICENSE) file for license rights and limitations (GPL v3).
