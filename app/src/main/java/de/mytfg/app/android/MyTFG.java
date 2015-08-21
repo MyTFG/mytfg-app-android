@@ -7,9 +7,9 @@ import org.acra.*;
 import org.acra.annotation.*;
 
 @ReportsCrashes(formKey = "", // will not be used
-        mailTo = "helpdesk@mytfg.de",
-        mode = ReportingInteractionMode.TOAST
-        //resToastText = // text: "MyTFG crashed, please send bug report"
+        mailTo = "app@mytfg.de",
+        mode = ReportingInteractionMode.TOAST,
+        resToastText = R.string.crash_toast
 )
 
 /**
@@ -20,6 +20,10 @@ public class MyTFG extends Application {
 
     public void onCreate(){
         super.onCreate();
+
+        // The following line triggers the initialization of ACRA
+        ACRA.init(this);
+
         MyTFG.context = getApplicationContext();
     }
 
