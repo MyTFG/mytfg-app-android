@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -19,7 +20,8 @@ public class Navigation {
         START,
         LOGIN,
         SETTINGS,
-        TERMINAL
+        TERMINAL,
+        TERMINAL_TOPIC
     }
 
     private Context context;
@@ -35,7 +37,10 @@ public class Navigation {
         categories = new LinkedList<>();
 
         NavigationCategory mainCat = new NavigationCategory("Hauptkategorie");
+        NavigationCategory hiddenCat = new NavigationCategory("Hidden Kategorie", true);
         categories.add(mainCat);
+        categories.add(hiddenCat);
+
 
         NavigationItem start = new StartItem(this);
         NavigationItem login = new LoginItem(this);
@@ -46,6 +51,8 @@ public class Navigation {
         mainCat.addItem(login);
         mainCat.addItem(terminal);
         mainCat.addItem(settings);
+
+        //hiddenCat.addItem(settings);
     }
 
     protected Context getContext() {
@@ -121,6 +128,15 @@ public class Navigation {
      * @param item The name of the Navigation Item.
      */
     public void navigate(Navigation.ItemNames item) {
+        navigate(item, new HashMap<String, String>());
+    }
+
+    /**
+     * Navigates to a specified NavigationItem / Fragment.
+     * @param item The name of the Navigation Item.
+     * @param params parameters
+     */
+    public void navigate(Navigation.ItemNames item, Map<String, String> params) {
         LinkedList<NavigationItem> items = getItems(true);
 
         int position = 0;
@@ -130,8 +146,14 @@ public class Navigation {
                 break;
             }
         }
-
-        MainActivity.mNavigationDrawerFragment.selectItem(position);
+        if (getItems(false).size() > position) {
+            MainActivity.mNavigationDrawerFragment.selectItem(position);
+        } else {
+            FragmentManager fragmentManager = ((MainActivity)context).getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, items.get(position).load())
+                    .commit();
+        }
     }
 
 

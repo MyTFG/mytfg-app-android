@@ -24,9 +24,11 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.R;
 import de.mytfg.app.android.api.ApiParams;
 import de.mytfg.app.android.api.MytfgApi;
+import de.mytfg.app.android.slidemenu.items.Navigation;
 
 public class StartFragment extends Fragment {
     View startview;
@@ -187,6 +189,12 @@ public class StartFragment extends Fragment {
             NotificationViewHolder(View itemView) {
                 super(itemView);
                 notificationView = (CardView)itemView.findViewById(R.id.notificationView);
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        MainActivity.navigation.navigate(Navigation.ItemNames.SETTINGS);
+                    }
+                });
                 typeIcon = (ImageView)itemView.findViewById(R.id.type_icon);
                 titleText = (TextView)itemView.findViewById(R.id.title_text);
                 textText = (TextView)itemView.findViewById(R.id.text_text);

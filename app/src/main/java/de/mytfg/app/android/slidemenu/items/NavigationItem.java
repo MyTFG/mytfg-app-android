@@ -3,6 +3,8 @@ package de.mytfg.app.android.slidemenu.items;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 
+import java.util.Map;
+
 import de.mytfg.app.android.R;
 import de.mytfg.app.android.slidemenu.MainActivity;
 
@@ -15,6 +17,7 @@ public abstract class NavigationItem {
     protected Context context;
     protected Navigation navigation;
     protected Navigation.ItemNames item;
+    protected Map<String, String> params;
 
     public NavigationItem(Navigation navigation) {
         this.navigation = navigation;
@@ -22,6 +25,10 @@ public abstract class NavigationItem {
     }
 
     public abstract Fragment load();
+    public Fragment load(Map<String, String> params) {
+        this.params = params;
+        return this.load();
+    }
 
     protected void stdLoad() {
         // ((MainActivity)context).getSupportActionBar().setDisplayShowHomeEnabled(true);
