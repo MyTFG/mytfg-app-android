@@ -8,6 +8,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/blue_accent"
         android:padding="16dp"
         >
 
@@ -26,7 +27,7 @@
             android:id="@+id/title_text"
             android:layout_toRightOf="@+id/type_icon"
             android:layout_alignParentTop="true"
-            android:textSize="30sp"
+            android:textSize="15dp"
             />
 
         <TextView
@@ -35,6 +36,7 @@
             android:id="@+id/text_text"
             android:layout_toRightOf="@+id/type_icon"
             android:layout_below="@+id/title_text"
+            android:textSize="10dp"
             />
 
         <ImageView

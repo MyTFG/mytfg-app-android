@@ -73,9 +73,8 @@ public class StartFragment extends Fragment {
                 Toast toast;
                 if (success) {
                     try {
-                        Log.d("asd", resultStr);
                         displayNotifications(result.getJSONArray("notifications"));
-                        toast = Toast.makeText(startview.getContext(), resultStr, Toast.LENGTH_LONG);
+                        return;
                     } catch (JSONException e) {
                         e.printStackTrace();
                         toast = Toast.makeText(startview.getContext(), "Error parsing JSON", Toast.LENGTH_LONG);
@@ -105,7 +104,7 @@ public class StartFragment extends Fragment {
             notifications.add(new Notification(
                             obj.getString("title"),
                             obj.getString("description"),
-                            Boolean.parseBoolean(obj.getString("acknowledged")),
+                            obj.getString("acknowledged").equals("1"),
                             Long.parseLong(obj.getString("timestamp")),
                             Long.parseLong(obj.getString("id")),
                             obj.getString("type"),
@@ -166,8 +165,11 @@ public class StartFragment extends Fragment {
         public void onBindViewHolder(NotificationViewHolder notificationViewHolder, int i) {
             notificationViewHolder.typeIcon.setImageResource(notifications.get(i).typeIconId);
             notificationViewHolder.titleText.setText(notifications.get(i).title);
-            notificationViewHolder.textText.setText(notifications.get(i).text);
+            notificationViewHolder.textText.setText(notifications.get(i).description);
             notificationViewHolder.statusIcon.setImageResource(notifications.get(i).statusIconId);
+            if (!notifications.get(i).acknowledged) {
+                notificationViewHolder.titleText.setTextColor(getResources().getColor(R.color.orange_accent));
+            }
         }
 
         @Override
