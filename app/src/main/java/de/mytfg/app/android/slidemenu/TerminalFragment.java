@@ -64,7 +64,7 @@ public class TerminalFragment extends Fragment {
         params.addParam("mytfg_api_login_user", mytfg_login_user);
         params.addParam("mytfg_api_login_token", mytfg_login_token);
         params.addParam("mytfg_api_login_device", mytfg_login_device);
-        params.addParam("group", "false");
+        params.addParam("all", "false");
         MytfgApi.ApiCallback callback = new MytfgApi.ApiCallback() {
             @Override
             public void callback(boolean success, JSONObject result, int responseCode, String resultStr) {
@@ -170,11 +170,13 @@ public class TerminalFragment extends Fragment {
                 try {
                     if (terminalEntries.get(i).workers.getString(j).equals(MyTFG.getUserId() + "")) {
                         terminalViewHolder.titleText.setTextColor(getResources().getColor(R.color.orange_accent));
+                        return;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
+            terminalViewHolder.titleText.setTextColor(getResources().getColor(R.color.white));
         }
 
         @Override
