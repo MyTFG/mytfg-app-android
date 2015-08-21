@@ -14,4 +14,8 @@
     <string name="action_settings">Settings</string>
 
     <string name="sharedpref_settings">sharedpref_settings</string>
+    <string name="settings_login_username">settings_login_username</string>
+    <string name="settings_login_userid">settings_login_userid</string>
+    <string name="settings_login_token">settings_login_token</string>
+    <string name="settings_login_timeout">settings_login_timeout</string>
 </resources>

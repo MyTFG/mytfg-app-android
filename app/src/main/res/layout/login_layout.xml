@@ -23,7 +23,8 @@
             android:layout_alignLeft="@+id/edit_password"
             android:layout_alignStart="@+id/edit_password"
             android:layout_alignRight="@+id/edit_password"
-            android:layout_alignEnd="@+id/edit_password" />
+            android:layout_alignEnd="@+id/edit_password"
+            android:singleLine="true" />
 
         <EditText
             android:layout_width="fill_parent"

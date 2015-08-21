@@ -12,6 +12,9 @@
         <item name="android:textColorHint">#00014a</item>
         <item name="android:textColorHighlight">#00014a</item>
         <item name="android:textCursorDrawable">@null</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">20dp</item>
+
         <item name="colorAccent">#FF7400</item>
         <item name="android:buttonStyle">@style/Widget.AppTheme.Button</item>
 
