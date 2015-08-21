@@ -3,6 +3,15 @@ package de.mytfg.app.android;
 import android.app.Application;
 import android.content.Context;
 
+import org.acra.*;
+import org.acra.annotation.*;
+
+@ReportsCrashes(formKey = "", // will not be used
+        mailTo = "helpdesk@mytfg.de",
+        mode = ReportingInteractionMode.TOAST
+        //resToastText = // text: "MyTFG crashed, please send bug report"
+)
+
 /**
  * Main Application
  */
