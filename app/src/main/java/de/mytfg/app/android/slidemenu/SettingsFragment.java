@@ -17,6 +17,7 @@ import java.sql.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.R;
 
 public class SettingsFragment extends Fragment {
@@ -29,8 +30,6 @@ public class SettingsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         settingsview = inflater.inflate(R.layout.settings_layout, container, false);
-        preferences = settingsview.getContext().getSharedPreferences(getString(R.string.sharedpref_settings), Context.MODE_MULTI_PROCESS);
-        prefEditor = preferences.edit();
 
         // Display Settings
         mainTable = (TableLayout) settingsview.findViewById(R.id.settings_table);
@@ -38,21 +37,21 @@ public class SettingsFragment extends Fragment {
         LinkedHashMap<String, String> rows = new LinkedHashMap<>();
 
         Long currentTimestamp = System.currentTimeMillis();
-        long tokenTimeout = preferences.getLong(getString(R.string.settings_login_timeout), 0) * 1000;
+        long tokenTimeout = MyTFG.getTokenTimeout();
         Date timeout = new Date(tokenTimeout);
         Date now = new Date(System.currentTimeMillis());
 
-        if (currentTimestamp < tokenTimeout) {
+        if (MyTFG.isLoggedIn()) {
             rows.put("Login Status", "Authentifiziert");
         } else {
             rows.put("Login Status", "Nicht authentifiziert / Abgelaufen");
         }
-        rows.put("Nutzername", preferences.getString(getString(R.string.settings_login_username), ""));
-        rows.put("Token", preferences.getString(getString(R.string.settings_login_token), ""));
+        rows.put("Nutzername",MyTFG.getUsername());
+        rows.put("Token", MyTFG.getToken());
         rows.put("TokenTimeout", timeout.toString());
         rows.put("Systemzeit", now.toString());
         rows.put("Geräte ID", Settings.Secure.getString(settingsview.getContext().getContentResolver(), Settings.Secure.ANDROID_ID));
-        rows.put("Nutzer ID", "" + preferences.getInt(getString(R.string.settings_login_userid), 0));
+        rows.put("Nutzer ID", "" + MyTFG.getUserId());
 
         for (Map.Entry<String, String> entry : rows.entrySet()) {
             TableRow tr = new TableRow(settingsview.getContext());

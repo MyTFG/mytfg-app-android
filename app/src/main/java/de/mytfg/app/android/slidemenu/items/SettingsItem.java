@@ -20,6 +20,7 @@ public class SettingsItem extends NavigationItem {
 
     @Override
     public Fragment load() {
+        stdLoad();
         ((MainActivity)context).getSupportActionBar().setTitle(this.title);
         return new SettingsFragment();
     }

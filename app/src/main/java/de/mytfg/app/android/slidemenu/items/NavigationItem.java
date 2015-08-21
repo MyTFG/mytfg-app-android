@@ -3,6 +3,9 @@ package de.mytfg.app.android.slidemenu.items;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 
+import de.mytfg.app.android.R;
+import de.mytfg.app.android.slidemenu.MainActivity;
+
 /**
  * Abstract class for Items in the Slide Menu.
  */
@@ -19,6 +22,11 @@ public abstract class NavigationItem {
     }
 
     public abstract Fragment load();
+
+    protected void stdLoad() {
+        // ((MainActivity)context).getSupportActionBar().setDisplayShowHomeEnabled(true);
+        // ((MainActivity)context).getSupportActionBar().setIcon(context.getResources().getDrawable(R.mipmap.ic_launcher));
+    }
 
     /**
      * Returns the Title of the NavigationItem.

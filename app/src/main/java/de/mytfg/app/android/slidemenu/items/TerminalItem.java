@@ -6,16 +6,15 @@ import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.R;
 import de.mytfg.app.android.slidemenu.LoginFragment;
 import de.mytfg.app.android.slidemenu.MainActivity;
-import de.mytfg.app.android.slidemenu.StartFragment;
 
 /**
  * Login Navigation Item loader
  */
-public class StartItem extends NavigationItem {
-    public StartItem(Navigation navigation) {
+public class TerminalItem extends NavigationItem {
+    public TerminalItem(Navigation navigation) {
         super(navigation);
-        this.title = MyTFG.getAppContext().getString(R.string.title_start);
-        this.item = Navigation.ItemNames.START;
+        this.title = MyTFG.getAppContext().getString(R.string.title_terminal);
+        this.item = Navigation.ItemNames.TERMINAL;
     }
 
 
@@ -23,6 +22,7 @@ public class StartItem extends NavigationItem {
     public Fragment load() {
         stdLoad();
         ((MainActivity)context).getSupportActionBar().setTitle(this.title);
-        return new StartFragment();
+        // TODO: Change to TerminalFragment
+        return new LoginFragment();
     }
 }

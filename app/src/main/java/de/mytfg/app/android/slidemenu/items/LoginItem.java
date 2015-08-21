@@ -21,6 +21,7 @@ public class LoginItem extends NavigationItem {
 
     @Override
     public Fragment load() {
+        stdLoad();
         ((MainActivity)context).getSupportActionBar().setTitle(this.title);
         return new LoginFragment();
     }

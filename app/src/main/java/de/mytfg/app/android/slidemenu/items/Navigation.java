@@ -40,9 +40,11 @@ public class Navigation {
         NavigationItem start = new StartItem(this);
         NavigationItem login = new LoginItem(this);
         NavigationItem settings = new SettingsItem(this);
+        NavigationItem terminal = new TerminalItem(this);
 
         mainCat.addItem(start);
         mainCat.addItem(login);
+        mainCat.addItem(terminal);
         mainCat.addItem(settings);
     }
 

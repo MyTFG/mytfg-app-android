@@ -16,6 +16,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.R;
 import de.mytfg.app.android.api.ApiParams;
 import de.mytfg.app.android.api.MytfgApi;
@@ -85,6 +86,7 @@ public class LoginFragment extends Fragment {
                                 prefEditor.putInt(getString(R.string.settings_login_userid), userid);
                                 prefEditor.putLong(getString(R.string.settings_login_timeout), timeout);
                                 prefEditor.commit();
+                                MyTFG.refreshPrefs();
                             } catch (JSONException ex) {
                                 toast = Toast.makeText(getView().getContext(), "Login erfolgreich, aber Fehler beim Parsen: " + ex.getMessage() , Toast.LENGTH_LONG);
                             } catch (Exception ex) {

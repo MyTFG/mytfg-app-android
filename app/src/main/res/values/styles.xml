@@ -44,6 +44,7 @@
         <item name="actionMenuTextColor">?android:textColorPrimary</item>
         <!-- action menu item icon color - only applies to appcompat-v7 icons :( -->
         <item name="colorControlNormal">?android:textColorPrimary</item>
+        <item name="android:homeAsUpIndicator">@mipmap/ic_launcher</item>
     </style>
 
     <style name="ThemeOverlay.AppTheme.PopupMenu" parent="ThemeOverlay.AppCompat.Dark">
