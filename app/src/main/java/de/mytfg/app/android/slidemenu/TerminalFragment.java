@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -164,6 +165,18 @@ public class TerminalFragment extends Fragment {
                 terminalViewHolder.editedDateText.setText(getString(R.string.terminal_edited) + ": " + MyTFG.getDate(terminalEntries.get(i).edited));
             }
 
+            final TerminalEntry entry = terminalEntries.get(i);
+
+            terminalViewHolder.terminalView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle args = new Bundle();
+                    args.putLong("topic", entry.id);
+                    args.putString("title", entry.title);
+                    MainActivity.navigation.navigate(Navigation.ItemNames.TERMINAL_TOPIC, args);
+                }
+            });
+
             terminalViewHolder.flagsText.setText(terminalEntries.get(i).flags.toString());
 
             for (int j = 0; j < terminalEntries.get(i).workers.length(); j++) {
@@ -185,7 +198,7 @@ public class TerminalFragment extends Fragment {
         }
 
         public class TerminalViewHolder extends RecyclerView.ViewHolder {
-            CardView notificationView;
+            CardView terminalView;
             TextView titleText;
             TextView authorDateText;
             TextView editedDateText;
@@ -193,7 +206,7 @@ public class TerminalFragment extends Fragment {
 
             TerminalViewHolder(View itemView) {
                 super(itemView);
-                notificationView = (CardView)itemView.findViewById(R.id.notificationView);
+                terminalView = (CardView)itemView.findViewById(R.id.terminalView);
                 titleText = (TextView)itemView.findViewById(R.id.title_text);
                 authorDateText = (TextView)itemView.findViewById(R.id.author_date_text);
                 editedDateText = (TextView)itemView.findViewById(R.id.edited_date_text);

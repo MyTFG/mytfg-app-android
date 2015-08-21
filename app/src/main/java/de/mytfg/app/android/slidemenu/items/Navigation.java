@@ -1,6 +1,7 @@
 package de.mytfg.app.android.slidemenu.items;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
@@ -47,12 +48,14 @@ public class Navigation {
         NavigationItem settings = new SettingsItem(this);
         NavigationItem terminal = new TerminalItem(this);
 
+        NavigationItem terminaltopic = new TerminalTopicItem(this);
+
         mainCat.addItem(start);
         mainCat.addItem(login);
         mainCat.addItem(terminal);
         mainCat.addItem(settings);
 
-        //hiddenCat.addItem(settings);
+        hiddenCat.addItem(terminaltopic);
     }
 
     protected Context getContext() {
@@ -111,12 +114,13 @@ public class Navigation {
     /**
      * Returns a List of Navigation Items.
      * @param hidden Specifies if hidden Items (not displayed in Navigation) should be returned.
-     * @return
+     * @return List of Items.
      */
     public LinkedList<NavigationItem> getItems(boolean hidden) {
         LinkedList<NavigationItem> items = new LinkedList<>();
 
         for (NavigationCategory category : categories) {
+            if (hidden || !category.isHidden())
             items.addAll(category.getItems());
         }
 
@@ -128,15 +132,15 @@ public class Navigation {
      * @param item The name of the Navigation Item.
      */
     public void navigate(Navigation.ItemNames item) {
-        navigate(item, new HashMap<String, String>());
+        navigate(item, new Bundle());
     }
 
     /**
      * Navigates to a specified NavigationItem / Fragment.
      * @param item The name of the Navigation Item.
-     * @param params parameters
+     * @param args parameters
      */
-    public void navigate(Navigation.ItemNames item, Map<String, String> params) {
+    public void navigate(Navigation.ItemNames item, Bundle args) {
         LinkedList<NavigationItem> items = getItems(true);
 
         int position = 0;
@@ -146,13 +150,23 @@ public class Navigation {
                 break;
             }
         }
-        if (getItems(false).size() > position) {
-            MainActivity.mNavigationDrawerFragment.selectItem(position);
-        } else {
+
+        if (items.get(position).isHidden) {
             FragmentManager fragmentManager = ((MainActivity)context).getSupportFragmentManager();
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, items.get(position).load())
+                    .replace(R.id.container, items.get(position).load(args))
                     .commit();
+        } else {
+            // Is in navigation, find navigation pos.
+            items = getItems(false);
+            position = 0;
+            for (int i = 0; i < items.size(); i++) {
+                if (items.get(i).isItem(item)) {
+                    position = i;
+                    break;
+                }
+            }
+            MainActivity.mNavigationDrawerFragment.selectItem(position);
         }
     }
 

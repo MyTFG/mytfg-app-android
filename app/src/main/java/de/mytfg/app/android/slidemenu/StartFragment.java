@@ -172,6 +172,13 @@ public class StartFragment extends Fragment {
             if (!notifications.get(i).acknowledged) {
                 notificationViewHolder.titleText.setTextColor(getResources().getColor(R.color.orange_accent));
             }
+
+            notificationViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MainActivity.navigation.navigate(Navigation.ItemNames.SETTINGS);
+                }
+            });
         }
 
         @Override
@@ -189,12 +196,6 @@ public class StartFragment extends Fragment {
             NotificationViewHolder(View itemView) {
                 super(itemView);
                 notificationView = (CardView)itemView.findViewById(R.id.notificationView);
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        MainActivity.navigation.navigate(Navigation.ItemNames.SETTINGS);
-                    }
-                });
                 typeIcon = (ImageView)itemView.findViewById(R.id.type_icon);
                 titleText = (TextView)itemView.findViewById(R.id.title_text);
                 textText = (TextView)itemView.findViewById(R.id.text_text);

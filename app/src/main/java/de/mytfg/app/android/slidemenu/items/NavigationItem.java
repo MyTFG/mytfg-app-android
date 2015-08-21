@@ -2,6 +2,8 @@ package de.mytfg.app.android.slidemenu.items;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
+import android.os.Bundle;
+import android.util.Log;
 
 import java.util.Map;
 
@@ -17,16 +19,19 @@ public abstract class NavigationItem {
     protected Context context;
     protected Navigation navigation;
     protected Navigation.ItemNames item;
-    protected Map<String, String> params;
+    protected Bundle args;
+    protected boolean isHidden = false;
 
     public NavigationItem(Navigation navigation) {
+        this.args = new Bundle();
         this.navigation = navigation;
         this.context = navigation.getContext();
     }
 
     public abstract Fragment load();
-    public Fragment load(Map<String, String> params) {
-        this.params = params;
+
+    public Fragment load(Bundle args) {
+        this.args = args;
         return this.load();
     }
 
