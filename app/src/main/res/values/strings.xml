@@ -1,10 +1,13 @@
 <resources>
     <string name="app_name">MyTFG</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">MyTFG</string>
 
-    <string name="title_section1">Start</string>
-    <string name="title_section2">Login</string>
-    <string name="title_section3">Settings</string>
+    <string name="title_start">Start</string>
+    <string name="title_login">Login</string>
+    <string name="title_settings">Einstellungen</string>
+    <string name="title_terminal">Supportcenter</string>
+    <string name="title_info">Info</string>
+    <string name="title_messages">Nachrichten</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

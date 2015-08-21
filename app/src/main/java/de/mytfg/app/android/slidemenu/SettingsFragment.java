@@ -13,10 +13,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import java.security.Timestamp;
 import java.sql.Date;
-import java.sql.Time;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 

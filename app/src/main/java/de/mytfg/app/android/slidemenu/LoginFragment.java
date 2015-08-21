@@ -19,6 +19,7 @@ import org.json.JSONObject;
 import de.mytfg.app.android.R;
 import de.mytfg.app.android.api.ApiParams;
 import de.mytfg.app.android.api.MytfgApi;
+import de.mytfg.app.android.slidemenu.items.Navigation;
 
 public class LoginFragment extends Fragment {
     View loginview;
@@ -32,7 +33,18 @@ public class LoginFragment extends Fragment {
         preferences = loginview.getContext().getSharedPreferences(getString(R.string.sharedpref_settings), Context.MODE_MULTI_PROCESS);
         prefEditor = preferences.edit();
 
+        Long currentTimestamp = System.currentTimeMillis();
+        long tokenTimeout = preferences.getLong(getString(R.string.settings_login_timeout), 0) * 1000;
+
+        if (currentTimestamp < tokenTimeout) {
+            // Already logged in
+            MainActivity.navigation.navigate(Navigation.ItemNames.START);
+            return null;
+        }
+
         Button loginButton = (Button) loginview.findViewById(R.id.button_dologin);
+
+        ((EditText)loginview.findViewById(R.id.edit_username)).setText(preferences.getString(getString(R.string.settings_login_username), ""));
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
