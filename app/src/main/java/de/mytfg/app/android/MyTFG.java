@@ -3,6 +3,7 @@ package de.mytfg.app.android;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.provider.Settings;
 import android.text.format.DateFormat;
 
 import java.util.Calendar;
@@ -46,6 +47,10 @@ public class MyTFG extends Application {
 
     public static int getUserId() {
         return login_userId;
+    }
+
+    public static String getDeviceId() {
+        return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
     public static String getDate(long timestamp) {

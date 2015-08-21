@@ -1,15 +1,11 @@
 package de.mytfg.app.android.slidemenu;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,17 +17,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
+import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.R;
 import de.mytfg.app.android.api.ApiParams;
 import de.mytfg.app.android.api.MytfgApi;
+import de.mytfg.app.android.slidemenu.items.Navigation;
 
 public class TerminalFragment extends Fragment {
     View terminalview;
-    SharedPreferences preferences;
     private String mytfg_login_user;
     private String mytfg_login_token;
     private String mytfg_login_device;
@@ -42,12 +37,15 @@ public class TerminalFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         terminalview = inflater.inflate(R.layout.terminal_layout, container, false);
 
-        preferences = terminalview.getContext().getSharedPreferences(getString(R.string.sharedpref_settings), Context.MODE_MULTI_PROCESS);
+        if (!MyTFG.isLoggedIn()) {
+            MainActivity.navigation.navigate(Navigation.ItemNames.LOGIN);
+            return null;
+        }
 
         // user, token and device id for MytfgApi calls
-        mytfg_login_user = preferences.getString(getString(R.string.settings_login_username), "");
-        mytfg_login_token = preferences.getString(getString(R.string.settings_login_token), "");
-        mytfg_login_device = Settings.Secure.getString(terminalview.getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        mytfg_login_user = MyTFG.getUsername();
+        mytfg_login_token = MyTFG.getToken();
+        mytfg_login_device = MyTFG.getDeviceId();
 
         // terminalList displays terminalEntries
         terminalList = (RecyclerView) terminalview.findViewById(R.id.terminalList);
@@ -73,7 +71,7 @@ public class TerminalFragment extends Fragment {
                 Toast toast;
                 if (success) {
                     try {
-                        displayTerminalEntries(result.getJSONArray("terminalEntries"));
+                        displayTerminalEntries(result.getJSONArray("topics"));
                         return;
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -104,7 +102,7 @@ public class TerminalFragment extends Fragment {
                             Long.parseLong(obj.getString("created")),
                             Long.parseLong(obj.getString("edited")),
                             Long.parseLong(obj.getString("id")),
-                            obj.getJSONObject("workers"),
+                            obj.getJSONArray("workers"),
                             Long.parseLong(obj.getString("code")))
             );
         }
@@ -119,11 +117,11 @@ public class TerminalFragment extends Fragment {
         long created;
         long edited;
         long id;
-        JSONObject workers;
+        JSONArray workers;
         long code;
 
         TerminalEntry(String title, String author, JSONArray flags, long created,
-                      long edited, long id, JSONObject workers, long code) {
+                      long edited, long id, JSONArray workers, long code) {
             this.title = title;
             this.author = author;
             this.flags = flags;
@@ -159,16 +157,23 @@ public class TerminalFragment extends Fragment {
             String title = "#" + terminalEntries.get(i).id + " - " + terminalEntries.get(i).title;
             terminalViewHolder.titleText.setText(title);
 
-            String authorDateText = getString(R.string.terminal_created) + getDate(terminalEntries.get(i).created) + getString(R.string.terminal_from) + terminalEntries.get(i).author;
-            if (terminalEntries.get(i).created != terminalEntries.get(i).edited) {
-                authorDateText += " - " + getString(R.string.terminal_edited) + ": " + getDate(terminalEntries.get(i).edited);
-            }
+            String authorDateText = getString(R.string.terminal_created) + " " + MyTFG.getDate(terminalEntries.get(i).created)  + " " + getString(R.string.terminal_from) + " " + terminalEntries.get(i).author;
             terminalViewHolder.authorDateText.setText(authorDateText);
+
+            if (terminalEntries.get(i).created != terminalEntries.get(i).edited) {
+                terminalViewHolder.editedDateText.setText(getString(R.string.terminal_edited) + ": " + MyTFG.getDate(terminalEntries.get(i).edited));
+            }
 
             terminalViewHolder.flagsText.setText(terminalEntries.get(i).flags.toString());
 
-            if (!terminalEntries.get(i).workers.has(mytfg_login_user)) {
-                terminalViewHolder.titleText.setTextColor(getResources().getColor(R.color.orange_accent));
+            for (int j = 0; j < terminalEntries.get(i).workers.length(); j++) {
+                try {
+                    if (terminalEntries.get(i).workers.getString(j).equals(MyTFG.getUserId() + "")) {
+                        terminalViewHolder.titleText.setTextColor(getResources().getColor(R.color.orange_accent));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -181,6 +186,7 @@ public class TerminalFragment extends Fragment {
             CardView notificationView;
             TextView titleText;
             TextView authorDateText;
+            TextView editedDateText;
             TextView flagsText;
 
             TerminalViewHolder(View itemView) {
@@ -188,14 +194,9 @@ public class TerminalFragment extends Fragment {
                 notificationView = (CardView)itemView.findViewById(R.id.notificationView);
                 titleText = (TextView)itemView.findViewById(R.id.title_text);
                 authorDateText = (TextView)itemView.findViewById(R.id.author_date_text);
+                editedDateText = (TextView)itemView.findViewById(R.id.edited_date_text);
                 flagsText = (TextView)itemView.findViewById(R.id.flags_text);
             }
         }
-    }
-
-    private String getDate(long timestamp) {
-        Calendar calendar = Calendar.getInstance(Locale.ENGLISH);
-        calendar.setTimeInMillis(timestamp * 1000);
-        return DateFormat.format("dd. MM. yyyy, HH:mm", calendar).toString() + "h";
     }
 }

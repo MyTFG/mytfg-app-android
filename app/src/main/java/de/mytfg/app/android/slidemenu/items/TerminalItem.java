@@ -6,6 +6,7 @@ import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.R;
 import de.mytfg.app.android.slidemenu.LoginFragment;
 import de.mytfg.app.android.slidemenu.MainActivity;
+import de.mytfg.app.android.slidemenu.TerminalFragment;
 
 /**
  * Login Navigation Item loader
@@ -22,7 +23,6 @@ public class TerminalItem extends NavigationItem {
     public Fragment load() {
         stdLoad();
         ((MainActivity)context).getSupportActionBar().setTitle(this.title);
-        // TODO: Change to TerminalFragment
-        return new LoginFragment();
+        return new TerminalFragment();
     }
 }
