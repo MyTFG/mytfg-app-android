@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:rowCount="3"
+        android:columnCount="1"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_centerInParent="true">
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/edit_username"
+            android:hint="Nutzername"
+            android:layout_centerVertical="true"
+            android:layout_alignLeft="@+id/edit_password"
+            android:layout_alignStart="@+id/edit_password"
+            android:layout_alignRight="@+id/edit_password"
+            android:layout_alignEnd="@+id/edit_password"
+            android:singleLine="true" />
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/edit_password"
+            android:layout_below="@+id/edit_username"
+            android:layout_centerHorizontal="true"
+            android:hint="Passwort" />
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Login"
+            android:id="@+id/button_dologin"
+            android:layout_below="@+id/edit_password"
+            android:layout_alignLeft="@+id/edit_password"
+            android:layout_alignStart="@+id/edit_password"
+            android:layout_alignRight="@+id/edit_password"
+            android:layout_alignEnd="@+id/edit_password"/>
+    </GridLayout>
+
+</RelativeLayout>
