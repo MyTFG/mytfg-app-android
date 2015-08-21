@@ -5,9 +5,15 @@ import android.content.Context;
 
 import org.acra.*;
 import org.acra.annotation.*;
+import org.acra.sender.HttpSender;
 
-@ReportsCrashes(formKey = "", // will not be used
-        mailTo = "app@mytfg.de",
+@ReportsCrashes(
+        httpMethod = HttpSender.Method.PUT,
+        reportType = HttpSender.Type.JSON,
+        formUri = "https://acra.mytfg.de/acra-mytfg_app_android/_design/acra-storage/_update/report",
+        formUriBasicAuthLogin = "mytfg_android",
+        formUriBasicAuthPassword = "xP3RvRi+elw9rAXWqMKsGUxOcD4=",
+
         mode = ReportingInteractionMode.TOAST,
         resToastText = R.string.crash_toast
 )

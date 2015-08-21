@@ -2,7 +2,7 @@
     <string name="app_name">MyTFG</string>
     <string name="title_activity_main">MyTFG</string>
 
-    <string name="crash_toast">MyTFG crashed, please send bug report</string>
+    <string name="crash_toast">Leider ist die MyTFG App abgestürzt, ein Absturzbericht wird gesendet</string>
 
     <string name="title_start">Start</string>
     <string name="title_login">Login</string>
