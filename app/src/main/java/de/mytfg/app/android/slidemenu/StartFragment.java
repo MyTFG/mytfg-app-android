@@ -173,10 +173,30 @@ public class StartFragment extends Fragment {
                 notificationViewHolder.titleText.setTextColor(getResources().getColor(R.color.orange_accent));
             }
 
+            final Notification notify = notifications.get(i);
+
             notificationViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MainActivity.navigation.navigate(Navigation.ItemNames.SETTINGS);
+                    switch (notify.type) {
+                        case "terminal":
+                            String[] grouper = notify.grouper.split("-");
+                            if (grouper.length == 3 && grouper[0].equals("terminal") && grouper[1].equals("topic")) {
+                                long topicId = Long.parseLong(grouper[2]);
+                                Bundle args = new Bundle();
+                                args.putLong("topic", topicId);
+                                args.putString("title", "Notification to topic " + topicId);
+                                MainActivity.navigation.navigate(Navigation.ItemNames.TERMINAL_TOPIC, args);
+                            } else {
+                                Toast toast = Toast.makeText(MyTFG.getAppContext(), "Unknown Grouper", Toast.LENGTH_LONG);
+                                toast.show();
+                            }
+                            break;
+                        default:
+                            Toast toast = Toast.makeText(MyTFG.getAppContext(), "Not implemented yet", Toast.LENGTH_LONG);
+                            toast.show();
+                            break;
+                    }
                 }
             });
         }
