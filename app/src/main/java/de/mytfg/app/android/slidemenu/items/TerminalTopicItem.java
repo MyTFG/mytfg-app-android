@@ -24,7 +24,8 @@ public class TerminalTopicItem extends NavigationItem {
         stdLoad();
         ((MainActivity)context).getSupportActionBar().setTitle(this.args.getString("title", this.title));
         TerminalTopicFragment frag = new TerminalTopicFragment();
-        if (frag.initialize(args)) {
+
+        if (frag.setArgs(args)) {
             return frag;
         } else {
             return null;

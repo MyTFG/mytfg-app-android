@@ -1,6 +1,7 @@
 package de.mytfg.app.android.slidemenu;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -31,10 +32,13 @@ public class MainActivity extends AppCompatActivity
      */
     private CharSequence mTitle;
     public static Navigation navigation;
+    public static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        context = this;
 
         navigation = new Navigation(this);
 
