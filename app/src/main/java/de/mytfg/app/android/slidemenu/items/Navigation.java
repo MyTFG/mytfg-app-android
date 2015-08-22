@@ -235,7 +235,7 @@ public class Navigation {
      */
     public void updateTitle() {
         AbstractFragment current = (AbstractFragment) ((MainActivity) context).getSupportFragmentManager().findFragmentById(R.id.container);
-        
+
         ((MainActivity)context).getSupportActionBar().setTitle(current.getTitle());
     }
 

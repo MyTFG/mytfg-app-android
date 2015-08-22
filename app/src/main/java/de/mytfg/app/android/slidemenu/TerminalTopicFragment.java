@@ -7,6 +7,8 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -35,7 +37,7 @@ public class TerminalTopicFragment extends AbstractFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        terminalentryview = inflater.inflate(R.layout.terminal_layout, container, false);
+        terminalentryview = inflater.inflate(R.layout.terminal_topic_layout, container, false);
         initialize();
         return terminalentryview;
     }

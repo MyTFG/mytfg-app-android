@@ -25,4 +25,6 @@
     <string name="terminal_from">von</string>
     <string name="terminal_created">Erstellt am</string>
     <string name="terminal_edited">Zuletzt bearbeitet</string>
+
+    <string name="action_details">Details</string>
 </resources>
