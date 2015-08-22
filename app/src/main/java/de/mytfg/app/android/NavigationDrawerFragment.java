@@ -156,6 +156,8 @@ public class NavigationDrawerFragment extends Fragment {
                     return;
                 }
 
+                navigation.updateTitle();
+
                 getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
 
