@@ -20,7 +20,7 @@ import java.util.Map;
 import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.R;
 
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends AbstractFragment {
     View settingsview;
     SharedPreferences preferences;
     SharedPreferences.Editor prefEditor;

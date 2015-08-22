@@ -26,7 +26,7 @@ import de.mytfg.app.android.api.ApiParams;
 import de.mytfg.app.android.api.MytfgApi;
 import de.mytfg.app.android.slidemenu.items.Navigation;
 
-public class TerminalFragment extends Fragment {
+public class TerminalFragment extends AbstractFragment {
     View terminalview;
     private String mytfg_login_user;
     private String mytfg_login_token;

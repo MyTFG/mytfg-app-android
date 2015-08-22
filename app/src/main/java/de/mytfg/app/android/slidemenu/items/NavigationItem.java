@@ -14,18 +14,37 @@ import de.mytfg.app.android.slidemenu.MainActivity;
  * Abstract class for Items in the Slide Menu.
  */
 public abstract class NavigationItem {
+    // The category of this Item
     protected NavigationCategory category;
+    // Title to be displayed in ActionBar
     protected String title;
+    // Context of the Application
     protected Context context;
+    // Navigation Object this item belongs to
     protected Navigation navigation;
+    // Representative Name for this Item
     protected Navigation.ItemNames item;
+    // Arguments (e.g. "title")
     protected Bundle args;
+    // If this item is visible in the navigation (set by navigationCategory)
     protected boolean isHidden = false;
+    // Parent of this item
+    // Set null if this item is own category, otherwise set to visible item
+    // Will be highlighted in NavigationDrawer.
+    protected Navigation.ItemNames parent;
 
     public NavigationItem(Navigation navigation) {
         this.args = new Bundle();
         this.navigation = navigation;
         this.context = navigation.getContext();
+    }
+
+    public Navigation.ItemNames getParent() {
+        if (parent != null) {
+            return parent;
+        } else {
+            return item;
+        }
     }
 
     public abstract Fragment load();
@@ -35,9 +54,9 @@ public abstract class NavigationItem {
         return this.load();
     }
 
+    // Can be used to perform actions on Load of every Item
     protected void stdLoad() {
-        // ((MainActivity)context).getSupportActionBar().setDisplayShowHomeEnabled(true);
-        // ((MainActivity)context).getSupportActionBar().setIcon(context.getResources().getDrawable(R.mipmap.ic_launcher));
+
     }
 
     /**
@@ -45,7 +64,7 @@ public abstract class NavigationItem {
      * @return Title.
      */
     public String getTitle() {
-        return this.title;
+        return args.getString("title", this.title);
     }
 
     /**
@@ -56,5 +75,10 @@ public abstract class NavigationItem {
      */
     public boolean isItem(Navigation.ItemNames item) {
         return item == this.item;
+    }
+
+
+    public Navigation.ItemNames getItem() {
+        return this.item;
     }
 }

@@ -30,7 +30,7 @@ import de.mytfg.app.android.api.ApiParams;
 import de.mytfg.app.android.api.MytfgApi;
 import de.mytfg.app.android.slidemenu.items.Navigation;
 
-public class StartFragment extends Fragment {
+public class StartFragment extends AbstractFragment {
     View startview;
     SharedPreferences preferences;
     private String mytfg_login_user;

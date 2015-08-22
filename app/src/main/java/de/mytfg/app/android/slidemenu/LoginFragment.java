@@ -22,7 +22,7 @@ import de.mytfg.app.android.api.ApiParams;
 import de.mytfg.app.android.api.MytfgApi;
 import de.mytfg.app.android.slidemenu.items.Navigation;
 
-public class LoginFragment extends Fragment {
+public class LoginFragment extends AbstractFragment {
     View loginview;
     SharedPreferences preferences;
     SharedPreferences.Editor prefEditor;

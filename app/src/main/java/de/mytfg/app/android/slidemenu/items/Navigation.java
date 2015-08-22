@@ -1,16 +1,22 @@
 package de.mytfg.app.android.slidemenu.items;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.DrawerLayout;
+import android.view.View;
+import android.widget.ListView;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+import de.mytfg.app.android.NavigationDrawerFragment;
 import de.mytfg.app.android.R;
+import de.mytfg.app.android.slidemenu.AbstractFragment;
 import de.mytfg.app.android.slidemenu.MainActivity;
 
 /**
@@ -25,16 +31,22 @@ public class Navigation {
         TERMINAL_TOPIC
     }
 
-    private Context context;
+    private ListView mDrawerListView;
+    private DrawerLayout mDrawerLayout;
+    private NavigationDrawerFragment.NavigationDrawerCallbacks mCallbacks;
+    private View mFragmentContainerView;
+
+    private final Context context;
+    private FragmentManager fragmentManager;
 
     private LinkedList<NavigationCategory> categories;
 
     /**
      * Creates a new Navigation. Only use one Instance.
-     * @param context The context of MainActivity.
+     * @param mainContext The context of MainActivity.
      */
-    public Navigation(Context context) {
-        this.context = context;
+    public Navigation(Context mainContext) {
+        this.context = mainContext;
         categories = new LinkedList<>();
 
         NavigationCategory mainCat = new NavigationCategory("Hauptkategorie");
@@ -56,6 +68,28 @@ public class Navigation {
         mainCat.addItem(settings);
 
         hiddenCat.addItem(terminaltopic);
+
+        fragmentManager = ((MainActivity)context).getSupportFragmentManager();
+
+        fragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                Fragment fr = fragmentManager.findFragmentById(R.id.container);
+                if (fr != null && fr instanceof AbstractFragment) {
+                    ((MainActivity)context).getSupportActionBar().setTitle(((AbstractFragment) fr).getTitle());
+                }
+            }
+        });
+    }
+
+    public void setNavigationDrawerParams(ListView mDrawerListView, DrawerLayout mDrawerLayout,
+                                          NavigationDrawerFragment.NavigationDrawerCallbacks mCallbacks,
+                                          View mFragmentContainerView) {
+        this.mDrawerListView = mDrawerListView;
+        this.mDrawerLayout = mDrawerLayout;
+        this.mCallbacks = mCallbacks;
+        this.mFragmentContainerView = mFragmentContainerView;
+
     }
 
     protected Context getContext() {
@@ -151,23 +185,49 @@ public class Navigation {
             }
         }
 
+        android.support.v4.app.FragmentTransaction ft = fragmentManager.beginTransaction();
+
         if (items.get(position).isHidden) {
-            FragmentManager fragmentManager = ((MainActivity)context).getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, items.get(position).load(args))
-                    .commit();
+            ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
+            ft.addToBackStack(items.get(position).getTitle());
+            highlightNavigation(items.get(position).getParent());
         } else {
-            // Is in navigation, find navigation pos.
-            items = getItems(false);
-            position = 0;
-            for (int i = 0; i < items.size(); i++) {
-                if (items.get(i).isItem(item)) {
-                    position = i;
-                    break;
-                }
-            }
-            MainActivity.mNavigationDrawerFragment.selectItem(position);
+            highlightNavigation(item);
         }
+        ((MainActivity)context).getSupportActionBar().setTitle(items.get(position).getTitle());
+        ft.replace(R.id.container, items.get(position).load(args));
+        ft.commit();
+    }
+
+    /**
+     * Allows the NavigationDrawer to navigate to a specified Fragment
+     * @param position The position in the NavigationDrawer
+     * @return The current position for the NavigationDrawer
+     */
+    public int navigate(int position) {
+        if (mDrawerLayout != null) {
+            mDrawerLayout.closeDrawer(mFragmentContainerView);
+        }
+
+        LinkedList<NavigationItem> items = getItems(false);
+        navigate(items.get(position).getItem());
+        return position;
+    }
+
+    public void highlightNavigation(Navigation.ItemNames item) {
+        if (mDrawerListView != null) {
+            mDrawerListView.setItemChecked(getItemPos(item), true);
+        }
+    }
+
+    public int getItemPos(Navigation.ItemNames item) {
+        int i = 0;
+        for (NavigationItem found : getItems(false)) {
+            if (found.isItem(item))
+                return i;
+            i++;
+        }
+        return -1;
     }
 
 
