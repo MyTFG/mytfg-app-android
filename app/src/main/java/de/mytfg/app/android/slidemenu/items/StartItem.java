@@ -26,6 +26,7 @@ public class StartItem extends NavigationItem {
     public Fragment load() {
         stdLoad();
         AbstractFragment frag = new StartFragment();
+        frag.item = this;
         if (frag != null) {
             frag.args.putString("title", title);
         }

@@ -26,6 +26,7 @@ public class TerminalTopicItem extends NavigationItem {
     public Fragment load() {
         stdLoad();
         AbstractFragment frag = new TerminalTopicFragment();
+        frag.item = this;
         if (frag != null) {
             if (args.containsKey("title")) {
                 frag.args = args;

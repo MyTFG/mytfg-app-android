@@ -25,6 +25,7 @@ public class LoginItem extends NavigationItem {
     public Fragment load() {
         stdLoad();
         AbstractFragment frag = new LoginFragment();
+        frag.item = this;
         if (frag != null) {
             frag.args.putString("title", title);
         }

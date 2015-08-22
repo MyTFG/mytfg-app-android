@@ -2,6 +2,7 @@ package de.mytfg.app.android.slidemenu;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,6 +34,17 @@ public class TerminalTopicFragment extends AbstractFragment {
     private String mytfg_login_token;
     private String mytfg_login_device;
     private RecyclerView terminalTopicList;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+    }
 
     @Nullable
     @Override
@@ -90,6 +102,7 @@ public class TerminalTopicFragment extends AbstractFragment {
         params.addParam("mytfg_api_login_device", mytfg_login_device);
         params.addParam("topic", "" + args.getLong("topic"));
 
+
         MytfgApi.ApiCallback callback = new MytfgApi.ApiCallback() {
             @Override
             public void callback(boolean success, JSONObject result, int responseCode, String resultStr) {
@@ -97,6 +110,7 @@ public class TerminalTopicFragment extends AbstractFragment {
                 if (success) {
                     try {
                         String title = result.getString("title");
+                        args.putString("title", title);
                         ((MainActivity)MainActivity.context).getSupportActionBar().setTitle(title);
                         displayTerminalReviews(result.getJSONArray("reviews"));
                         return;

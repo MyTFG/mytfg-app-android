@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -29,6 +30,39 @@ public class Navigation {
         SETTINGS,
         TERMINAL,
         TERMINAL_TOPIC
+    }
+
+    public enum Transition {
+        DEFAULT,
+        SLIDE,
+        ZOOM,
+        NONE,
+        FADE;
+
+        public int[] getAnimations() {
+            int[] res = new int[4];
+
+            switch (this) {
+                case SLIDE:
+                    res[0] = R.anim.slide_in_right;
+                    res[1] = R.anim.slide_out_left;
+                    res[2] = R.anim.slide_in_left;
+                    res[3] = R.anim.slide_out_right;
+                    break;
+                case NONE:
+                    break;
+                case ZOOM:
+                    break;
+                case FADE:
+                    res[0] = R.anim.fade_in;
+                    res[1] = R.anim.fade_out;
+                    res[2] = R.anim.fade_out;
+                    res[3] = R.anim.fade_in;
+                    break;
+            }
+
+            return res;
+        }
     }
 
     private ListView mDrawerListView;
@@ -74,10 +108,8 @@ public class Navigation {
         fragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
-                Fragment fr = fragmentManager.findFragmentById(R.id.container);
-                if (fr != null && fr instanceof AbstractFragment) {
-                    ((MainActivity)context).getSupportActionBar().setTitle(((AbstractFragment) fr).getTitle());
-                }
+                    updateActionBarButton();
+                    updateNavigationHighlight();
             }
         });
     }
@@ -111,41 +143,6 @@ public class Navigation {
     }
 
     /**
-     * Loads a specified Navigation Item at the given position.
-     * @param position The Position of the fragment to load in the Navigation.
-     * @return The fragment.
-     */
-    public Fragment load(int position) {
-        Fragment result = null;
-        int currentPos = 0;
-        int offset = 0;
-
-        LinkedList<NavigationItem> items = getItems(false);
-
-        if (items.size() < position) {
-            return null;
-        } else {
-            return items.get(position).load();
-        }
-    }
-
-
-
-    private Fragment load(Navigation.ItemNames item) {
-        LinkedList<NavigationItem> items = getItems(true);
-
-        int position = 0;
-        for (int i = 0; i < items.size(); i++) {
-            if (items.get(i).isItem(item)) {
-                position = i;
-                break;
-            }
-        }
-
-        return items.get(position).load();
-    }
-
-    /**
      * Returns a List of Navigation Items.
      * @param hidden Specifies if hidden Items (not displayed in Navigation) should be returned.
      * @return List of Items.
@@ -166,15 +163,37 @@ public class Navigation {
      * @param item The name of the Navigation Item.
      */
     public void navigate(Navigation.ItemNames item) {
-        navigate(item, new Bundle());
+        navigate(item, new Bundle(), Transition.DEFAULT, false);
+    }
+
+    /**
+     * Navigates to a specified NavigationItem / Fragment.
+     * @param args Arguments to pass to the Fragment
+     * @param item The name of the Navigation Item.
+     */
+    public void navigate(Navigation.ItemNames item, Bundle args) {
+        navigate(item, args, Transition.DEFAULT, false);
+    }
+
+    /**
+     * Navigates to a specified NavigationItem / Fragment.
+     * @param args Arguments to pass to the Fragment
+     * @param item The name of the Navigation Item.
+     * @param transition Animation to use for this Transition.
+     */
+    public void navigate(Navigation.ItemNames item, Bundle args, Navigation.Transition transition) {
+        navigate(item, args, transition, false);
     }
 
     /**
      * Navigates to a specified NavigationItem / Fragment.
      * @param item The name of the Navigation Item.
-     * @param args parameters
+     * @param args Arguments to pass to the Fragment.
+     * @param transition Animation to use for this Transition
+     * @param forceBackStack Forces the navigation to add a OnBack event.
      */
-    public void navigate(Navigation.ItemNames item, Bundle args) {
+    public void navigate(Navigation.ItemNames item, Bundle args, Navigation.Transition transition,
+                         boolean forceBackStack) {
         LinkedList<NavigationItem> items = getItems(true);
 
         int position = 0;
@@ -187,13 +206,23 @@ public class Navigation {
 
         android.support.v4.app.FragmentTransaction ft = fragmentManager.beginTransaction();
 
-        if (items.get(position).isHidden) {
-            ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
+        if (items.get(position).isHidden || forceBackStack) {
+            if (transition == Transition.DEFAULT) {
+                transition = Transition.SLIDE;
+            }
+
             ft.addToBackStack(items.get(position).getTitle());
             highlightNavigation(items.get(position).getParent());
         } else {
+            if (transition == Transition.DEFAULT) {
+                transition = Transition.NONE;
+            }
             highlightNavigation(item);
+            clearBackStack();
         }
+        int[] anim = transition.getAnimations();
+        ft.setCustomAnimations(anim[0], anim[1], anim[2], anim[3]);
+
         ((MainActivity)context).getSupportActionBar().setTitle(items.get(position).getTitle());
         ft.replace(R.id.container, items.get(position).load(args));
         ft.commit();
@@ -231,12 +260,38 @@ public class Navigation {
     }
 
     /**
-     * Renews the ActionBar title
+     * Renews the ActionBar title, icon and the navigation Highlight
      */
+    public void update() {
+        updateTitle();
+        updateActionBarButton();
+        updateNavigationHighlight();
+    }
+
+
     public void updateTitle() {
         AbstractFragment current = (AbstractFragment) ((MainActivity) context).getSupportFragmentManager().findFragmentById(R.id.container);
 
         ((MainActivity)context).getSupportActionBar().setTitle(current.getTitle());
+
+        updateActionBarButton();
+    }
+
+    public void updateActionBarButton() {
+        if (((MainActivity) context).getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            ((MainActivity) context).getSupportActionBar().setHomeAsUpIndicator(context.getResources().getDrawable(R.drawable.ic_action_back));
+        } else {
+            ((MainActivity) context).getSupportActionBar().setHomeAsUpIndicator(context.getResources().getDrawable(R.mipmap.ic_launcher));
+        }
+    }
+
+    private void clearBackStack() {
+        ((MainActivity) context).getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    }
+
+    public void updateNavigationHighlight() {
+        AbstractFragment current = (AbstractFragment) ((MainActivity) context).getSupportFragmentManager().findFragmentById(R.id.container);
+        highlightNavigation(current.item.parent);
     }
 
 

@@ -49,7 +49,7 @@
 
     <style name="ThemeOverlay.AppTheme.PopupMenu" parent="ThemeOverlay.AppCompat.Dark">
         <!-- popup menu background - NEVER "android:background" !!! in themes -->
-        <item name="android:colorBackground">#00014a</item>
+        <item name="android:colorBackground">@color/blue_medium</item>
         <!-- popup menu item text color -->
         <item name="android:textColorPrimary">#FFFFFF</item>
     </style>

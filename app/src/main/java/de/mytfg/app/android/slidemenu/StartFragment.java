@@ -39,6 +39,7 @@ public class StartFragment extends AbstractFragment {
     private RecyclerView notificationList;
     private List<Notification> notifications;
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

@@ -56,6 +56,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
+
+        /*
         // update the main content by replacing fragments
         Fragment objFragment = navigation.load(position);
 
@@ -67,7 +69,7 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, objFragment)
-                .commit();
+                .commit();*/
     }
 
     public void onSectionAttached(int number) {

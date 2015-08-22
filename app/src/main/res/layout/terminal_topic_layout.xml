@@ -2,25 +2,29 @@
 <RelativeLayout
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical">
     <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/terminalList">
+        android:id="@+id/terminalList"
+        android:layout_above="@+id/respond_text"
+        android:layout_height="match_parent">
 
     </android.support.v7.widget.RecyclerView>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
+    <EditText
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:clickable="true"
-        android:src="@drawable/ic_pencil"
-        android:baselineAlignBottom="false"
-        android:layout_alignParentEnd="false"
-        android:layout_alignParentStart="false"
+        android:inputType="textMultiLine"
+        android:textColor="@color/white"
+        android:ems="10"
+        android:id="@+id/respond_text"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true" />
+        android:maxLines="5"
+        android:background="@drawable/edit_border"
+        android:padding="5dip"
+        android:minLines="2"
+        android:nestedScrollingEnabled="true"
+        android:gravity="bottom" />
 </RelativeLayout>
 

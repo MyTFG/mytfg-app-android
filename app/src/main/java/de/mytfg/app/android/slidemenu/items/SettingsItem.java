@@ -24,6 +24,7 @@ public class SettingsItem extends NavigationItem {
     public Fragment load() {
         stdLoad();
         AbstractFragment frag = new SettingsFragment();
+        frag.item = this;
         if (frag != null) {
             frag.args.putString("title", title);
         }

@@ -2,6 +2,7 @@ package de.mytfg.app.android.slidemenu;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -47,6 +48,14 @@ public class TerminalFragment extends AbstractFragment {
         mytfg_login_user = MyTFG.getUsername();
         mytfg_login_token = MyTFG.getToken();
         mytfg_login_device = MyTFG.getDeviceId();
+
+        FloatingActionButton fab = (FloatingActionButton) terminalview.findViewById(R.id.terminal_create_fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.navigation.navigate(Navigation.ItemNames.START, new Bundle(), Navigation.Transition.SLIDE, true);
+            }
+        });
 
         // terminalList displays terminalEntries
         terminalList = (RecyclerView) terminalview.findViewById(R.id.terminalList);
