@@ -15,7 +15,6 @@ public abstract class AbstractFragment extends Fragment {
 
     public NavigationItem item;
 
-
     public String getTitle() {
         if (args == null) {
             return "";
