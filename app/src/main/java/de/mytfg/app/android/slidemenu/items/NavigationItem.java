@@ -25,7 +25,7 @@ public abstract class NavigationItem {
     // Representative Name for this Item
     protected Navigation.ItemNames item;
     // Arguments (e.g. "title")
-    protected Bundle args;
+    public Bundle args;
     // If this item is visible in the navigation (set by navigationCategory)
     protected boolean isHidden = false;
     // Parent of this item
