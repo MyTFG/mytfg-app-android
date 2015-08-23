@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -108,8 +109,7 @@ public class Navigation {
         fragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
-                    updateActionBarButton();
-                    updateNavigationHighlight();
+                update();
             }
         });
     }
@@ -273,8 +273,6 @@ public class Navigation {
         AbstractFragment current = (AbstractFragment) ((MainActivity) context).getSupportFragmentManager().findFragmentById(R.id.container);
 
         ((MainActivity)context).getSupportActionBar().setTitle(current.getTitle());
-
-        updateActionBarButton();
     }
 
     public void updateActionBarButton() {
@@ -286,12 +284,14 @@ public class Navigation {
     }
 
     private void clearBackStack() {
-        ((MainActivity) context).getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        ((MainActivity) context).getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
     public void updateNavigationHighlight() {
         AbstractFragment current = (AbstractFragment) ((MainActivity) context).getSupportFragmentManager().findFragmentById(R.id.container);
-        highlightNavigation(current.item.parent);
+        if (current != null && current.item != null) {
+            highlightNavigation(current.item.parent);
+        }
     }
 
 
