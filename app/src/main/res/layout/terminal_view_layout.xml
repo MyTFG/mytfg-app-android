@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/cards"
     android:id="@+id/terminalView"
     >
 
@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/title_text"
             android:layout_alignParentTop="true"
-            android:textSize="15dp"
+            android:textSize="@dimen/mytfg_title"
             />
 
         <TextView
@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/author_date_text"
             android:layout_below="@+id/title_text"
-            android:textSize="10dp"
+            android:textSize="@dimen/mytfg_text"
             />
 
         <TextView
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/edited_date_text"
             android:layout_below="@+id/author_date_text"
-            android:textSize="10dp"
+            android:textSize="@dimen/mytfg_small"
             />
 
         <TextView
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/flags_text"
             android:layout_below="@+id/edited_date_text"
-            android:textSize="10dp"
+            android:textSize="@dimen/mytfg_small"
             />
 
 
