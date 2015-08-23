@@ -38,7 +38,13 @@ public class StartFragment extends AbstractFragment {
     private String mytfg_login_device;
     private RecyclerView notificationList;
     private List<Notification> notifications;
+    RVAdapter adapter;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        adapter = new RVAdapter(null);
+    }
 
     @Nullable
     @Override
@@ -114,7 +120,7 @@ public class StartFragment extends AbstractFragment {
                             obj.getString("grouper"), text)
             );
         }
-        RVAdapter adapter = new RVAdapter(notifications);
+        adapter.notifications = notifications;
         notificationList.setAdapter(adapter);
     }
 
@@ -186,7 +192,7 @@ public class StartFragment extends AbstractFragment {
                                 long topicId = Long.parseLong(grouper[2]);
                                 Bundle args = new Bundle();
                                 args.putLong("topic", topicId);
-                                args.putString("title", "Notification to topic " + topicId);
+                                args.putString("title", "Laden...");
                                 MainActivity.navigation.navigate(Navigation.ItemNames.TERMINAL_TOPIC, args);
                             } else {
                                 Toast toast = Toast.makeText(MyTFG.getAppContext(), "Unknown Grouper", Toast.LENGTH_LONG);
