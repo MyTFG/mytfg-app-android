@@ -3,7 +3,9 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:clickable="true"
+    android:background="@null">
     <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:id="@+id/terminalList"
@@ -12,19 +14,25 @@
 
     </android.support.v7.widget.RecyclerView>
 
+
+
     <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:textColor="@color/white"
-        android:ems="10"
-        android:id="@+id/respond_text"
-        android:layout_alignParentBottom="true"
-        android:maxLines="5"
-        android:background="@drawable/edit_border"
-        android:padding="5dip"
-        android:minLines="2"
-        android:nestedScrollingEnabled="true"
-        android:gravity="bottom" />
+        style="@style/multilineEdit"
+        android:id="@+id/respond_text"/>
+
+    <ImageButton
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+
+        android:id="@+id/replyButton"
+        android:layout_alignBottom="@+id/respond_text"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:contentDescription="Senden"
+        android:background="@null"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_action_send" />
 </RelativeLayout>
 
