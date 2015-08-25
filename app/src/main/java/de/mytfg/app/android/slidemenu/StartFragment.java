@@ -63,6 +63,13 @@ public class StartFragment extends AbstractFragment {
     private void refreshNotifications() {
         ApiParams params = new ApiParams();
         params.addParam("group", "false");
+
+        if (MyTFG.preferences.getBoolean(getResources().getString(R.string.pref_notification_group), false)) {
+            params.addParam("group", "true");
+        } else {
+            params.addParam("group", "false");
+        }
+        
         MytfgApi.ApiCallback callback = new MytfgApi.ApiCallback() {
             @Override
             public void callback(boolean success, JSONObject result, int responseCode, String resultStr) {
