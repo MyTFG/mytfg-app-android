@@ -21,4 +21,10 @@
     <string name="settings_login_userid">settings_login_userid</string>
     <string name="settings_login_token">settings_login_token</string>
     <string name="settings_login_timeout">settings_login_timeout</string>
+
+    <string name="terminal_from">von</string>
+    <string name="terminal_created">Erstellt am</string>
+    <string name="terminal_edited">Zuletzt bearbeitet</string>
+
+    <string name="action_details">Details</string>
 </resources>

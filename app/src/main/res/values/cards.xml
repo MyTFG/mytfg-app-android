@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="cards" parent="CardView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">0dp</item>
+        <item name="android:layout_marginBottom">0dp</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="cardCornerRadius">0dp</item>
+        <item name="cardElevation">5sp</item>
+        <item name="cardUseCompatPadding">true</item>
+    </style>
+
+    <dimen name="mytfg_header">20sp</dimen>
+    <dimen name="mytfg_title">18sp</dimen>
+    <dimen name="mytfg_text">15sp</dimen>
+    <dimen name="mytfg_small">13sp</dimen>
+</resources>
