@@ -20,7 +20,7 @@ public class MyTFG extends Application {
     private static int login_userId = 0;
     private static String login_token = "";
 
-    private static SharedPreferences preferences;
+    public static SharedPreferences preferences;
 
     public void onCreate(){
         super.onCreate();

@@ -24,18 +24,14 @@ import de.mytfg.app.android.slidemenu.items.Navigation;
 
 public class LoginFragment extends AbstractFragment {
     View loginview;
-    SharedPreferences preferences;
-    SharedPreferences.Editor prefEditor;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         loginview = inflater.inflate(R.layout.login_layout, container, false);
-        preferences = loginview.getContext().getSharedPreferences(getString(R.string.sharedpref_settings), Context.MODE_MULTI_PROCESS);
-        prefEditor = preferences.edit();
 
         Long currentTimestamp = System.currentTimeMillis();
-        long tokenTimeout = preferences.getLong(getString(R.string.settings_login_timeout), 0) * 1000;
+        long tokenTimeout = MyTFG.getTokenTimeout();
 
         if (currentTimestamp < tokenTimeout) {
             // Already logged in
@@ -45,7 +41,7 @@ public class LoginFragment extends AbstractFragment {
 
         Button loginButton = (Button) loginview.findViewById(R.id.button_dologin);
 
-        ((EditText)loginview.findViewById(R.id.edit_username)).setText(preferences.getString(getString(R.string.settings_login_username), ""));
+        ((EditText)loginview.findViewById(R.id.edit_username)).setText(MyTFG.getUsername());
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +77,7 @@ public class LoginFragment extends AbstractFragment {
                                 String token = result.getString("token");
                                 long timeout = Long.parseLong(result.getString("tokentimeout"));
                                 int userid = Integer.parseInt(result.getString("loginID"));
+                                SharedPreferences.Editor prefEditor = MyTFG.preferences.edit();
                                 prefEditor.putString(getString(R.string.settings_login_username), userText);
                                 prefEditor.putString(getString(R.string.settings_login_token), token);
                                 prefEditor.putInt(getString(R.string.settings_login_userid), userid);
