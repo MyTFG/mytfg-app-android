@@ -13,6 +13,7 @@ import de.mytfg.app.android.NavigationDrawerFragment;
 import de.mytfg.app.android.R;
 import de.mytfg.app.android.slidemenu.AbstractFragment;
 import de.mytfg.app.android.slidemenu.MainActivity;
+import de.mytfg.app.android.slidemenu.VPlanFragment;
 
 /**
  * Navigation Manager class.
@@ -27,7 +28,8 @@ public class Navigation {
         TERMINAL,
         TERMINAL_TOPIC,
         TERMINAL_DETAIL,
-        TERMINAL_CREATE
+        TERMINAL_CREATE,
+        VPLAN
     }
 
     public enum Transition {
@@ -91,6 +93,7 @@ public class Navigation {
         NavigationItem settings = new SettingsItem(this);
         NavigationItem conversationsList = new ConversationsListItem(this);
         NavigationItem terminal = new TerminalItem(this);
+        VPlanItem vplan = new VPlanItem(this);
 
         NavigationItem conversation = new ConversationItem(this);
         NavigationItem terminaltopic = new TerminalTopicItem(this);
@@ -102,6 +105,7 @@ public class Navigation {
         mainCat.addItem(terminal);
         mainCat.addItem(conversationsList);
         mainCat.addItem(settings);
+        mainCat.addItem(vplan);
 
         hiddenCat.addItem(conversation);
         hiddenCat.addItem(terminaltopic);
