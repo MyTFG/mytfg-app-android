@@ -3,6 +3,7 @@ package de.mytfg.app.android;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.provider.Settings;
 import android.text.format.DateFormat;
 
@@ -56,7 +57,7 @@ public class MyTFG extends Application {
     public static String getDate(long timestamp) {
         Calendar calendar = Calendar.getInstance(Locale.ENGLISH);
         calendar.setTimeInMillis(timestamp * 1000);
-        return DateFormat.format("dd. MM. yyyy, HH:mm", calendar).toString() + "h";
+        return DateFormat.format("dd.MM.yyyy, HH:mm", calendar).toString();
     }
 
     public static void refreshPrefs() {
@@ -68,5 +69,31 @@ public class MyTFG extends Application {
 
     public static Context getAppContext() {
         return MyTFG.context;
+    }
+
+    public static int color(int col) {
+        return context.getResources().getColor(col);
+    }
+
+    public static String string(int str) {
+        return context.getResources().getString(str);
+    }
+
+    public static Drawable drawable(int draw) {
+        return context.getResources().getDrawable(draw);
+    }
+
+    public static float dimension(int id) {
+        return context.getResources().getDimension(id);
+    }
+
+    public static void logout() {
+        preferences.edit().remove(
+                string(R.string.settings_login_timeout)).remove(
+                string(R.string.settings_login_token)).remove(
+                string(R.string.settings_login_userid)).remove(
+                string(R.string.settings_login_username)).commit();
+
+        refreshPrefs();
     }
 }
