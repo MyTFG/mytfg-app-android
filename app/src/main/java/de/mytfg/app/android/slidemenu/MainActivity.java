@@ -1,6 +1,7 @@
 package de.mytfg.app.android.slidemenu;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -31,10 +32,13 @@ public class MainActivity extends AppCompatActivity
      */
     private CharSequence mTitle;
     public static Navigation navigation;
+    public static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        context = this;
 
         navigation = new Navigation(this);
 
@@ -52,6 +56,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
+
+        /*
         // update the main content by replacing fragments
         Fragment objFragment = navigation.load(position);
 
@@ -63,7 +69,7 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, objFragment)
-                .commit();
+                .commit();*/
     }
 
     public void onSectionAttached(int number) {
@@ -96,13 +102,6 @@ public class MainActivity extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 

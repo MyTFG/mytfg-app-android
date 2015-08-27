@@ -3,7 +3,7 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <GridLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:rowCount="3"
@@ -19,7 +19,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/edit_username"
             android:hint="Nutzername"
-            android:layout_centerVertical="true"
             android:layout_alignLeft="@+id/edit_password"
             android:layout_alignStart="@+id/edit_password"
             android:layout_alignRight="@+id/edit_password"
@@ -46,6 +45,6 @@
             android:layout_alignStart="@+id/edit_password"
             android:layout_alignRight="@+id/edit_password"
             android:layout_alignEnd="@+id/edit_password"/>
-    </GridLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

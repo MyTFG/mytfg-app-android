@@ -22,10 +22,15 @@ public class NavigationCategory {
     }
 
     protected void addItem(NavigationItem item) {
+        item.isHidden = hidden;
         items.add(item);
     }
 
+    protected boolean isHidden() {
+        return hidden;
+    }
+
     protected LinkedList<NavigationItem> getItems() {
-        return (LinkedList)items.clone();
+        return (LinkedList<NavigationItem>)items.clone();
     }
 }

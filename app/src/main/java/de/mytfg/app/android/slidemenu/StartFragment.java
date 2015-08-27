@@ -24,30 +24,29 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.R;
 import de.mytfg.app.android.api.ApiParams;
 import de.mytfg.app.android.api.MytfgApi;
+import de.mytfg.app.android.slidemenu.items.Navigation;
 
-public class StartFragment extends Fragment {
+public class StartFragment extends AbstractFragment {
     View startview;
-    SharedPreferences preferences;
-    private String mytfg_login_user;
-    private String mytfg_login_token;
-    private String mytfg_login_device;
     private RecyclerView notificationList;
     private List<Notification> notifications;
+    RVAdapter adapter;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        adapter = new RVAdapter(null);
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         startview = inflater.inflate(R.layout.start_layout, container, false);
 
-        preferences = startview.getContext().getSharedPreferences(getString(R.string.sharedpref_settings), Context.MODE_MULTI_PROCESS);
-
-        // user, token and device id for MytfgApi calls
-        mytfg_login_user = preferences.getString(getString(R.string.settings_login_username), "");
-        mytfg_login_token = preferences.getString(getString(R.string.settings_login_token), "");
-        mytfg_login_device = Settings.Secure.getString(startview.getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
 
         // notificationList displays notifications
         notificationList = (RecyclerView) startview.findViewById(R.id.notificationList);
@@ -63,9 +62,6 @@ public class StartFragment extends Fragment {
 
     private void refreshNotifications() {
         ApiParams params = new ApiParams();
-        params.addParam("mytfg_api_login_user", mytfg_login_user);
-        params.addParam("mytfg_api_login_token", mytfg_login_token);
-        params.addParam("mytfg_api_login_device", mytfg_login_device);
         params.addParam("group", "false");
         MytfgApi.ApiCallback callback = new MytfgApi.ApiCallback() {
             @Override
@@ -111,7 +107,7 @@ public class StartFragment extends Fragment {
                             obj.getString("grouper"), text)
             );
         }
-        RVAdapter adapter = new RVAdapter(notifications);
+        adapter.notifications = notifications;
         notificationList.setAdapter(adapter);
     }
 
@@ -170,6 +166,33 @@ public class StartFragment extends Fragment {
             if (!notifications.get(i).acknowledged) {
                 notificationViewHolder.titleText.setTextColor(getResources().getColor(R.color.orange_accent));
             }
+
+            final Notification notify = notifications.get(i);
+
+            notificationViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    switch (notify.type) {
+                        case "terminal":
+                            String[] grouper = notify.grouper.split("-");
+                            if (grouper.length == 3 && grouper[0].equals("terminal") && grouper[1].equals("topic")) {
+                                long topicId = Long.parseLong(grouper[2]);
+                                Bundle args = new Bundle();
+                                args.putLong("topic", topicId);
+                                args.putString("title", "Laden...");
+                                MainActivity.navigation.navigate(Navigation.ItemNames.TERMINAL_TOPIC, args);
+                            } else {
+                                Toast toast = Toast.makeText(MyTFG.getAppContext(), "Unknown Grouper", Toast.LENGTH_LONG);
+                                toast.show();
+                            }
+                            break;
+                        default:
+                            Toast toast = Toast.makeText(MyTFG.getAppContext(), "Not implemented yet", Toast.LENGTH_LONG);
+                            toast.show();
+                            break;
+                    }
+                }
+            });
         }
 
         @Override

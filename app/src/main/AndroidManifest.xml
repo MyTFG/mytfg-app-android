@@ -11,6 +11,7 @@
         android:name="de.mytfg.app.android.MyTFG">
         <activity
             android:name=".slidemenu.MainActivity"
+            android:windowSoftInputMode="adjustResize"
             android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
