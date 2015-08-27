@@ -47,6 +47,10 @@ public class StartFragment extends AbstractFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         startview = inflater.inflate(R.layout.start_layout, container, false);
 
+        if (!MyTFG.isLoggedIn()) {
+            MainActivity.navigation.navigate(Navigation.ItemNames.SETTINGS);
+            return null;
+        }
 
         // notificationList displays notifications
         notificationList = (RecyclerView) startview.findViewById(R.id.notificationList);
@@ -69,7 +73,7 @@ public class StartFragment extends AbstractFragment {
         } else {
             params.addParam("group", "false");
         }
-        
+
         MytfgApi.ApiCallback callback = new MytfgApi.ApiCallback() {
             @Override
             public void callback(boolean success, JSONObject result, int responseCode, String resultStr) {
