@@ -8,6 +8,7 @@
     <string name="title_terminal">Supportcenter</string>
     <string name="title_info">Info</string>
     <string name="title_messages">Nachrichten</string>
+    <string name="title_vplan">Vertretungsplan</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -27,4 +28,5 @@
     <string name="terminal_edited">Zuletzt bearbeitet</string>
 
     <string name="action_details">Details</string>
+
 </resources>
