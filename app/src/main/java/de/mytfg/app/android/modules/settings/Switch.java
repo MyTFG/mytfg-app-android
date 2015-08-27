@@ -3,6 +3,7 @@ package de.mytfg.app.android.modules.settings;
 import android.app.ActionBar;
 import android.content.Context;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 
 import de.mytfg.app.android.MyTFG;
@@ -42,6 +43,8 @@ public class Switch extends SettingsItem {
         android.widget.Switch sw = new android.widget.Switch(MainActivity.context);
 
         sw.setTextColor(context.getResources().getColor(R.color.white));
+
+        /*
         sw.setPadding(5, 5, 5, 5);
 
         LinearLayout.LayoutParams lw = new LinearLayout.LayoutParams(
@@ -49,15 +52,18 @@ public class Switch extends SettingsItem {
 
         lw.setMargins(8, 20, 8, 20);
         sw.setLayoutParams(lw);
+        */
 
         sw.setText(title);
         sw.setChecked(state);
-        sw.setOnClickListener(new View.OnClickListener() {
+        sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                onSwitch(v);
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                onSwitch(buttonView);
             }
         });
+
+        this.setLayout(sw);
 
         return sw;
     }
