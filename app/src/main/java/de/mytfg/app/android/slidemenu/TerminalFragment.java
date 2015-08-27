@@ -44,11 +44,6 @@ public class TerminalFragment extends AbstractFragment {
             return null;
         }
 
-        // user, token and device id for MytfgApi calls
-        mytfg_login_user = MyTFG.getUsername();
-        mytfg_login_token = MyTFG.getToken();
-        mytfg_login_device = MyTFG.getDeviceId();
-
         FloatingActionButton fab = (FloatingActionButton) terminalview.findViewById(R.id.terminal_create_fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,9 +66,6 @@ public class TerminalFragment extends AbstractFragment {
 
     private void refreshTerminalEntries() {
         ApiParams params = new ApiParams();
-        params.addParam("mytfg_api_login_user", mytfg_login_user);
-        params.addParam("mytfg_api_login_token", mytfg_login_token);
-        params.addParam("mytfg_api_login_device", mytfg_login_device);
         params.addParam("all", "false");
         MytfgApi.ApiCallback callback = new MytfgApi.ApiCallback() {
             @Override

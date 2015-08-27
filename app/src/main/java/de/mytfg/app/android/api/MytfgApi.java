@@ -18,6 +18,8 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import de.mytfg.app.android.MyTFG;
+
 /**
  * This class is an abstract wrapper to access the MyTFG API.
  * It allows to call API functions by name with given parameters.
@@ -35,6 +37,11 @@ public class MytfgApi {
             // Will not handle null params.
             callback.callback(false, null, -1, null);
         } else {
+            if (MyTFG.isLoggedIn()) {
+                params.addParam("mytfg_api_login_user", MyTFG.getUsername());
+                params.addParam("mytfg_api_login_token", MyTFG.getToken());
+                params.addParam("mytfg_api_login_device", MyTFG.getDeviceId());
+            }
             new MytfgApi.RequestTask(apiFunction, params, callback).execute("");
         }
     }

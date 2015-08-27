@@ -81,11 +81,6 @@ public class TerminalTopicFragment extends AbstractFragment {
         if (topicId == 0) {
             return;
         } else {
-            // user, token and device id for MytfgApi calls
-            mytfg_login_user = MyTFG.getUsername();
-            mytfg_login_token = MyTFG.getToken();
-            mytfg_login_device = MyTFG.getDeviceId();
-
             // terminalList displays terminalEntries
             terminalTopicList = (RecyclerView) terminalentryview.findViewById(R.id.terminalList);
             terminalTopicList.setHasFixedSize(true);
@@ -142,9 +137,6 @@ public class TerminalTopicFragment extends AbstractFragment {
 
     private void refreshTerminalTopic(final boolean scrollToBottom) {
         ApiParams params = new ApiParams();
-        params.addParam("mytfg_api_login_user", mytfg_login_user);
-        params.addParam("mytfg_api_login_token", mytfg_login_token);
-        params.addParam("mytfg_api_login_device", mytfg_login_device);
         params.addParam("topic", "" + args.getLong("topic"));
 
 
