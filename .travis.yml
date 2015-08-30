@@ -45,8 +45,9 @@ deploy:
     user: "rleh"
     key:
       secure: PGnszKxvxrpuymszMaSLaLRTnpe9xenFfrA9nu3phCIUFEJqdBqW1s9CgtHkkqBNmvCsnrnu5YyOkvKJ94MmXfynZpF2LYdnmzmEDGT55RXJ8G9cPqRATjL98hXWuPJO1+yfEPiCQoVsDmZTf+VRTI42Z+qqBBU8jRlD/aMs5W/GgHwHuzr5l05WC8JnIpwiHJXFxedEEgr+Fk81bvYKFeRIWmAqC4WuW8GA/ZVANh0y1tgdD5kgxdaBEuB2kM2pB3NATPssLYj60mrVQkzamXTKkU61wl08F9xfvu8JaR0AkUzwRyDb3APdbU/i1q/wzbZPV8p5eJs4YPBLjmBBiQvTwA/y+z7sxamWmR05rLzba0G3oD6KJoZ6GeuqeqUkaZ1WXWFpJqiFM4frPdTiyJShIpYonpU5mJAOyI+mxpitoCLcuRtKd3GAHMB+CaIXhg41VaYpWY9dBlY62ZvUDTBMIWbcOKI7tluxQjj4NrfHaWXGNpziMo+LK3H4JRLFdj18VCiL16WK/JQYo+K0leW1d/+BtIKr46QUpYTE2mpKy5lFVV7WCfUQnMdAT1iI84q5K4gCp5uGtzLhOBfZMTzU3ZpIXpKvMgySLAQ6rjBSA4jPdRI6XyuOY4HIWO6Yb0NeTtIrY3WaS+6Sm7xazEDk+spGSD6wJqKyb/qU+4Y=
-    all_branches: true
     skip_cleanup: true
+    on:
+      all_branches: true
 #    on:
 #      branch:
 #        - develop
