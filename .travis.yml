@@ -37,8 +37,7 @@ after_script:
   - cat app/build/outputs/lint-results.html
 
 before_deploy:
-  - ls app/build/outputs/apk/ -ahl
-  - cp app/build/outputs/apk/app-bintray-signed.apk app/build/outputs/apk/mytfg-app-$TRAVIS_BRANCH-$TRAVIS_COMMIT.apk
+  - cp app/build/outputs/apk/app-bintray.apk app/build/outputs/apk/mytfg-app-$TRAVIS_BRANCH-$TRAVIS_COMMIT.apk
 
 deploy:
   - provider: bintray
