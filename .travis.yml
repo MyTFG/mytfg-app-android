@@ -41,8 +41,8 @@ before_deploy:
   - cp app/build/outputs/apk/app-bintray.apk app/build/outputs/apk/mytfg-app-$TRAVIS_BRANCH-$TRAVIS_COMMIT.apk
 
 deploy:
-  skip_cleanup: true
   - provider: bintray
+    skip_cleanup: true
     file: deploy-bintray.txt
     user: "rleh"
     key:

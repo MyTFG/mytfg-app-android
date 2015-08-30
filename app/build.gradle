@@ -22,15 +22,6 @@ android {
         }
     }
     buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-        debug {
-            applicationIdSuffix ".debug"
-            versionNameSuffix " debug"
-            minifyEnabled false
-        }
         if (System.getenv("TRAVIS")) {
             bintray {
                 applicationIdSuffix ".bintray"
@@ -40,11 +31,23 @@ android {
                 proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
                 signingConfig signingConfigs.release
             }
-            stable {
-                minifyEnabled true
-                shrinkResources true
+            if(System.getenv("TRAVIS_BRANCH") == "master") {
+                stable {
+                    minifyEnabled true
+                    shrinkResources true
+                    proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+                    signingConfig signingConfigs.release
+                }
+            }
+        } else {
+            release {
+                minifyEnabled false
                 proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-                signingConfig signingConfigs.release
+            }
+            debug {
+                applicationIdSuffix ".debug"
+                versionNameSuffix " debug"
+                minifyEnabled false
             }
         }
     }
