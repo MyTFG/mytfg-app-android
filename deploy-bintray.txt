@@ -1,0 +1,22 @@
+{
+    "package": {
+        "name": "mytfg-app-android", // Bintray package name
+        "repo": "mytfg-app-android", // Bintray repository name
+        "subject": "MyTFG", // Bintray subject (user or organization)
+        "desc": "MyTFG App latest automated build",
+        "website_url": "www.mytfg.de",
+        "issue_tracker_url": "https://github.com/MyTFG/mytfg-app-android/issues",
+        "vcs_url": "https://github.com/MyTFG/mytfg-app-android.git",
+        "licenses": ["GPL-3.0"]
+    },
+    "version": {
+        "name": "0.1-pre",
+        "desc": "development version",
+        "gpgSign": false
+    },
+    "files":
+        [
+        {"includePattern": "app\/build\/outputs\/apk\/(mytfg-app-.+\.apk)", "uploadPattern": "$1"}
+        ],
+    "publish": true
+}
