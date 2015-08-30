@@ -37,8 +37,10 @@ after_script:
   - cat app/build/outputs/lint-results.html
 
 before_deploy:
-  - find . | grep apk
-  - cp app/build/outputs/apk/app-bintray.apk app/build/outputs/apk/mytfg-app-$TRAVIS_BRANCH-$TRAVIS_COMMIT.apk
+  - find .
+  - echo "" | keytool -list -keystore release.keystore
+  - echo $TRAVIS
+  - cp app/build/outputs/apk/app-bintray-unsigned.apk app/build/outputs/apk/mytfg-app-$TRAVIS_BRANCH-$TRAVIS_COMMIT.apk
 
 deploy:
   - provider: bintray
