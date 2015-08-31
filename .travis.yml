@@ -33,19 +33,12 @@ before_script:
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
 
-script:
-  - ./gradlew tasks
-  - ./gradlew clean build connectedCheck
-  - ./gradlew signingReport
-
 after_script:
   - cat app/build/outputs/lint-results.html
+  - ./gradlew signingReport
 
 before_deploy:
-  - find .
-  - echo "" | keytool -list -keystore release.keystore
-  - echo $TRAVIS
-  - cp app/build/outputs/apk/app-bintray-unsigned.apk app/build/outputs/apk/mytfg-app-$TRAVIS_BRANCH-$TRAVIS_COMMIT.apk
+  - cp app/build/outputs/apk/app-bintray.apk app/build/outputs/apk/mytfg-app-$TRAVIS_BRANCH-$TRAVIS_COMMIT.apk
 
 deploy:
   - provider: bintray
