@@ -2,7 +2,7 @@
     "package": {
         "name": "mytfg-app-android", // Bintray package name
         "repo": "mytfg-app-android", // Bintray repository name
-        "subject": "MyTFG", // Bintray subject (user or organization)
+        "subject": "mytfg", // Bintray subject (user or organization)
         "desc": "MyTFG App latest automated build",
         "website_url": "www.mytfg.de",
         "issue_tracker_url": "https://github.com/MyTFG/mytfg-app-android/issues",
