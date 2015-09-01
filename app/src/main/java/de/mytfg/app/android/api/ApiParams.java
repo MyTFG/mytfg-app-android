@@ -70,9 +70,9 @@ public class ApiParams {
 
     @Override
     public boolean equals(Object o) {
-        /*if (this == o) {
+        if (this == o) {
             return true;
-        }*/
+        }
         if (!(o instanceof ApiParams)) {
             return false;
         }

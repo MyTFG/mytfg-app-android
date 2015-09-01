@@ -1,13 +1,10 @@
 package de.mytfg.app.android.api;
 
-import android.util.Log;
-
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import de.mytfg.app.android.MyTFG;
 
 /**
  * Used to Cache API-Calls.
@@ -54,17 +51,13 @@ public class ApiCache {
                 if (cachedResult.isSuccessful() &&
                         cachedResult.getTimestamp() + timeout > System.currentTimeMillis()) {
                     // Cache is up-to-date
-                    Log.d("CACHE", "Using cached result for " + apiFunction);
-
                     callback.callback(cachedResult.isSuccessful(), cachedResult.getJson(),
                             cachedResult.getReturnCode(), cachedResult.getResultString());
 
                     return;
                 }
-                Log.d("CACHE", "Cached result timed out for " + apiFunction);
             }
 
-            Log.d("CACHE", "No cached result for " + apiFunction);
             // No cache entry: Call API
             MytfgApi.ApiCallback cacheCallback = new MytfgApi.ApiCallback() {
                 @Override

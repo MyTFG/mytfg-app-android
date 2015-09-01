@@ -1,7 +1,5 @@
 package de.mytfg.app.android.api;
 
-import android.util.Log;
-
 /**
  * A key for internal use in the API Cache.
  */
@@ -20,13 +18,7 @@ public class ApiCacheKey {
         if (this == o) return true;
         if (!(o instanceof ApiCacheKey)) return false;
         ApiCacheKey key = (ApiCacheKey) o;
-        if ((this.function.equals(key.function)) && (this.params.equals(key.params))) {
-            Log.d("CALL", "EQUALS TRUE");
-            return true;
-        } else {
-            Log.d("CALL", "EQUALS FALSE");
-            return false;
-        }
+        return (this.function.equals(key.function)) && (this.params.equals(key.params));
     }
 
     @Override
