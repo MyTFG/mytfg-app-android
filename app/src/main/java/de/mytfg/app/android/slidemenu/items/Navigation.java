@@ -91,18 +91,18 @@ public class Navigation {
 
 
         NavigationItem start = new StartItem(this);
-        NavigationItem login = new LoginItem(this);
         NavigationItem settings = new SettingsItem(this);
         NavigationItem terminal = new TerminalItem(this);
 
         NavigationItem terminaltopic = new TerminalTopicItem(this);
+        NavigationItem login = new LoginItem(this);
 
         mainCat.addItem(start);
-        mainCat.addItem(login);
         mainCat.addItem(terminal);
         mainCat.addItem(settings);
 
         hiddenCat.addItem(terminaltopic);
+        hiddenCat.addItem(login);
 
         fragmentManager = ((MainActivity)context).getSupportFragmentManager();
 

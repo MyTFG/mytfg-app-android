@@ -17,7 +17,7 @@ public class LoginItem extends NavigationItem {
         super(navigation);
         this.title = MyTFG.getAppContext().getString(R.string.title_login);
         this.item = Navigation.ItemNames.LOGIN;
-        this.parent = this.item;
+        this.parent = Navigation.ItemNames.SETTINGS;
     }
 
 
