@@ -22,6 +22,9 @@ android:
     # if you need to run emulator(s) during your tests
     - sys-img-armeabi-v7a-android-19
 
+# decrypt release.keystore
+before_install:
+- openssl aes-256-cbc -K $encrypted_a5f2b7f46db1_key -iv $encrypted_a5f2b7f46db1_iv -in release.keystore.enc -out release.keystore -d
 
 # Emulator Management: Create, Start and Wait
 before_script:
@@ -32,3 +35,21 @@ before_script:
 
 after_script:
   - cat app/build/outputs/lint-results.html
+  - ./gradlew signingReport
+
+before_deploy:
+  - cp app/build/outputs/apk/app-bintray.apk app/build/outputs/apk/mytfg-app-$TRAVIS_BRANCH-$TRAVIS_COMMIT.apk
+
+deploy:
+  - provider: bintray
+    skip_cleanup: true
+    file: deploy-bintray.txt
+    user: "rleh"
+    key:
+      secure: PGnszKxvxrpuymszMaSLaLRTnpe9xenFfrA9nu3phCIUFEJqdBqW1s9CgtHkkqBNmvCsnrnu5YyOkvKJ94MmXfynZpF2LYdnmzmEDGT55RXJ8G9cPqRATjL98hXWuPJO1+yfEPiCQoVsDmZTf+VRTI42Z+qqBBU8jRlD/aMs5W/GgHwHuzr5l05WC8JnIpwiHJXFxedEEgr+Fk81bvYKFeRIWmAqC4WuW8GA/ZVANh0y1tgdD5kgxdaBEuB2kM2pB3NATPssLYj60mrVQkzamXTKkU61wl08F9xfvu8JaR0AkUzwRyDb3APdbU/i1q/wzbZPV8p5eJs4YPBLjmBBiQvTwA/y+z7sxamWmR05rLzba0G3oD6KJoZ6GeuqeqUkaZ1WXWFpJqiFM4frPdTiyJShIpYonpU5mJAOyI+mxpitoCLcuRtKd3GAHMB+CaIXhg41VaYpWY9dBlY62ZvUDTBMIWbcOKI7tluxQjj4NrfHaWXGNpziMo+LK3H4JRLFdj18VCiL16WK/JQYo+K0leW1d/+BtIKr46QUpYTE2mpKy5lFVV7WCfUQnMdAT1iI84q5K4gCp5uGtzLhOBfZMTzU3ZpIXpKvMgySLAQ6rjBSA4jPdRI6XyuOY4HIWO6Yb0NeTtIrY3WaS+6Sm7xazEDk+spGSD6wJqKyb/qU+4Y=
+    on:
+      all_branches: true
+#    on:
+#      branch:
+#        - develop
+#        - master
