@@ -37,11 +37,7 @@ public class MytfgApi {
             // Will not handle null params.
             callback.callback(false, null, -1, null);
         } else {
-            if (MyTFG.isLoggedIn()) {
-                params.addParam("mytfg_api_login_user", MyTFG.getUsername());
-                params.addParam("mytfg_api_login_token", MyTFG.getToken());
-                params.addParam("mytfg_api_login_device", MyTFG.getDeviceId());
-            }
+            params.login();
             new MytfgApi.RequestTask(apiFunction, params, callback).execute("");
         }
     }

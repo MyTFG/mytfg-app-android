@@ -26,6 +26,7 @@ import java.util.List;
 
 import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.R;
+import de.mytfg.app.android.api.ApiCache;
 import de.mytfg.app.android.api.ApiParams;
 import de.mytfg.app.android.api.MytfgApi;
 import de.mytfg.app.android.slidemenu.items.Navigation;
@@ -97,7 +98,7 @@ public class StartFragment extends AbstractFragment {
                 toast.show();
             }
         };
-        MytfgApi.call("ajax_notification_list", params, callback);
+        ApiCache.call("ajax_notification_list", params, callback);
     }
 
     private void displayNotifications(JSONArray jsonNotifications) throws JSONException {
