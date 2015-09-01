@@ -3,6 +3,8 @@ package de.mytfg.app.android.api;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.mytfg.app.android.MyTFG;
+
 /**
  * This class allows to specify parameters to pass to the API.
  * This is just a wrapper class for Map.
@@ -64,5 +66,36 @@ public class ApiParams {
 
     protected Map<String, String> getMap() {
         return parameters;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ApiParams)) {
+            return false;
+        }
+        ApiParams params = (ApiParams) o;
+
+        return (this.parameters.equals(params.parameters));
+    }
+
+    @Override
+    public int hashCode() {
+        return this.parameters.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return this.parameters.toString();
+    }
+
+    public void doLogin() {
+        if (MyTFG.isLoggedIn()) {
+            this.addParam("mytfg_api_login_user", MyTFG.getUsername());
+            this.addParam("mytfg_api_login_token", MyTFG.getToken());
+            this.addParam("mytfg_api_login_device", MyTFG.getDeviceId());
+        }
     }
 }

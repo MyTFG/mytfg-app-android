@@ -40,7 +40,7 @@ public class TerminalFragment extends AbstractFragment {
         terminalview = inflater.inflate(R.layout.terminal_layout, container, false);
 
         if (!MyTFG.isLoggedIn()) {
-            MainActivity.navigation.navigate(Navigation.ItemNames.LOGIN);
+            MainActivity.navigation.navigate(Navigation.ItemNames.SETTINGS);
             return null;
         }
 
