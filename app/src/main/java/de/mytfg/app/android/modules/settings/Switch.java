@@ -43,17 +43,6 @@ public class Switch extends SettingsItem {
         android.widget.Switch sw = new android.widget.Switch(MainActivity.context);
 
         sw.setTextColor(context.getResources().getColor(R.color.white));
-
-        /*
-        sw.setPadding(5, 5, 5, 5);
-
-        LinearLayout.LayoutParams lw = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        lw.setMargins(8, 20, 8, 20);
-        sw.setLayoutParams(lw);
-        */
-
         sw.setText(title);
         sw.setChecked(state);
         sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
