@@ -42,7 +42,7 @@ public class ApiCache {
             // Will not handle null params.
             callback.callback(false, null, -1, null);
         } else {
-            params.login();
+            params.doLogin();
 
             final ApiCacheKey search = new ApiCacheKey(apiFunction, params);
 

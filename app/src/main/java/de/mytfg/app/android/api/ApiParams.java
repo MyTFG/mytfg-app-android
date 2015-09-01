@@ -91,7 +91,7 @@ public class ApiParams {
         return this.parameters.toString();
     }
 
-    public void login() {
+    public void doLogin() {
         if (MyTFG.isLoggedIn()) {
             this.addParam("mytfg_api_login_user", MyTFG.getUsername());
             this.addParam("mytfg_api_login_token", MyTFG.getToken());
