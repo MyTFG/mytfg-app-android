@@ -98,7 +98,7 @@ public class StartFragment extends AbstractFragment {
                 toast.show();
             }
         };
-        ApiCache.call("ajax_notification_list", params, callback);
+        ApiCache.call("ajax_notification_list", params, callback, 0);
     }
 
     private void displayNotifications(JSONArray jsonNotifications) throws JSONException {
