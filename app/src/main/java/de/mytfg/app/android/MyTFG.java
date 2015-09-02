@@ -6,7 +6,9 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.provider.Settings;
 import android.text.format.DateFormat;
+
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -14,6 +16,10 @@ import java.util.Locale;
 import org.acra.*;
 import org.acra.annotation.*;
 import org.acra.sender.HttpSender;
+import org.json.JSONObject;
+
+import de.mytfg.app.android.api.ApiParams;
+import de.mytfg.app.android.api.MytfgApi;
 
 import de.mytfg.app.android.modulemanager.ModuleManager;
 import de.mytfg.app.android.slidemenu.MainActivity;
@@ -108,7 +114,7 @@ public class MyTFG extends Application {
     }
 
     public static Drawable drawable(int draw) {
-        return context.getResources().getDrawable(draw);
+        return context.getResources().getDrawable(draw, context.getTheme());
     }
 
     public static float dimension(int id) {
@@ -131,6 +137,26 @@ public class MyTFG extends Application {
                 MainActivity.loadingBar.setVisibility(View.VISIBLE);
             } else {
                 MainActivity.loadingBar.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    public static void sendGcmToken() {
+        if (isLoggedIn()) {
+            String token = preferences.getString(string(R.string.settings_gcm_token), "");
+            if (!token.equals("")) {
+                // Send token to Server
+                ApiParams params = new ApiParams();
+                params.addParam("token", token);
+                MytfgApi.ApiCallback callback = new MytfgApi.ApiCallback() {
+                    @Override
+                    public void callback(boolean success, JSONObject result, int responseCode, String resultStr) {
+                        if (!success) {
+                            Toast.makeText(context, "GCM Registrierung fehlgeschlagen: " + resultStr, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                };
+                MytfgApi.call("ajax_gcm_register", params, callback);
             }
         }
     }
