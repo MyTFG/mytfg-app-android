@@ -84,6 +84,8 @@ public class LoginFragment extends AbstractFragment {
                                 prefEditor.putLong(getString(R.string.settings_login_timeout), timeout);
                                 prefEditor.commit();
                                 MyTFG.refreshPrefs();
+                                // Resend GCM token!
+                                MyTFG.sendGcmToken();
                                 ((MainActivity) MainActivity.context).getSupportFragmentManager().popBackStackImmediate();
                             } catch (JSONException ex) {
                                 toast = Toast.makeText(getView().getContext(), "Login erfolgreich, aber Fehler beim Parsen: " + ex.getMessage() , Toast.LENGTH_LONG);
