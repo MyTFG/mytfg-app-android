@@ -1,13 +1,19 @@
 package de.mytfg.app.android.slidemenu;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,9 +21,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import de.mytfg.app.android.*;
 
+import de.mytfg.app.android.gcm.RegistrationIntentService;
 import de.mytfg.app.android.slidemenu.items.Navigation;
 
 public class MainActivity extends AppCompatActivity
@@ -35,6 +46,9 @@ public class MainActivity extends AppCompatActivity
     public static Navigation navigation;
     public static Context context;
     public static ProgressBar loadingBar;
+
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +69,32 @@ public class MainActivity extends AppCompatActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        // Init GCM
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                SharedPreferences sharedPreferences = MyTFG.preferences;
+                boolean sentToken = sharedPreferences
+                        .getBoolean("sentTokenToServer", false);
+                if (sentToken) {
+                    Toast.makeText(context, "Message Send", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(context, "Token error", Toast.LENGTH_LONG).show();
+                }
+            }
+        };
+
+
+        if (checkPlayServices()) {
+            // Start IntentService to register this application with GCM.
+            Log.i("CPS", "Intent Service started.");
+            Intent intent = new Intent(this, RegistrationIntentService.class);
+            startService(intent);
+        } else {
+            Log.i("CPS", "Failed.");
+        }
+
     }
 
     @Override
@@ -108,6 +148,40 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter("registrationComplete"));
+    }
+
+    @Override
+    protected void onPause() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+        super.onPause();
+    }
+
+    /**
+     * Check the device to make sure it has the Google Play Services APK. If
+     * it doesn't, display a dialog that allows users to download the APK from
+     * the Google Play Store or enable it in the device's system settings.
+     */
+    private boolean checkPlayServices() {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+                Log.i("GCM", "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -150,6 +224,7 @@ public class MainActivity extends AppCompatActivity
         public void setActionBarTitle(String title){
             getActivity().getActionBar().setTitle(title);
         }
+
     }
 
 }
