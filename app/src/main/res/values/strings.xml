@@ -2,6 +2,8 @@
     <string name="app_name">MyTFG</string>
     <string name="title_activity_main">MyTFG</string>
 
+    <string name="crash_toast">Leider ist die MyTFG App abgestürzt, ein Absturzbericht wird gesendet</string>
+
     <string name="title_start">Start</string>
     <string name="title_login">Login</string>
     <string name="title_settings">Einstellungen</string>
@@ -29,4 +31,17 @@
 
     <string name="action_details">Details</string>
 
+    <!-- Settings items titles -->
+    <string name="setting_notification_group">Benachrichtigungen gruppieren</string>
+    <string name="setting_terminal_archive">Supportcenter Archiv</string>
+    <string name="setting_auth_logout_title">Sie sind derzeit angemeldet</string>
+    <string name="setting_auth_logout_user">Ihr Nutzername lautet</string>
+    <string name="setting_auth_logout_timeout">Ihr Login ist gültig bis</string>
+    <string name="setting_auth_logout_button">Logout</string>
+    <string name="setting_auth_login_title">Sie sind nicht angemeldet</string>
+    <string name="setting_auth_login_button">Login</string>
+
+    <!-- Settings items prefs -->
+    <string name="pref_notification_group">group_notifications</string>
+    <string name="pref_terminal_archive">show_terminal_archive</string>
 </resources>

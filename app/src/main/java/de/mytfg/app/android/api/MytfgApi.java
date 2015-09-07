@@ -35,6 +35,7 @@ public class MytfgApi {
             // Will not handle null params.
             callback.callback(false, null, -1, null);
         } else {
+            params.doLogin();
             new MytfgApi.RequestTask(apiFunction, params, callback).execute("");
         }
     }

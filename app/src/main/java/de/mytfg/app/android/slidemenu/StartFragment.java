@@ -26,16 +26,13 @@ import java.util.List;
 
 import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.R;
+import de.mytfg.app.android.api.ApiCache;
 import de.mytfg.app.android.api.ApiParams;
 import de.mytfg.app.android.api.MytfgApi;
 import de.mytfg.app.android.slidemenu.items.Navigation;
 
 public class StartFragment extends AbstractFragment {
     View startview;
-    SharedPreferences preferences;
-    private String mytfg_login_user;
-    private String mytfg_login_token;
-    private String mytfg_login_device;
     private RecyclerView notificationList;
     private List<Notification> notifications;
     RVAdapter adapter;
@@ -51,12 +48,10 @@ public class StartFragment extends AbstractFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         startview = inflater.inflate(R.layout.start_layout, container, false);
 
-        preferences = startview.getContext().getSharedPreferences(getString(R.string.sharedpref_settings), Context.MODE_MULTI_PROCESS);
-
-        // user, token and device id for MytfgApi calls
-        mytfg_login_user = preferences.getString(getString(R.string.settings_login_username), "");
-        mytfg_login_token = preferences.getString(getString(R.string.settings_login_token), "");
-        mytfg_login_device = Settings.Secure.getString(startview.getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        if (!MyTFG.isLoggedIn()) {
+            MainActivity.navigation.navigate(Navigation.ItemNames.SETTINGS);
+            return null;
+        }
 
         // notificationList displays notifications
         notificationList = (RecyclerView) startview.findViewById(R.id.notificationList);
@@ -72,10 +67,14 @@ public class StartFragment extends AbstractFragment {
 
     private void refreshNotifications() {
         ApiParams params = new ApiParams();
-        params.addParam("mytfg_api_login_user", mytfg_login_user);
-        params.addParam("mytfg_api_login_token", mytfg_login_token);
-        params.addParam("mytfg_api_login_device", mytfg_login_device);
         params.addParam("group", "false");
+
+        if (MyTFG.preferences.getBoolean(getResources().getString(R.string.pref_notification_group), false)) {
+            params.addParam("group", "true");
+        } else {
+            params.addParam("group", "false");
+        }
+
         MytfgApi.ApiCallback callback = new MytfgApi.ApiCallback() {
             @Override
             public void callback(boolean success, JSONObject result, int responseCode, String resultStr) {
@@ -99,7 +98,7 @@ public class StartFragment extends AbstractFragment {
                 toast.show();
             }
         };
-        MytfgApi.call("ajax_notification_list", params, callback);
+        ApiCache.call("ajax_notification_list", params, callback);
     }
 
     private void displayNotifications(JSONArray jsonNotifications) throws JSONException {
