@@ -8,8 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="16dp"
-        android:paddingTop="16dp"
-        android:text="@string/school_class" />
+        android:paddingTop="16dp" />
 
     <TextView
         android:id="@+id/date"
@@ -18,8 +17,7 @@
         android:layout_alignParentRight="true"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:paddingTop="16dp"
-        android:text="@string/date"/>
+        android:paddingTop="16dp" />
 
     <LinearLayout
         android:id="@+id/buttons_layout"

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ import de.mytfg.app.android.slidemenu.items.Navigation;
 public class VPlanFragment extends AbstractFragment {
     View vplanview;
     private RecyclerView vPlanList;
+    private String selected_day;
 
     @Nullable
     @Override
@@ -46,24 +48,48 @@ public class VPlanFragment extends AbstractFragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(vplanview.getContext());
         vPlanList.setLayoutManager(linearLayoutManager);
 
+        Button todayButton = (Button) vplanview.findViewById(R.id.button_today);
+        todayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selected_day = "today";
+                refreshVPlanEntries();
+            }
+        });
+
+        Button tomorrowButton = (Button) vplanview.findViewById(R.id.button_tomorrow);
+        tomorrowButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selected_day = "tomorrow";
+                refreshVPlanEntries();
+            }
+        });
+
+        // set default value for selected_day
+        selected_day = "today";
+
         refreshVPlanEntries();
         return vplanview;
     }
 
     private void refreshVPlanEntries() {
         ApiParams params = new ApiParams();
-        params.addParam("day", "today");
+        params.addParam("day", selected_day);
         MytfgApi.ApiCallback callback = new MytfgApi.ApiCallback() {
             @Override
             public void callback(boolean success, JSONObject result, int responseCode, String resultStr) {
                 Toast toast;
                 if (success) {
                     try {
+                        displayHeaderEntries(result.getJSONArray("entries").getJSONObject(0).getString("class"),
+                                result.getString("status_message"));
                         displayVPlanEntries(result.getJSONArray("entries"));
                         return;
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        toast = Toast.makeText(vplanview.getContext(), "Error parsing JSON", Toast.LENGTH_LONG);
+                        toast = Toast.makeText(vplanview.getContext(), "Error parsing JSON",
+                                Toast.LENGTH_LONG);
                     }
                 } else {
                     String error = "";
@@ -79,12 +105,20 @@ public class VPlanFragment extends AbstractFragment {
         MytfgApi.call("ajax_vplan_get", params, callback);
     }
 
+    private void displayHeaderEntries(String school_class, String date) {
+        // split string to get useful data
+        String date_new[] = date.split("für");
+        TextView textview_school_class = (TextView) vplanview.findViewById(R.id.school_class);
+        textview_school_class.setText(school_class);
+        TextView textview_date = (TextView) vplanview.findViewById(R.id.date);
+        textview_date.setText(date_new[1]);
+    }
+
     private void displayVPlanEntries(JSONArray jsonVPlanEntries) throws JSONException {
         List<VPlanEntry> vPlanEntries = new ArrayList<>();
         for (int i = 0; i < jsonVPlanEntries.length(); i++) {
             JSONObject obj = jsonVPlanEntries.getJSONObject(i);
             vPlanEntries.add(new VPlanEntry(
-                            obj.getString("class"),
                             obj.getString("lesson"),
                             obj.getString("plan"),
                             obj.getString("substitution"),
@@ -96,14 +130,12 @@ public class VPlanFragment extends AbstractFragment {
     }
 
     class VPlanEntry {
-        String school_class;
         String lesson;
         String plan;
         String substitution;
         String comment;
 
-        VPlanEntry(String school_class, String lesson, String plan, String comment, String substitution) {
-            this.school_class = school_class;
+        VPlanEntry(String lesson, String plan, String comment, String substitution) {
             this.lesson = lesson;
             this.plan = plan;
             this.substitution = substitution;
