@@ -30,6 +30,7 @@ public class VPlanFragment extends AbstractFragment {
     View vplanview;
     private RecyclerView vPlanList;
     private String selected_day;
+    JSONArray info_array;
 
     @Nullable
     @Override
@@ -82,6 +83,7 @@ public class VPlanFragment extends AbstractFragment {
                 Toast toast;
                 if (success) {
                     try {
+                        displayInfos(result.getJSONArray("marquee"));
                         displayHeaderEntries(result.getJSONArray("entries").getJSONObject(0).getString("class"),
                                 result.getString("status_message"));
                         displayVPlanEntries(result.getJSONArray("entries"));
@@ -105,6 +107,11 @@ public class VPlanFragment extends AbstractFragment {
         MytfgApi.call("ajax_vplan_get", params, callback);
     }
 
+    // save info_array to display information
+    private void displayInfos(JSONArray infos){
+        info_array = infos;
+    }
+
     private void displayHeaderEntries(String school_class, String date) {
         // split string to get useful data
         String date_new[] = date.split("für");
@@ -115,6 +122,7 @@ public class VPlanFragment extends AbstractFragment {
     }
 
     private void displayVPlanEntries(JSONArray jsonVPlanEntries) throws JSONException {
+        // create list of entries to display in card view
         List<VPlanEntry> vPlanEntries = new ArrayList<>();
         for (int i = 0; i < jsonVPlanEntries.length(); i++) {
             JSONObject obj = jsonVPlanEntries.getJSONObject(i);
@@ -143,7 +151,7 @@ public class VPlanFragment extends AbstractFragment {
         }
     }
 
-    public class RVAdapter extends RecyclerView.Adapter<RVAdapter.VPlanViewHolder> {
+    public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         List<VPlanEntry> vplanEntries;
 
@@ -151,32 +159,62 @@ public class VPlanFragment extends AbstractFragment {
             this.vplanEntries = entries;
         }
 
+        // get position of item, 0 is vplan_info_view, > 0 are vplan_views
+        @Override
+        public int getItemViewType(int position) {
+            return position;
+        }
+
+
         @Override
         public int getItemCount() {
             return vplanEntries.size();
         }
 
         @Override
-        public VPlanViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.vplan_view_layout, viewGroup, false);
-            return new VPlanViewHolder(v);
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            // if this is the vplan_info_view
+            if (i == 0) {
+                View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.vplan_info_view_layout, viewGroup, false);
+                return new VPlanInfoViewHolder(v);
+            } else {
+                View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.vplan_view_layout, viewGroup, false);
+                return new VPlanViewHolder(v);
+            }
         }
 
         @Override
-        public void onBindViewHolder(VPlanViewHolder vplanViewHolder, int i) {
-            String lesson = vplanEntries.get(i).lesson;
-            vplanViewHolder.lessonText.setText(lesson);
+        public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
+            // if this is the vplan_info_view
+            if (i==0) {
+                // cast to VPlanInfoViewHolder
+                VPlanInfoViewHolder vPlanInfoViewHolder = (VPlanInfoViewHolder) viewHolder;
+                // get entries and construct String
+                String string_info = "Keine Informationen gespeichert";
+                for (int j=0; j < info_array.length(); j++) {
+                    try {
+                        string_info = info_array.getString(j) + System.getProperty("line.separator");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                vPlanInfoViewHolder.info.setText(string_info);
+            } else {
+                // cast to VPlanViewHolder
+                VPlanViewHolder vPlanViewHolder = (VPlanViewHolder) viewHolder;
+                // get elements from vplanEntries class
+                String lesson = vplanEntries.get(i).lesson;
+                String regular = vplanEntries.get(i).plan;
+                String comment = vplanEntries.get(i).comment;
+                String substitution = vplanEntries.get(i).substitution;
+                // and display in text views
+                vPlanViewHolder.lessonText.setText(lesson);
+                vPlanViewHolder.regularText.setText(regular);
+                vPlanViewHolder.substitutionText.setText(substitution);
+                vPlanViewHolder.substitutionText.setText(comment);
 
-            String regular = vplanEntries.get(i).plan;
-            vplanViewHolder.regularText.setText(regular);
 
-            String substitution = vplanEntries.get(i).substitution;
-            vplanViewHolder.substitutionText.setText(substitution);
-
-            String comment = vplanEntries.get(i).comment;
-            vplanViewHolder.substitutionText.setText(comment);
-
-           // vplanViewHolder.titleText.setTextColor(getResources().getColor(R.color.white));
+            }
         }
 
         @Override
@@ -198,6 +236,17 @@ public class VPlanFragment extends AbstractFragment {
                 regularText = (TextView) itemView.findViewById(R.id.regular_text);
                 substitutionText = (TextView) itemView.findViewById(R.id.substitution_text);
                 commentText = (TextView) itemView.findViewById(R.id.comment_text);
+            }
+        }
+
+        public class VPlanInfoViewHolder extends RecyclerView.ViewHolder {
+            CardView vplanInfoView;
+            TextView info;
+
+            VPlanInfoViewHolder(View itemView) {
+                super(itemView);
+                vplanInfoView = (CardView) itemView.findViewById(R.id.vplanInfoView);
+                info = (TextView) itemView.findViewById(R.id.vplan_info);
             }
         }
     }
