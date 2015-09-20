@@ -44,4 +44,13 @@
     <!-- Settings items prefs -->
     <string name="pref_notification_group">group_notifications</string>
     <string name="pref_terminal_archive">show_terminal_archive</string>
+
+    <!-- VPlan -->
+    <string name="regular_headline">Nach Plan:</string>
+    <string name="substitution_headline">Vertretung:</string>
+    <string name="comment_headline">Bemerkung:</string>
+    <string name="school_class">Klasse 5A</string>
+    <string name="date">Freitag, 04.02.</string>
+    <string name="button_today">heute</string>
+    <string name="button_tomorrow">morgen</string>
 </resources>

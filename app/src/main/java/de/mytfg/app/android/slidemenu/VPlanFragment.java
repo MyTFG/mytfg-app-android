@@ -87,7 +87,8 @@ public class VPlanFragment extends AbstractFragment {
                             obj.getString("class"),
                             obj.getString("lesson"),
                             obj.getString("plan"),
-                            obj.getString("substitution"))
+                            obj.getString("substitution"),
+                            obj.getString("comment"))
             );
         }
         RVAdapter adapter = new RVAdapter(vPlanEntries);
@@ -99,16 +100,18 @@ public class VPlanFragment extends AbstractFragment {
         String lesson;
         String plan;
         String substitution;
+        String comment;
 
-        VPlanEntry(String school_class, String lesson, String plan, String substitution) {
+        VPlanEntry(String school_class, String lesson, String plan, String comment, String substitution) {
             this.school_class = school_class;
             this.lesson = lesson;
             this.plan = plan;
             this.substitution = substitution;
+            this.comment = comment;
         }
     }
 
-    public class RVAdapter extends RecyclerView.Adapter<RVAdapter.TerminalViewHolder> {
+    public class RVAdapter extends RecyclerView.Adapter<RVAdapter.VPlanViewHolder> {
 
         List<VPlanEntry> vplanEntries;
 
@@ -122,23 +125,26 @@ public class VPlanFragment extends AbstractFragment {
         }
 
         @Override
-        public TerminalViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.terminal_view_layout, viewGroup, false);
-            return new TerminalViewHolder(v);
+        public VPlanViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.vplan_view_layout, viewGroup, false);
+            return new VPlanViewHolder(v);
         }
 
         @Override
-        public void onBindViewHolder(TerminalViewHolder terminalViewHolder, int i) {
-            String title = vplanEntries.get(i).school_class;
-            terminalViewHolder.titleText.setText(title);
+        public void onBindViewHolder(VPlanViewHolder vplanViewHolder, int i) {
+            String lesson = vplanEntries.get(i).lesson;
+            vplanViewHolder.lessonText.setText(lesson);
 
-            String authorDateText = vplanEntries.get(i).lesson;
-            terminalViewHolder.authorDateText.setText(authorDateText);
+            String regular = vplanEntries.get(i).plan;
+            vplanViewHolder.regularText.setText(regular);
 
-            String mainText = vplanEntries.get(i).plan + " - " + vplanEntries.get(i).substitution;
-            terminalViewHolder.mainText.setText(mainText);
+            String substitution = vplanEntries.get(i).substitution;
+            vplanViewHolder.substitutionText.setText(substitution);
 
-            terminalViewHolder.titleText.setTextColor(getResources().getColor(R.color.white));
+            String comment = vplanEntries.get(i).comment;
+            vplanViewHolder.substitutionText.setText(comment);
+
+           // vplanViewHolder.titleText.setTextColor(getResources().getColor(R.color.white));
         }
 
         @Override
@@ -146,18 +152,20 @@ public class VPlanFragment extends AbstractFragment {
             super.onAttachedToRecyclerView(recyclerView);
         }
 
-        public class TerminalViewHolder extends RecyclerView.ViewHolder {
-            CardView terminalView;
-            TextView titleText;
-            TextView authorDateText;
-            TextView mainText;
+        public class VPlanViewHolder extends RecyclerView.ViewHolder {
+            CardView vplanView;
+            TextView lessonText;
+            TextView regularText;
+            TextView substitutionText;
+            TextView commentText;
 
-            TerminalViewHolder(View itemView) {
+            VPlanViewHolder(View itemView) {
                 super(itemView);
-                terminalView = (CardView) itemView.findViewById(R.id.terminalView);
-                titleText = (TextView) itemView.findViewById(R.id.title_text);
-                authorDateText = (TextView) itemView.findViewById(R.id.author_date_text);
-                mainText = (TextView) itemView.findViewById(R.id.flags_text);
+                vplanView = (CardView) itemView.findViewById(R.id.vplanView);
+                lessonText = (TextView) itemView.findViewById(R.id.lesson_text);
+                regularText = (TextView) itemView.findViewById(R.id.regular_text);
+                substitutionText = (TextView) itemView.findViewById(R.id.substitution_text);
+                commentText = (TextView) itemView.findViewById(R.id.comment_text);
             }
         }
     }
