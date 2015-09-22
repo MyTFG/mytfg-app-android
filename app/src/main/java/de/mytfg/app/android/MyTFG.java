@@ -14,6 +14,8 @@ import org.acra.*;
 import org.acra.annotation.*;
 import org.acra.sender.HttpSender;
 
+import de.mytfg.app.android.modulemanager.ModuleManager;
+
 /**
  * ACRA collects crash information (stacktrace, device info, ...) and sends it JSON formated to
  * acralyzer.
@@ -45,6 +47,7 @@ public class MyTFG extends Application {
     private static String login_token = "";
 
     public static SharedPreferences preferences;
+    public static ModuleManager moduleManager;
 
     public void onCreate(){
         super.onCreate();
@@ -55,6 +58,8 @@ public class MyTFG extends Application {
         MyTFG.context = getApplicationContext();
         preferences = getSharedPreferences(getString(R.string.sharedpref_settings), Context.MODE_MULTI_PROCESS);
         refreshPrefs();
+
+        moduleManager = new ModuleManager();
     }
 
     public static boolean isLoggedIn() {
