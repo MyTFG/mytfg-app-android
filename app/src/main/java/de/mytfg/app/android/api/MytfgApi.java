@@ -2,6 +2,7 @@ package de.mytfg.app.android.api;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 
 import org.json.JSONObject;
 
@@ -18,6 +19,8 @@ import java.net.URLEncoder;
 import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import de.mytfg.app.android.slidemenu.MainActivity;
 
 /**
  * This class is an abstract wrapper to access the MyTFG API.
@@ -37,6 +40,7 @@ public class MytfgApi {
             callback.callback(false, null, -1, null);
         } else {
             params.doLogin();
+            MainActivity.loadingBar.setVisibility(View.VISIBLE);
             new MytfgApi.RequestTask(apiFunction, params, callback).execute("");
         }
     }
@@ -67,6 +71,7 @@ public class MytfgApi {
         private String apiFunction;
         private ApiParams parameters;
         private ApiCallback callback;
+        private static int activeCalls = 0;
 
         private String baseURL = "https://mytfg.de/";
         private String urlExtension = ".x";
@@ -98,6 +103,7 @@ public class MytfgApi {
 
         @Override
         protected String doInBackground(String... useless) {
+            activeCalls++;
             try {
                 URL url = new URL(baseURL + apiFunction + urlExtension);
                 HttpsURLConnection connection = (HttpsURLConnection)url.openConnection();
@@ -137,6 +143,14 @@ public class MytfgApi {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            if (activeCalls > 0) {
+                activeCalls--;
+            }
+
+            if (activeCalls == 0) {
+                MainActivity.loadingBar.setVisibility(View.GONE);
+            }
+
             if (result == null) {
                 try {
                     JSONObject obj = new JSONObject("");
