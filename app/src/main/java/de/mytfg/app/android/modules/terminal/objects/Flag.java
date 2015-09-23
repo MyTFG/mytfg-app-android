@@ -6,7 +6,23 @@ package de.mytfg.app.android.modules.terminal.objects;
 public class Flag {
     private int id;
     // TODO
-    private String[] names = {};
+    private String[] names = {
+            "Bug",
+            "Bestätigt",
+            "Gelöst",
+            "Kritisch",
+            "Lecht",
+            "Schwer",
+            "Vorschlag",
+            "Supportanfrage",
+            "Aufgabe AG",
+            "Abgewiesen",
+            "In Bearbeitung",
+            "Gesehen",
+            "Tutorial",
+            "Diskussion",
+            "Verwaltungsnetz"
+    };
 
     public Flag(int id) {
         this.id = id;
@@ -17,8 +33,11 @@ public class Flag {
     }
 
     public String getName() {
-        // TODO
-        return "Flag " + id;
+        if (id >= 0 && id < names.length) {
+            return names[id];
+        } else {
+            return "Flag " + id;
+        }
     }
 
     @Override
