@@ -12,19 +12,22 @@ public class User {
     private String grade;
     private String username;
     private int rights;
+    private boolean loaded;
 
     public User(long id) {
+        this.loaded = false;
         this.id = id;
         this.load();
     }
 
     private void load() {
-        // 1wTODO: Load rest of user data from API
+        // TODO: Load rest of user data from API
         this.firstname = "";
         this.lastname = "";
         this.grade = "";
         this.username = "";
         this.rights = 0;
+        this.loaded = true;
     }
 
     // GETTERS
@@ -50,5 +53,18 @@ public class User {
 
     public boolean isLoginUser() {
         return this.id == MyTFG.getUserId();
+    }
+
+    public boolean isLoaded() {
+        return loaded;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof User)) {
+            return false;
+        } else {
+            return this.id == ((User)o).id;
+        }
     }
 }
