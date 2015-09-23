@@ -3,28 +3,19 @@ package de.mytfg.app.android.slidemenu;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
+
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.R;
-import de.mytfg.app.android.api.ApiParams;
-import de.mytfg.app.android.api.MytfgApi;
 import de.mytfg.app.android.modulemanager.Modules;
 import de.mytfg.app.android.modules.terminal.TerminalTopics;
 import de.mytfg.app.android.modules.terminal.objects.Topic;
@@ -32,9 +23,6 @@ import de.mytfg.app.android.slidemenu.items.Navigation;
 
 public class TerminalFragment extends AbstractFragment {
     View terminalview;
-    private String mytfg_login_user;
-    private String mytfg_login_token;
-    private String mytfg_login_device;
     private RecyclerView terminalList;
 
     @Nullable
@@ -69,84 +57,19 @@ public class TerminalFragment extends AbstractFragment {
 
         module.getTopics(new TerminalTopics.GetTopicsCallback() {
             @Override
-            public void callback(List<Topic> topics) {
-                RVAdapter adapter = new RVAdapter(topics);
-                terminalList.setAdapter(adapter);
+            public void callback(List<Topic> topics, boolean stillLoading) {
+                if (topics.size() == 0 && !stillLoading) {
+                    // Display loading information when no topics and still loading
+                    // TODO
+                } else {
+                    // Display topics (may be old)
+                    RVAdapter adapter = new RVAdapter(topics);
+                    terminalList.setAdapter(adapter);
+                }
             }
         });
 
         return terminalview;
-    }
-
-    private void refreshTerminalEntries() {
-        ApiParams params = new ApiParams();
-        params.addParam("all", "false");
-        MytfgApi.ApiCallback callback = new MytfgApi.ApiCallback() {
-            @Override
-            public void callback(boolean success, JSONObject result, int responseCode, String resultStr) {
-                Toast toast;
-                if (success) {
-                    try {
-                        displayTerminalEntries(result.getJSONArray("topics"));
-                        return;
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        toast = Toast.makeText(terminalview.getContext(), "Error parsing JSON", Toast.LENGTH_LONG);
-                    }
-                } else {
-                    String error = "";
-                    if(resultStr != null) {
-                        error = resultStr;
-                    }
-                    toast = Toast.makeText(terminalview.getContext(), "Fehlgeschlagen: " + responseCode
-                            + " (" + error + ")", Toast.LENGTH_LONG);
-                }
-                toast.show();
-            }
-        };
-        MytfgApi.call("ajax_terminal_topics", params, callback);
-    }
-
-    private void displayTerminalEntries(JSONArray jsonTerminalEntries) throws JSONException {
-        List<TerminalEntry> terminalEntries = new ArrayList<>();
-        for(int i = 0; i < jsonTerminalEntries.length(); i++) {
-            JSONObject obj = jsonTerminalEntries.getJSONObject(i);
-            terminalEntries.add(new TerminalEntry(
-                            obj.getString("title"),
-                            obj.getString("author"),
-                            obj.getJSONArray("flags"),
-                            Long.parseLong(obj.getString("created")),
-                            Long.parseLong(obj.getString("edited")),
-                            Long.parseLong(obj.getString("id")),
-                            obj.getJSONArray("workers"),
-                            Long.parseLong(obj.getString("code")))
-            );
-        }
-        //RVAdapter adapter = new RVAdapter(terminalEntries);
-        //terminalList.setAdapter(adapter);
-    }
-
-    class TerminalEntry {
-        String title;
-        String author;
-        JSONArray flags;
-        long created;
-        long edited;
-        long id;
-        JSONArray workers;
-        long code;
-
-        TerminalEntry(String title, String author, JSONArray flags, long created,
-                      long edited, long id, JSONArray workers, long code) {
-            this.title = title;
-            this.author = author;
-            this.flags = flags;
-            this.created = created;
-            this.edited = edited;
-            this.id = id;
-            this.workers = workers;
-            this.code = code;
-        }
     }
 
     public class RVAdapter extends RecyclerView.Adapter<RVAdapter.TerminalViewHolder>{

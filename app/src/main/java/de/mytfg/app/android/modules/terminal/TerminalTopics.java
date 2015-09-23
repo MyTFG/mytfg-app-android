@@ -30,20 +30,22 @@ public class TerminalTopics extends Module {
     }
 
     public interface GetTopicsCallback {
-        public void callback(List<Topic> topics);
+        public void callback(List<Topic> topics, boolean stillLoading);
     }
 
     public void getTopics(GetTopicsCallback callback) {
         if (System.currentTimeMillis() > lastUpdate + updateInterval) {
+            sendCallback(callback, true);
             this.updateTopics(callback);
         } else {
-            sendCallback(callback);
+            // Data is up to date
+            sendCallback(callback, false);
         }
     }
 
-    private void sendCallback(GetTopicsCallback callback) {
+    private void sendCallback(GetTopicsCallback callback, boolean stillLoading) {
         if (callback != null) {
-            callback.callback(this.topics);
+            callback.callback(this.topics, stillLoading);
         }
     }
 
@@ -57,7 +59,7 @@ public class TerminalTopics extends Module {
                 if (success) {
                     try {
                         readTopics(result.getJSONArray("topics"));
-                        sendCallback(callbackf);
+                        sendCallback(callbackf, false);
                         return;
                     } catch (JSONException e) {
                         e.printStackTrace();
