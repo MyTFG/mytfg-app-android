@@ -1,6 +1,7 @@
 package de.mytfg.app.android.modulemanager;
 
 import de.mytfg.app.android.modules.settings.Settings;
+import de.mytfg.app.android.modules.terminal.TerminalTopics;
 
 /**
  * A ModuleFactory to create Modules by ENUM.
@@ -15,10 +16,8 @@ public class ModuleFactory {
                 break;
             case SETTINGS:
                 return new Settings();
-            case TERMINAL:
-                // TODO: Add Terminal module
-                ModuleFactory.error();
-                break;
+            case TERMINALTOPICS:
+                return new TerminalTopics();
             default:
                 ModuleFactory.error();
                 break;
