@@ -25,6 +25,9 @@ import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.R;
 import de.mytfg.app.android.api.ApiParams;
 import de.mytfg.app.android.api.MytfgApi;
+import de.mytfg.app.android.modulemanager.Modules;
+import de.mytfg.app.android.modules.terminal.TerminalTopics;
+import de.mytfg.app.android.modules.terminal.objects.Topic;
 import de.mytfg.app.android.slidemenu.items.Navigation;
 
 public class TerminalFragment extends AbstractFragment {
@@ -44,11 +47,12 @@ public class TerminalFragment extends AbstractFragment {
             return null;
         }
 
+        // Draw Floating Button for new Topic
         FloatingActionButton fab = (FloatingActionButton) terminalview.findViewById(R.id.terminal_create_fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity.navigation.navigate(Navigation.ItemNames.START, new Bundle(), Navigation.Transition.SLIDE, true);
+           MainActivity.navigation.navigate(Navigation.ItemNames.START, new Bundle(), Navigation.Transition.SLIDE, true);
             }
         });
 
@@ -60,7 +64,17 @@ public class TerminalFragment extends AbstractFragment {
         terminalList.setLayoutManager(linearLayoutManager);
 
 
-        refreshTerminalEntries();
+        // refreshTerminalEntries();
+        TerminalTopics module = (TerminalTopics)MyTFG.moduleManager.getModule(Modules.TERMINALTOPICS);
+
+        module.getTopics(new TerminalTopics.GetTopicsCallback() {
+            @Override
+            public void callback(List<Topic> topics) {
+                RVAdapter adapter = new RVAdapter(topics);
+                terminalList.setAdapter(adapter);
+            }
+        });
+
         return terminalview;
     }
 
@@ -108,8 +122,8 @@ public class TerminalFragment extends AbstractFragment {
                             Long.parseLong(obj.getString("code")))
             );
         }
-        RVAdapter adapter = new RVAdapter(terminalEntries);
-        terminalList.setAdapter(adapter);
+        //RVAdapter adapter = new RVAdapter(terminalEntries);
+        //terminalList.setAdapter(adapter);
     }
 
     class TerminalEntry {
@@ -137,15 +151,15 @@ public class TerminalFragment extends AbstractFragment {
 
     public class RVAdapter extends RecyclerView.Adapter<RVAdapter.TerminalViewHolder>{
 
-        List<TerminalEntry> terminalEntries;
+        List<Topic> topics;
 
-        RVAdapter(List<TerminalEntry> persons){
-            this.terminalEntries = persons;
+        RVAdapter(List<Topic> topics){
+            this.topics = topics;
         }
 
         @Override
         public int getItemCount() {
-            return terminalEntries.size();
+            return topics.size();
         }
 
         @Override
@@ -156,38 +170,34 @@ public class TerminalFragment extends AbstractFragment {
 
         @Override
         public void onBindViewHolder(TerminalViewHolder terminalViewHolder, int i) {
-            String title = "#" + terminalEntries.get(i).id + " - " + terminalEntries.get(i).title;
+            String title = "#" + topics.get(i).getId() + " - " + topics.get(i).getTitle();
             terminalViewHolder.titleText.setText(title);
 
-            String authorDateText = getString(R.string.terminal_created) + " " + MyTFG.getDate(terminalEntries.get(i).created)  + " " + getString(R.string.terminal_from) + " " + terminalEntries.get(i).author;
+            String authorDateText = getString(R.string.terminal_created) + " " + MyTFG.getDate(topics.get(i).getCreated())  + " " + getString(R.string.terminal_from) + " " + topics.get(i).getAuthor();
             terminalViewHolder.authorDateText.setText(authorDateText);
 
-            if (terminalEntries.get(i).created != terminalEntries.get(i).edited) {
-                terminalViewHolder.editedDateText.setText(getString(R.string.terminal_edited) + ": " + MyTFG.getDate(terminalEntries.get(i).edited));
+            if (topics.get(i).getCreated() != topics.get(i).getEdited()) {
+                terminalViewHolder.editedDateText.setText(getString(R.string.terminal_edited) + ": " + MyTFG.getDate(topics.get(i).getEdited()));
             }
 
-            final TerminalEntry entry = terminalEntries.get(i);
+            final Topic topic = topics.get(i);
 
             terminalViewHolder.terminalView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Bundle args = new Bundle();
-                    args.putLong("topic", entry.id);
-                    args.putString("title", entry.title);
+                    args.putLong("topic", topic.getId());
+                    args.putString("title", topic.getTitle());
                     MainActivity.navigation.navigate(Navigation.ItemNames.TERMINAL_TOPIC, args);
                 }
             });
 
-            terminalViewHolder.flagsText.setText(terminalEntries.get(i).flags.toString());
+            terminalViewHolder.flagsText.setText(topics.get(i).getFlags().toString());
 
-            for (int j = 0; j < terminalEntries.get(i).workers.length(); j++) {
-                try {
-                    if (terminalEntries.get(i).workers.getString(j).equals(MyTFG.getUserId() + "")) {
-                        terminalViewHolder.titleText.setTextColor(getResources().getColor(R.color.orange_accent));
-                        return;
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+            for (int j = 0; j < topics.get(i).getWorkers().size(); j++) {
+                if (topics.get(i).getWorkers().get(j).getId() == MyTFG.getUserId()) {
+                    terminalViewHolder.titleText.setTextColor(getResources().getColor(R.color.orange_accent));
+                    return;
                 }
             }
             terminalViewHolder.titleText.setTextColor(getResources().getColor(R.color.white));
