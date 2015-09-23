@@ -1,6 +1,7 @@
 package de.mytfg.app.android.api;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.json.JSONObject;
 
@@ -149,6 +150,8 @@ public class MytfgApi {
                     boolean status = (obj.getString("status").equals("1"));
                     callback.callback(status, obj, responseCode, result);
                 } catch (Exception ex) {
+                    Log.e("API", "Could not parse JSON result: " + ex.getMessage());
+                    ex.printStackTrace();
                     callback.callback(false, null, responseCode, result);
                 }
             }
