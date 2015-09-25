@@ -17,6 +17,10 @@ android:
     - extra-android-support
     ## Android Support Repository
     - extra-android-m2repository
+    ## Google Play Services Library
+    - extra-google-google_play_services
+    ## Goodle Android Repository
+    - extra-google-m2repository
 
     # Specify at least one system image,
     # if you need to run emulator(s) during your tests
