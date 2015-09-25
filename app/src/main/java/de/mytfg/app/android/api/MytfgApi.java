@@ -143,11 +143,9 @@ public class MytfgApi {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            if (activeCalls > 0) {
-                activeCalls--;
-            }
+            activeCalls--;
 
-            if (activeCalls == 0) {
+            if (activeCalls <= 0) {
                 MainActivity.loadingBar.setVisibility(View.GONE);
             }
 
