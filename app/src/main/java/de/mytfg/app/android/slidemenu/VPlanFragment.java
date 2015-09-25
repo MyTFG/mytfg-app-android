@@ -135,6 +135,7 @@ public class VPlanFragment extends AbstractFragment {
         for (int i = 0; i < jsonVPlanEntries.length(); i++) {
             JSONObject obj = jsonVPlanEntries.getJSONObject(i);
             vPlanEntries.add(new VPlanEntry(
+                            obj.getString("class"),
                             obj.getString("lesson"),
                             obj.getString("plan"),
                             obj.getString("substitution"),
@@ -148,18 +149,20 @@ public class VPlanFragment extends AbstractFragment {
     private void clearVPlan() {
         // create list of empty entries to clear plan
         List<VPlanEntry> vPlanEntries = new ArrayList<>();
-        vPlanEntries.add(new VPlanEntry("", "", "", ""));
+        vPlanEntries.add(new VPlanEntry("", "", "", "", ""));
         RVAdapter adapter = new RVAdapter(vPlanEntries);
         vPlanList.setAdapter(adapter);
     }
 
     class VPlanEntry {
+        String school_class;
         String lesson;
         String plan;
         String substitution;
         String comment;
 
-        VPlanEntry(String lesson, String plan, String comment, String substitution) {
+        VPlanEntry(String school_class, String lesson, String plan, String comment, String substitution) {
+            this.school_class = school_class;
             this.lesson = lesson;
             this.plan = plan;
             this.substitution = substitution;
@@ -220,10 +223,16 @@ public class VPlanFragment extends AbstractFragment {
                 VPlanViewHolder vPlanViewHolder = (VPlanViewHolder) viewHolder;
                 // get elements from vplanEntries class
                 String lesson = vplanEntries.get(i).lesson;
+                String school_class = vplanEntries.get(i).school_class;
                 String regular = vplanEntries.get(i).plan;
                 String comment = vplanEntries.get(i).comment;
                 String substitution = vplanEntries.get(i).substitution;
-                // and display in text views
+                // only display school class in entry cards, if user is no pupil (and has more than
+                // only his own class's entries)
+                if (!pupil) {
+                    vPlanViewHolder.schoolClassText.setText(school_class);
+                }
+                // display entries
                 vPlanViewHolder.lessonText.setText(lesson);
                 vPlanViewHolder.regularText.setText(regular);
                 vPlanViewHolder.substitutionText.setText(substitution);
@@ -240,6 +249,7 @@ public class VPlanFragment extends AbstractFragment {
 
         public class VPlanViewHolder extends RecyclerView.ViewHolder {
             CardView vplanView;
+            TextView schoolClassText;
             TextView lessonText;
             TextView regularText;
             TextView substitutionText;
@@ -248,6 +258,7 @@ public class VPlanFragment extends AbstractFragment {
             VPlanViewHolder(View itemView) {
                 super(itemView);
                 vplanView = (CardView) itemView.findViewById(R.id.vplanView);
+                schoolClassText= (TextView) itemView.findViewById(R.id.school_class);
                 lessonText = (TextView) itemView.findViewById(R.id.lesson_text);
                 regularText = (TextView) itemView.findViewById(R.id.regular_text);
                 substitutionText = (TextView) itemView.findViewById(R.id.substitution_text);
