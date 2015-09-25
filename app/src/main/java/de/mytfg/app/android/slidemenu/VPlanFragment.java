@@ -31,6 +31,7 @@ public class VPlanFragment extends AbstractFragment {
     private RecyclerView vPlanList;
     private String selected_day;
     JSONArray info_array;
+    boolean pupil;
 
     @Nullable
     @Override
@@ -83,10 +84,17 @@ public class VPlanFragment extends AbstractFragment {
                 Toast toast;
                 if (success) {
                     try {
+                        // check, if user is a pupil
+                        pupil = (result.getInt("mode") == 1);
                         displayInfos(result.getJSONArray("marquee"));
-                        displayHeaderEntries(result.getJSONArray("entries").getJSONObject(0).getString("class"),
+                        displayHeaderEntries(result.getString("class_str"),
                                 result.getString("status_message"));
-                        displayVPlanEntries(result.getJSONArray("entries"));
+                        // check, if entries are existing
+                        if (result.get("entries") instanceof JSONArray) {
+                            displayVPlanEntries(result.getJSONArray("entries"));
+                        } else if (!result.getBoolean("entries")) {
+                            clearVPlan();
+                        }
                         return;
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -108,7 +116,7 @@ public class VPlanFragment extends AbstractFragment {
     }
 
     // save info_array to display information
-    private void displayInfos(JSONArray infos){
+    private void displayInfos(JSONArray infos) {
         info_array = infos;
     }
 
@@ -133,6 +141,14 @@ public class VPlanFragment extends AbstractFragment {
                             obj.getString("comment"))
             );
         }
+        RVAdapter adapter = new RVAdapter(vPlanEntries);
+        vPlanList.setAdapter(adapter);
+    }
+
+    private void clearVPlan() {
+        // create list of empty entries to clear plan
+        List<VPlanEntry> vPlanEntries = new ArrayList<>();
+        vPlanEntries.add(new VPlanEntry("", "", "", ""));
         RVAdapter adapter = new RVAdapter(vPlanEntries);
         vPlanList.setAdapter(adapter);
     }
@@ -186,12 +202,12 @@ public class VPlanFragment extends AbstractFragment {
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
             // if this is the vplan_info_view
-            if (i==0) {
+            if (i == 0) {
                 // cast to VPlanInfoViewHolder
                 VPlanInfoViewHolder vPlanInfoViewHolder = (VPlanInfoViewHolder) viewHolder;
                 // get entries and construct String
                 String string_info = "Keine Informationen gespeichert";
-                for (int j=0; j < info_array.length(); j++) {
+                for (int j = 0; j < info_array.length(); j++) {
                     try {
                         string_info = info_array.getString(j) + System.getProperty("line.separator");
                     } catch (JSONException e) {
