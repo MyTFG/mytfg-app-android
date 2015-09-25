@@ -20,6 +20,7 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.slidemenu.MainActivity;
 
 /**
@@ -40,7 +41,7 @@ public class MytfgApi {
             callback.callback(false, null, -1, null);
         } else {
             params.doLogin();
-            MainActivity.loadingBar.setVisibility(View.VISIBLE);
+            MyTFG.setLoadingBarVisble(true);
             new MytfgApi.RequestTask(apiFunction, params, callback).execute("");
         }
     }
@@ -146,7 +147,7 @@ public class MytfgApi {
             activeCalls--;
 
             if (activeCalls <= 0) {
-                MainActivity.loadingBar.setVisibility(View.GONE);
+                MyTFG.setLoadingBarVisble(false);
             }
 
             if (result == null) {

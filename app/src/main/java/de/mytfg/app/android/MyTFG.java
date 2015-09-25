@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.provider.Settings;
 import android.text.format.DateFormat;
+import android.view.View;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -15,6 +16,7 @@ import org.acra.annotation.*;
 import org.acra.sender.HttpSender;
 
 import de.mytfg.app.android.modulemanager.ModuleManager;
+import de.mytfg.app.android.slidemenu.MainActivity;
 
 /**
  * ACRA collects crash information (stacktrace, device info, ...) and sends it JSON formated to
@@ -127,5 +129,15 @@ public class MyTFG extends Application {
                 string(R.string.settings_login_username)).commit();
 
         refreshPrefs();
+    }
+
+    public static void setLoadingBarVisble(boolean visble) {
+        if (MainActivity.loadingBar != null) {
+            if (visble) {
+                MainActivity.loadingBar.setVisibility(View.VISIBLE);
+            } else {
+                MainActivity.loadingBar.setVisibility(View.GONE);
+            }
+        }
     }
 }
