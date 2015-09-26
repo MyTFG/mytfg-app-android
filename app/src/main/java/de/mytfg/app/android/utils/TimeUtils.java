@@ -5,9 +5,6 @@ import android.text.format.DateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-/**
- * Created by t on 26.09.15.
- */
 public class TimeUtils {
 
     public static String getDateStringShort(long timestamp) {
