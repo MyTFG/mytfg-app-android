@@ -29,6 +29,7 @@ import de.mytfg.app.android.R;
 import de.mytfg.app.android.api.ApiParams;
 import de.mytfg.app.android.api.MytfgApi;
 import de.mytfg.app.android.slidemenu.items.Navigation;
+import de.mytfg.app.android.utils.TimeUtils;
 
 public class TerminalTopicFragment extends AbstractFragment {
     View terminalentryview;
@@ -232,7 +233,7 @@ public class TerminalTopicFragment extends AbstractFragment {
             String title = terminalReviews.get(i).author;
             terminalTopicViewHolder.titleText.setText(title);
 
-            String authorDateText = MyTFG.getDate(terminalReviews.get(i).created);
+            String authorDateText = TimeUtils.getDateStringShort(terminalReviews.get(i).created);
             terminalTopicViewHolder.authorDateText.setText(authorDateText);
 
             terminalTopicViewHolder.mainText.setText(terminalReviews.get(i).text);

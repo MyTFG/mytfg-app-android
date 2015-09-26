@@ -11,6 +11,7 @@ import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.R;
 import de.mytfg.app.android.slidemenu.MainActivity;
 import de.mytfg.app.android.slidemenu.items.Navigation;
+import de.mytfg.app.android.utils.TimeUtils;
 
 /**
  * Authentication Settings Item.
@@ -48,7 +49,7 @@ public class Auth extends SettingsItem {
 
         tw = new TextView(MainActivity.context);
         tw.setText(MyTFG.string(R.string.setting_auth_logout_timeout)
-                + ":\n  " + MyTFG.getDate(MyTFG.getTokenTimeout() / 1000) + "\n");
+                + ":\n  " + TimeUtils.getDateStringShort(MyTFG.getTokenTimeout() / 1000) + "\n");
         tw.setTextColor(MyTFG.color(R.color.white));
         tw.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyTFG.dimension(R.dimen.mytfg_text));
         ll.addView(tw);
