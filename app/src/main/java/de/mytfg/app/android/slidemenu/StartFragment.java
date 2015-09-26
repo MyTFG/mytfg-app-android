@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +23,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.R;
@@ -175,6 +178,17 @@ public class StartFragment extends AbstractFragment {
             notificationViewHolder.titleText.setText(notifications.get(i).title);
             notificationViewHolder.textText.setText(notifications.get(i).description);
             notificationViewHolder.statusIcon.setImageResource(notifications.get(i).statusIconId);
+            String datetime = "";
+            Calendar calendar = Calendar.getInstance(Locale.ENGLISH);
+            calendar.setTimeInMillis(notifications.get(i).timestamp * 1000);
+            if (calendar.get(Calendar.DATE) == Calendar.getInstance().get(Calendar.DATE)) {
+                datetime = DateFormat.format("HH:mm", calendar).toString();
+            } else if (calendar.get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR)) {
+                datetime = DateFormat.format("dd.MM.", calendar).toString();
+            } else {
+                datetime = DateFormat.format("dd.MM.yyyy", calendar).toString();
+            }
+            notificationViewHolder.datetimeText.setText(datetime);
             if (!notifications.get(i).acknowledged) {
                 notificationViewHolder.titleText.setTextColor(getResources().getColor(R.color.orange_accent));
             }
@@ -218,6 +232,7 @@ public class StartFragment extends AbstractFragment {
             TextView titleText;
             TextView textText;
             ImageView statusIcon;
+            TextView datetimeText;
 
             NotificationViewHolder(View itemView) {
                 super(itemView);
@@ -226,6 +241,7 @@ public class StartFragment extends AbstractFragment {
                 titleText = (TextView)itemView.findViewById(R.id.title_text);
                 textText = (TextView)itemView.findViewById(R.id.text_text);
                 statusIcon = (ImageView)itemView.findViewById(R.id.status_icon);
+                datetimeText = (TextView)itemView.findViewById(R.id.datetime_text);
             }
         }
     }
