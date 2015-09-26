@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.provider.Settings;
 import android.text.format.DateFormat;
+import android.view.View;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -13,6 +14,9 @@ import java.util.Locale;
 import org.acra.*;
 import org.acra.annotation.*;
 import org.acra.sender.HttpSender;
+
+import de.mytfg.app.android.modulemanager.ModuleManager;
+import de.mytfg.app.android.slidemenu.MainActivity;
 
 /**
  * ACRA collects crash information (stacktrace, device info, ...) and sends it JSON formated to
@@ -45,6 +49,7 @@ public class MyTFG extends Application {
     private static String login_token = "";
 
     public static SharedPreferences preferences;
+    public static ModuleManager moduleManager;
 
     public void onCreate(){
         super.onCreate();
@@ -55,6 +60,8 @@ public class MyTFG extends Application {
         MyTFG.context = getApplicationContext();
         preferences = getSharedPreferences(getString(R.string.sharedpref_settings), Context.MODE_MULTI_PROCESS);
         refreshPrefs();
+
+        moduleManager = new ModuleManager();
     }
 
     public static boolean isLoggedIn() {
@@ -122,5 +129,15 @@ public class MyTFG extends Application {
                 string(R.string.settings_login_username)).commit();
 
         refreshPrefs();
+    }
+
+    public static void setLoadingBarVisble(boolean visble) {
+        if (MainActivity.loadingBar != null) {
+            if (visble) {
+                MainActivity.loadingBar.setVisibility(View.VISIBLE);
+            } else {
+                MainActivity.loadingBar.setVisibility(View.GONE);
+            }
+        }
     }
 }

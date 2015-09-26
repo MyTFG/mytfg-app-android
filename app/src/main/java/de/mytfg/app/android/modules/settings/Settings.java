@@ -9,16 +9,18 @@ import java.util.List;
 
 import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.R;
+import de.mytfg.app.android.modulemanager.Module;
 
 /**
- * Created by lennart on 25-Aug-15.
+ * The Module for the Settings Fragment.
+ * Managed by ModuleManager.
  */
-public class Settings {
+public class Settings extends Module {
     public interface SettingsCallback {
         void callback();
     }
 
-    public static void init(View v) {
+    public void init(View v) {
         List<SettingsItem> items = new LinkedList<>();
 
         // Login / Logout

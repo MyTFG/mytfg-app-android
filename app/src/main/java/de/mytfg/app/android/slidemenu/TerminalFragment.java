@@ -3,35 +3,26 @@ package de.mytfg.app.android.slidemenu;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
+
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.R;
-import de.mytfg.app.android.api.ApiParams;
-import de.mytfg.app.android.api.MytfgApi;
+import de.mytfg.app.android.modulemanager.Modules;
+import de.mytfg.app.android.modules.terminal.TerminalTopics;
+import de.mytfg.app.android.modules.terminal.objects.Topic;
 import de.mytfg.app.android.slidemenu.items.Navigation;
 
 public class TerminalFragment extends AbstractFragment {
     View terminalview;
-    private String mytfg_login_user;
-    private String mytfg_login_token;
-    private String mytfg_login_device;
     private RecyclerView terminalList;
 
     @Nullable
@@ -44,11 +35,12 @@ public class TerminalFragment extends AbstractFragment {
             return null;
         }
 
+        // Draw Floating Button for new Topic
         FloatingActionButton fab = (FloatingActionButton) terminalview.findViewById(R.id.terminal_create_fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity.navigation.navigate(Navigation.ItemNames.START, new Bundle(), Navigation.Transition.SLIDE, true);
+           MainActivity.navigation.navigate(Navigation.ItemNames.START, new Bundle(), Navigation.Transition.SLIDE, true);
             }
         });
 
@@ -60,92 +52,37 @@ public class TerminalFragment extends AbstractFragment {
         terminalList.setLayoutManager(linearLayoutManager);
 
 
-        refreshTerminalEntries();
-        return terminalview;
-    }
+        // refreshTerminalEntries();
+        TerminalTopics module = (TerminalTopics)MyTFG.moduleManager.getModule(Modules.TERMINALTOPICS);
 
-    private void refreshTerminalEntries() {
-        ApiParams params = new ApiParams();
-        params.addParam("all", "false");
-        MytfgApi.ApiCallback callback = new MytfgApi.ApiCallback() {
+        module.getTopics(new TerminalTopics.GetTopicsCallback() {
             @Override
-            public void callback(boolean success, JSONObject result, int responseCode, String resultStr) {
-                Toast toast;
-                if (success) {
-                    try {
-                        displayTerminalEntries(result.getJSONArray("topics"));
-                        return;
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        toast = Toast.makeText(terminalview.getContext(), "Error parsing JSON", Toast.LENGTH_LONG);
-                    }
+            public void callback(List<Topic> topics, boolean stillLoading) {
+                if (topics.size() == 0 && !stillLoading) {
+                    // Display loading information when no topics and still loading
+                    // TODO
                 } else {
-                    String error = "";
-                    if(resultStr != null) {
-                        error = resultStr;
-                    }
-                    toast = Toast.makeText(terminalview.getContext(), "Fehlgeschlagen: " + responseCode
-                            + " (" + error + ")", Toast.LENGTH_LONG);
+                    // Display topics (may be old)
+                    RVAdapter adapter = new RVAdapter(topics);
+                    terminalList.setAdapter(adapter);
                 }
-                toast.show();
             }
-        };
-        MytfgApi.call("ajax_terminal_topics", params, callback);
-    }
+        });
 
-    private void displayTerminalEntries(JSONArray jsonTerminalEntries) throws JSONException {
-        List<TerminalEntry> terminalEntries = new ArrayList<>();
-        for(int i = 0; i < jsonTerminalEntries.length(); i++) {
-            JSONObject obj = jsonTerminalEntries.getJSONObject(i);
-            terminalEntries.add(new TerminalEntry(
-                            obj.getString("title"),
-                            obj.getString("author"),
-                            obj.getJSONArray("flags"),
-                            Long.parseLong(obj.getString("created")),
-                            Long.parseLong(obj.getString("edited")),
-                            Long.parseLong(obj.getString("id")),
-                            obj.getJSONArray("workers"),
-                            Long.parseLong(obj.getString("code")))
-            );
-        }
-        RVAdapter adapter = new RVAdapter(terminalEntries);
-        terminalList.setAdapter(adapter);
-    }
-
-    class TerminalEntry {
-        String title;
-        String author;
-        JSONArray flags;
-        long created;
-        long edited;
-        long id;
-        JSONArray workers;
-        long code;
-
-        TerminalEntry(String title, String author, JSONArray flags, long created,
-                      long edited, long id, JSONArray workers, long code) {
-            this.title = title;
-            this.author = author;
-            this.flags = flags;
-            this.created = created;
-            this.edited = edited;
-            this.id = id;
-            this.workers = workers;
-            this.code = code;
-        }
+        return terminalview;
     }
 
     public class RVAdapter extends RecyclerView.Adapter<RVAdapter.TerminalViewHolder>{
 
-        List<TerminalEntry> terminalEntries;
+        List<Topic> topics;
 
-        RVAdapter(List<TerminalEntry> persons){
-            this.terminalEntries = persons;
+        RVAdapter(List<Topic> topics){
+            this.topics = topics;
         }
 
         @Override
         public int getItemCount() {
-            return terminalEntries.size();
+            return topics.size();
         }
 
         @Override
@@ -156,38 +93,34 @@ public class TerminalFragment extends AbstractFragment {
 
         @Override
         public void onBindViewHolder(TerminalViewHolder terminalViewHolder, int i) {
-            String title = "#" + terminalEntries.get(i).id + " - " + terminalEntries.get(i).title;
+            String title = "#" + topics.get(i).getId() + " - " + topics.get(i).getTitle();
             terminalViewHolder.titleText.setText(title);
 
-            String authorDateText = getString(R.string.terminal_created) + " " + MyTFG.getDate(terminalEntries.get(i).created)  + " " + getString(R.string.terminal_from) + " " + terminalEntries.get(i).author;
+            String authorDateText = getString(R.string.terminal_created) + " " + MyTFG.getDate(topics.get(i).getCreated())  + " " + getString(R.string.terminal_from) + " " + topics.get(i).getAuthor();
             terminalViewHolder.authorDateText.setText(authorDateText);
 
-            if (terminalEntries.get(i).created != terminalEntries.get(i).edited) {
-                terminalViewHolder.editedDateText.setText(getString(R.string.terminal_edited) + ": " + MyTFG.getDate(terminalEntries.get(i).edited));
+            if (topics.get(i).getCreated() != topics.get(i).getEdited()) {
+                terminalViewHolder.editedDateText.setText(getString(R.string.terminal_edited) + ": " + MyTFG.getDate(topics.get(i).getEdited()));
             }
 
-            final TerminalEntry entry = terminalEntries.get(i);
+            final Topic topic = topics.get(i);
 
             terminalViewHolder.terminalView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Bundle args = new Bundle();
-                    args.putLong("topic", entry.id);
-                    args.putString("title", entry.title);
+                    args.putLong("topic", topic.getId());
+                    args.putString("title", topic.getTitle());
                     MainActivity.navigation.navigate(Navigation.ItemNames.TERMINAL_TOPIC, args);
                 }
             });
 
-            terminalViewHolder.flagsText.setText(terminalEntries.get(i).flags.toString());
+            terminalViewHolder.flagsText.setText(topics.get(i).getFlags().toString());
 
-            for (int j = 0; j < terminalEntries.get(i).workers.length(); j++) {
-                try {
-                    if (terminalEntries.get(i).workers.getString(j).equals(MyTFG.getUserId() + "")) {
-                        terminalViewHolder.titleText.setTextColor(getResources().getColor(R.color.orange_accent));
-                        return;
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+            for (int j = 0; j < topics.get(i).getWorkers().size(); j++) {
+                if (topics.get(i).getWorkers().get(j).getId() == MyTFG.getUserId()) {
+                    terminalViewHolder.titleText.setTextColor(getResources().getColor(R.color.orange_accent));
+                    return;
                 }
             }
             terminalViewHolder.titleText.setTextColor(getResources().getColor(R.color.white));

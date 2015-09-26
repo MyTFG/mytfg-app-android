@@ -4,6 +4,8 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     tools:context="de.mytfg.app.android.MainActivity">
 
+    <include layout="@layout/toolbar" />
+
     <!-- As the main content view, the view below consumes the entire
          space available using match_parent in both dimensions. -->
     <FrameLayout android:id="@+id/container" android:layout_width="match_parent"

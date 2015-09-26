@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.ProgressBar;
 
 import de.mytfg.app.android.*;
 
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity
     private CharSequence mTitle;
     public static Navigation navigation;
     public static Context context;
+    public static ProgressBar loadingBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity
         navigation = new Navigation(this);
 
         setContentView(R.layout.activity_main);
+        loadingBar = (ProgressBar) findViewById(R.id.loading_bar);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
