@@ -59,9 +59,9 @@ public class ConversationsListFragment extends AbstractFragment {
     }
 
     public void refresh() {
-        conversations.getConversations(new Conversations.GetConversationsCallback() {
+        conversations.updateConversations(new Conversations.GetConversationsCallback() {
             @Override
-            public void callback(List<Conversation> list, boolean waiting, boolean success) {
+            public void callback(List<Conversation> list, boolean success) {
                 swipeRefresh.setRefreshing(conversations.isUpdating());
                 if(!success) {
                     Toast.makeText(MyTFG.getAppContext(), R.string.error_refreshing, Toast.LENGTH_LONG).show();
@@ -70,7 +70,7 @@ public class ConversationsListFragment extends AbstractFragment {
                     adapter.setConversations(list);
                 }
             }
-        }, true);
+        });
     }
 }
 

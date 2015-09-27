@@ -25,19 +25,10 @@ public class Conversations extends Module {
     private boolean isUpdating;
 
     public interface GetConversationsCallback {
-        void callback(List<Conversation> conversations, boolean waiting, boolean success);
+        void callback(List<Conversation> conversations, boolean success);
     }
 
-    public void getConversations(GetConversationsCallback callback, boolean forceRefresh) {
-        if(System.currentTimeMillis() > lastUpdate + UPDATE_INTERVAL) {
-            callback.callback(conversations, true, true);
-            updateConversations(callback);
-        } else {
-            callback.callback(conversations, false, true);
-        }
-    }
-
-    private void updateConversations(final GetConversationsCallback callback) {
+    public void updateConversations(final GetConversationsCallback callback) {
         isUpdating = true;
         ApiParams params = new ApiParams();
         MytfgApi.ApiCallback apiCallback = new MytfgApi.ApiCallback() {
@@ -46,6 +37,7 @@ public class Conversations extends Module {
                 boolean error = false;
                 if (success) {
                     try {
+                        conversations.clear();
                         JSONArray conversationsArray = result.getJSONArray("conversations");
                         for(int i = 0; i < conversationsArray.length(); i++) {
                             Conversation conversation = new Conversation();
@@ -72,7 +64,7 @@ public class Conversations extends Module {
                     error = true;
                 }
                 isUpdating = false;
-                callback.callback(conversations, false, !error);
+                callback.callback(conversations, !error);
             }
         };
         MytfgApi.call("ajax_message_list-conversations", params, apiCallback);
