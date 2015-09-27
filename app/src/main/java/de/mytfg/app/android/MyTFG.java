@@ -88,12 +88,6 @@ public class MyTFG extends Application {
         return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
-    public static String getDate(long timestamp) {
-        Calendar calendar = Calendar.getInstance(Locale.ENGLISH);
-        calendar.setTimeInMillis(timestamp * 1000);
-        return DateFormat.format("dd.MM.yyyy, HH:mm", calendar).toString();
-    }
-
     public static void refreshPrefs() {
         login_timeout = preferences.getLong(context.getString(R.string.settings_login_timeout), 0);
         login_token = preferences.getString(context.getString(R.string.settings_login_token), "");

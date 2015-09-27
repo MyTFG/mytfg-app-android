@@ -20,6 +20,7 @@ import de.mytfg.app.android.modulemanager.Modules;
 import de.mytfg.app.android.modules.terminal.TerminalTopics;
 import de.mytfg.app.android.modules.terminal.objects.Topic;
 import de.mytfg.app.android.slidemenu.items.Navigation;
+import de.mytfg.app.android.utils.TimeUtils;
 
 public class TerminalFragment extends AbstractFragment {
     View terminalview;
@@ -96,11 +97,11 @@ public class TerminalFragment extends AbstractFragment {
             String title = "#" + topics.get(i).getId() + " - " + topics.get(i).getTitle();
             terminalViewHolder.titleText.setText(title);
 
-            String authorDateText = getString(R.string.terminal_created) + " " + MyTFG.getDate(topics.get(i).getCreated())  + " " + getString(R.string.terminal_from) + " " + topics.get(i).getAuthor();
+            String authorDateText = getString(R.string.terminal_created) + " " + TimeUtils.getDateStringShort(topics.get(i).getCreated())  + " " + getString(R.string.terminal_from) + " " + topics.get(i).getAuthor();
             terminalViewHolder.authorDateText.setText(authorDateText);
 
             if (topics.get(i).getCreated() != topics.get(i).getEdited()) {
-                terminalViewHolder.editedDateText.setText(getString(R.string.terminal_edited) + ": " + MyTFG.getDate(topics.get(i).getEdited()));
+                terminalViewHolder.editedDateText.setText(getString(R.string.terminal_edited) + ": " + TimeUtils.getDateStringShort(topics.get(i).getEdited()));
             }
 
             final Topic topic = topics.get(i);

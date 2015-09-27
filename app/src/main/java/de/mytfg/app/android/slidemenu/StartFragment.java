@@ -1,15 +1,10 @@
 package de.mytfg.app.android.slidemenu;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.provider.Settings;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +21,7 @@ import java.util.List;
 
 import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.R;
+import de.mytfg.app.android.utils.TimeUtils;
 import de.mytfg.app.android.api.ApiCache;
 import de.mytfg.app.android.api.ApiParams;
 import de.mytfg.app.android.api.MytfgApi;
@@ -175,6 +171,7 @@ public class StartFragment extends AbstractFragment {
             notificationViewHolder.titleText.setText(notifications.get(i).title);
             notificationViewHolder.textText.setText(notifications.get(i).description);
             notificationViewHolder.statusIcon.setImageResource(notifications.get(i).statusIconId);
+            notificationViewHolder.datetimeText.setText(TimeUtils.getDateStringShort(notifications.get(i).timestamp));
             if (!notifications.get(i).acknowledged) {
                 notificationViewHolder.titleText.setTextColor(getResources().getColor(R.color.orange_accent));
             }
@@ -218,6 +215,7 @@ public class StartFragment extends AbstractFragment {
             TextView titleText;
             TextView textText;
             ImageView statusIcon;
+            TextView datetimeText;
 
             NotificationViewHolder(View itemView) {
                 super(itemView);
@@ -226,6 +224,7 @@ public class StartFragment extends AbstractFragment {
                 titleText = (TextView)itemView.findViewById(R.id.title_text);
                 textText = (TextView)itemView.findViewById(R.id.text_text);
                 statusIcon = (ImageView)itemView.findViewById(R.id.status_icon);
+                datetimeText = (TextView)itemView.findViewById(R.id.datetime_text);
             }
         }
     }
