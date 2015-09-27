@@ -86,7 +86,7 @@ public class Navigation {
 
         NavigationItem start = new StartItem(this);
         NavigationItem settings = new SettingsItem(this);
-        NavigationItem messageCenter = new ConversationsListItem(this);
+        NavigationItem conversationsList = new ConversationsListItem(this);
         NavigationItem terminal = new TerminalItem(this);
 
         NavigationItem terminaltopic = new TerminalTopicItem(this);
@@ -94,7 +94,7 @@ public class Navigation {
 
         mainCat.addItem(start);
         mainCat.addItem(terminal);
-        mainCat.addItem(messageCenter);
+        mainCat.addItem(conversationsList);
         mainCat.addItem(settings);
 
         hiddenCat.addItem(terminaltopic);
