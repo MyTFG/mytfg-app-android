@@ -1,11 +1,15 @@
 package de.mytfg.app.android.modules.general;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import de.mytfg.app.android.MyTFG;
 
 /**
  * Represents a MyTFG User.
  */
-public class User {
+public class User extends ApiObject {
+
     private long id;
     private String firstname;
     private String lastname;
@@ -20,6 +24,10 @@ public class User {
         this.load();
     }
 
+    public User() {
+
+    }
+
     private void load() {
         // TODO: Load rest of user data from API
         this.firstname = "";
@@ -27,6 +35,19 @@ public class User {
         this.grade = "";
         this.username = "";
         this.rights = 0;
+        this.loaded = true;
+    }
+
+    public void readFromJson(JSONObject json) throws JSONException {
+        if(!json.getString("type").equals("user")) {
+            throw new IllegalArgumentException("Given JSON object does not represent an user!");
+        }
+        this.id = json.getLong("id");
+        this.firstname = json.getString("firstname");
+        this.lastname = json.getString("lastname");
+        this.grade = json.getString("grade");
+        this.username = json.getString("username");
+        this.rights = json.getInt("rights");
         this.loaded = true;
     }
 
