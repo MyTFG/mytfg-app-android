@@ -1,20 +1,13 @@
 package de.mytfg.app.android.slidemenu.items;
 
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
-import java.util.Map;
 
 import de.mytfg.app.android.NavigationDrawerFragment;
 import de.mytfg.app.android.R;
@@ -29,6 +22,7 @@ public class Navigation {
         START,
         LOGIN,
         SETTINGS,
+        CONVERSATIONS_LIST,
         TERMINAL,
         TERMINAL_TOPIC
     }
@@ -92,6 +86,7 @@ public class Navigation {
 
         NavigationItem start = new StartItem(this);
         NavigationItem settings = new SettingsItem(this);
+        NavigationItem messageCenter = new ConversationsListItem(this);
         NavigationItem terminal = new TerminalItem(this);
 
         NavigationItem terminaltopic = new TerminalTopicItem(this);
@@ -99,6 +94,7 @@ public class Navigation {
 
         mainCat.addItem(start);
         mainCat.addItem(terminal);
+        mainCat.addItem(messageCenter);
         mainCat.addItem(settings);
 
         hiddenCat.addItem(terminaltopic);

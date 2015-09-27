@@ -1,5 +1,6 @@
 package de.mytfg.app.android.modulemanager;
 
+import de.mytfg.app.android.modules.messagecenter.Conversations;
 import de.mytfg.app.android.modules.settings.Settings;
 import de.mytfg.app.android.modules.terminal.TerminalTopics;
 
@@ -16,6 +17,8 @@ public class ModuleFactory {
                 break;
             case SETTINGS:
                 return new Settings();
+            case CONVERSATIONS:
+                return new Conversations();
             case TERMINALTOPICS:
                 return new TerminalTopics();
             default:

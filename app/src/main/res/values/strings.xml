@@ -43,4 +43,9 @@
     <!-- Settings items prefs -->
     <string name="pref_notification_group">group_notifications</string>
     <string name="pref_terminal_archive">show_terminal_archive</string>
+
+    <!-- Message Center -->
+    <string name="message_center_name">Nachrichtencenter</string>
+    <string name="error_refreshing">Fehler beim Aktualisieren!</string>
+
 </resources>
