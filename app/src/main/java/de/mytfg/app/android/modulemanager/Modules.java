@@ -7,6 +7,7 @@ public enum Modules {
     NOTIFICATIONS,
     TERMINALTOPICS,
     CONVERSATIONS,
+    CONVERSATION,
     SETTINGS;
 
     public static int size = Modules.values().length;

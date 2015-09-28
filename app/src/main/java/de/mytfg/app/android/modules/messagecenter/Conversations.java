@@ -18,26 +18,19 @@ import de.mytfg.app.android.modules.messagecenter.objects.Conversation;
 
 public class Conversations extends Module {
 
-    private static final int UPDATE_INTERVAL = 30000;
-
-    private ArrayList<Conversation> conversations = new ArrayList<>();
-    private long lastUpdate;
-    private boolean isUpdating;
-
     public interface GetConversationsCallback {
         void callback(List<Conversation> conversations, boolean success);
     }
 
-    public void updateConversations(final GetConversationsCallback callback) {
-        isUpdating = true;
+    public void getConversations(final GetConversationsCallback callback) {
         ApiParams params = new ApiParams();
         MytfgApi.ApiCallback apiCallback = new MytfgApi.ApiCallback() {
             @Override
             public void callback(boolean success, JSONObject result, int responseCode, String resultStr) {
                 boolean error = false;
+                ArrayList<Conversation> conversations = new ArrayList<>();
                 if (success) {
                     try {
-                        conversations.clear();
                         JSONArray conversationsArray = result.getJSONArray("conversations");
                         for(int i = 0; i < conversationsArray.length(); i++) {
                             Conversation conversation = new Conversation();
@@ -63,20 +56,10 @@ public class Conversations extends Module {
                     Log.e("API", "API call failed " + resultStr);
                     error = true;
                 }
-                isUpdating = false;
                 callback.callback(conversations, !error);
             }
         };
         MytfgApi.call("ajax_message_list-conversations", params, apiCallback);
-        lastUpdate = System.currentTimeMillis();
-    }
-
-    public long getLastUpdate() {
-        return lastUpdate;
-    }
-
-    public boolean isUpdating() {
-        return isUpdating;
     }
 
 }

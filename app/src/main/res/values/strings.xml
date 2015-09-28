@@ -47,5 +47,8 @@
     <!-- Message Center -->
     <string name="message_center_name">Nachrichtencenter</string>
     <string name="error_refreshing">Fehler beim Aktualisieren!</string>
+    <string name="last_message">Letzte Nachricht</string>
+    <string name="me">Ich</string>
+    <string name="error_sending">Fehler beim Senden!</string>
 
 </resources>

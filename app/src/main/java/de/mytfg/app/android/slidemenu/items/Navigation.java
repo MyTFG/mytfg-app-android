@@ -23,6 +23,7 @@ public class Navigation {
         LOGIN,
         SETTINGS,
         CONVERSATIONS_LIST,
+        CONVERSATION,
         TERMINAL,
         TERMINAL_TOPIC
     }
@@ -89,6 +90,7 @@ public class Navigation {
         NavigationItem conversationsList = new ConversationsListItem(this);
         NavigationItem terminal = new TerminalItem(this);
 
+        NavigationItem conversation = new ConversationItem(this);
         NavigationItem terminaltopic = new TerminalTopicItem(this);
         NavigationItem login = new LoginItem(this);
 
@@ -97,6 +99,7 @@ public class Navigation {
         mainCat.addItem(conversationsList);
         mainCat.addItem(settings);
 
+        hiddenCat.addItem(conversation);
         hiddenCat.addItem(terminaltopic);
         hiddenCat.addItem(login);
 
