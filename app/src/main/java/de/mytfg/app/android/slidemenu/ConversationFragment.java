@@ -76,6 +76,7 @@ public class ConversationFragment extends AbstractFragment {
                 conversationAdapter.setConversations(conversation); // TODO: thread safe? Also conversationslist
                 recyclerView.scrollToPosition(conversationAdapter.getItemCount() - 1);
                 //TODO: mark read
+                //TODO: keep scroll position also with keyboard
             }
         }, MESSAGES_COUNT);
 

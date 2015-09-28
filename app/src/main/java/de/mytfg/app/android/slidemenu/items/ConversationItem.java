@@ -26,7 +26,7 @@ public class ConversationItem extends NavigationItem {
         }
         stdLoad();
         AbstractFragment frag = new ConversationFragment();
-        frag.item = this;
+        frag.item = this; //TODO: title
         if (frag != null) {
             frag.args.putString("title", title);
             frag.args.putLong("conversationId", args.getLong("conversationId"));
