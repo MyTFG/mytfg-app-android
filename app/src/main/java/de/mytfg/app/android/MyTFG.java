@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.provider.Settings;
 import android.text.format.DateFormat;
+import android.widget.Toast;
 
 import android.view.View;
 import android.widget.Toast;

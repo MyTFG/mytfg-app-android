@@ -16,6 +16,7 @@ import android.util.Log;
 import com.google.android.gms.gcm.GcmListenerService;
 
 import de.mytfg.app.android.MyTFG;
+
 import de.mytfg.app.android.slidemenu.MainActivity;
 import de.mytfg.app.android.R;
 
@@ -36,17 +37,10 @@ public class MytfgGcmListenerService extends GcmListenerService {
     // [START receive_message]
     @Override
     public void onMessageReceived(String from, Bundle data) {
-        String message = data.getString("message") + " " + data.getString("grouper") + " " + data.getString("type");
+        String message = data.getString("message");
         String title = data.getString("title");
         int id = MyTFG.gcmManager.notify(from, data);
 
-        Log.d(TAG, "onMessageReceived");
-
-        if (from.startsWith("/topics/")) {
-            // message received from some topic.
-        } else {
-            // normal downstream message.
-        }
 
         sendNotification(message, title, id);
     }

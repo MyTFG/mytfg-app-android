@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -28,8 +29,8 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import de.mytfg.app.android.*;
 
-import de.mytfg.app.android.api.MytfgApi;
 import de.mytfg.app.android.gcm.GcmCallbackRegistration;
+
 import de.mytfg.app.android.gcm.RegistrationIntentService;
 import de.mytfg.app.android.slidemenu.items.Navigation;
 
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity
     public static Navigation navigation;
     public static Context context;
     public static ProgressBar loadingBar;
+
 
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -97,7 +99,6 @@ public class MainActivity extends AppCompatActivity
         } else {
             Log.i("CPS", "Failed.");
         }
-
     }
 
     protected void onNewIntent(Intent intent) {

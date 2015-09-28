@@ -25,6 +25,7 @@ android:
     ## Goodle Android Repository
     - extra-google-m2repository
 
+
 # decrypt release.keystore
 before_install:
 - openssl aes-256-cbc -K $encrypted_a5f2b7f46db1_key -iv $encrypted_a5f2b7f46db1_iv -in release.keystore.enc -out release.keystore -d
