@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import de.mytfg.app.android.api.ApiParams;
 import de.mytfg.app.android.api.MytfgApi;
 
+import de.mytfg.app.android.gcm.GcmManager;
 import de.mytfg.app.android.modulemanager.ModuleManager;
 import de.mytfg.app.android.slidemenu.MainActivity;
 
@@ -56,6 +57,7 @@ public class MyTFG extends Application {
 
     public static SharedPreferences preferences;
     public static ModuleManager moduleManager;
+    public static GcmManager gcmManager;
 
     public void onCreate(){
         super.onCreate();
@@ -68,6 +70,7 @@ public class MyTFG extends Application {
         refreshPrefs();
 
         moduleManager = new ModuleManager();
+        gcmManager = new GcmManager();
     }
 
     public static boolean isLoggedIn() {

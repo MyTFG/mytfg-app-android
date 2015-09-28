@@ -11,9 +11,11 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
+import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.slidemenu.MainActivity;
 import de.mytfg.app.android.R;
 
@@ -34,8 +36,11 @@ public class MytfgGcmListenerService extends GcmListenerService {
     // [START receive_message]
     @Override
     public void onMessageReceived(String from, Bundle data) {
-        String message = data.getString("message");
+        String message = data.getString("message") + " " + data.getString("grouper") + " " + data.getString("type");
         String title = data.getString("title");
+        int id = MyTFG.gcmManager.notify(from, data);
+
+        Log.d(TAG, "onMessageReceived");
 
         if (from.startsWith("/topics/")) {
             // message received from some topic.
@@ -43,8 +48,7 @@ public class MytfgGcmListenerService extends GcmListenerService {
             // normal downstream message.
         }
 
-        sendNotification(message, title);
-
+        sendNotification(message, title, id);
     }
 
     /**
@@ -52,11 +56,14 @@ public class MytfgGcmListenerService extends GcmListenerService {
      *
      * @param message GCM message received.
      */
-    private void sendNotification(String message, String title) {
+    private void sendNotification(String message, String title, int id) {
+        Log.d(TAG, "sendNotification");
+
         Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.putExtra("notificationId", id);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                PendingIntent.FLAG_ONE_SHOT);
+                PendingIntent.FLAG_UPDATE_CURRENT);
 
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
@@ -64,6 +71,7 @@ public class MytfgGcmListenerService extends GcmListenerService {
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setLargeIcon(bm)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(title)
                 .setContentText(message)
                 .setAutoCancel(true)
@@ -75,6 +83,6 @@ public class MytfgGcmListenerService extends GcmListenerService {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+        notificationManager.notify(id, notificationBuilder.build());
     }
 }

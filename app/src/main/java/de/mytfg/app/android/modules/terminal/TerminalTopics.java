@@ -1,5 +1,6 @@
 package de.mytfg.app.android.modules.terminal;
 
+import android.os.Bundle;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -9,10 +10,15 @@ import org.json.JSONObject;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.api.ApiParams;
 import de.mytfg.app.android.api.MytfgApi;
+import de.mytfg.app.android.gcm.GcmCallback;
+import de.mytfg.app.android.gcm.GcmNotification;
 import de.mytfg.app.android.modulemanager.Module;
 import de.mytfg.app.android.modules.terminal.objects.Topic;
+import de.mytfg.app.android.slidemenu.MainActivity;
+import de.mytfg.app.android.slidemenu.items.Navigation;
 
 /**
  * Module for the TerminalTopic List.

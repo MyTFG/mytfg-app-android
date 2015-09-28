@@ -28,6 +28,8 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import de.mytfg.app.android.*;
 
+import de.mytfg.app.android.api.MytfgApi;
+import de.mytfg.app.android.gcm.GcmCallbackRegistration;
 import de.mytfg.app.android.gcm.RegistrationIntentService;
 import de.mytfg.app.android.slidemenu.items.Navigation;
 
@@ -53,6 +55,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        onNewIntent(getIntent());
+
+        GcmCallbackRegistration.registerAll();
 
         context = this;
 
@@ -76,11 +81,9 @@ public class MainActivity extends AppCompatActivity
             public void onReceive(Context context, Intent intent) {
                 SharedPreferences sharedPreferences = MyTFG.preferences;
                 boolean sentToken = sharedPreferences
-                        .getBoolean("sentTokenToServer", false);
-                if (sentToken) {
-                    Toast.makeText(context, "Message Send", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(context, "Token error", Toast.LENGTH_LONG).show();
+                        .getBoolean(MyTFG.string(R.string.settings_gcm_sent), false);
+                if (!sentToken) {
+                    Toast.makeText(context, "GCM Token error", Toast.LENGTH_LONG).show();
                 }
             }
         };
@@ -95,6 +98,13 @@ public class MainActivity extends AppCompatActivity
             Log.i("CPS", "Failed.");
         }
 
+    }
+
+    protected void onNewIntent(Intent intent) {
+        int id = intent.getIntExtra("notificationId", -1);
+        if (id >= 0) {
+            MyTFG.gcmManager.clicked(id);
+        }
     }
 
     @Override
