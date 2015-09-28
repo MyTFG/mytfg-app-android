@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,6 +29,8 @@ import de.mytfg.app.android.api.ApiParams;
 import de.mytfg.app.android.api.MytfgApi;
 import de.mytfg.app.android.slidemenu.items.Navigation;
 import de.mytfg.app.android.utils.TimeUtils;
+
+import in.uncod.android.bypass.Bypass;
 
 public class TerminalTopicFragment extends AbstractFragment {
     View terminalentryview;
@@ -234,7 +237,10 @@ public class TerminalTopicFragment extends AbstractFragment {
             String authorDateText = TimeUtils.getDateStringShort(terminalReviews.get(i).created);
             terminalTopicViewHolder.authorDateText.setText(authorDateText);
 
-            terminalTopicViewHolder.mainText.setText(terminalReviews.get(i).text);
+            Bypass bypass = new Bypass(MyTFG.getAppContext());
+            CharSequence string = bypass.markdownToSpannable(terminalReviews.get(i).text);
+            terminalTopicViewHolder.mainText.setText(string);
+            terminalTopicViewHolder.mainText.setMovementMethod(LinkMovementMethod.getInstance());
 
             terminalTopicViewHolder.titleText.setTextColor(getResources().getColor(R.color.white));
         }
