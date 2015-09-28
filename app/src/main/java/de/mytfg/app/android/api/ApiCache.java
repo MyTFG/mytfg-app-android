@@ -48,17 +48,19 @@ public class ApiCache {
 
             if (cache.containsKey(search)) {
                 ApiResult cachedResult = cache.get(search);
-                if (cachedResult.isSuccessful() &&
-                        cachedResult.getTimestamp() + timeout > System.currentTimeMillis()) {
+                if (cachedResult.isSuccessful()
+                        && (cachedResult.getTimestamp() + timeout > System.currentTimeMillis()
+                        || timeout == 0)) {
                     // Cache is up-to-date
                     callback.callback(cachedResult.isSuccessful(), cachedResult.getJson(),
                             cachedResult.getReturnCode(), cachedResult.getResultString());
 
-                    return;
+                    if (timeout != 0) {
+                        return;
+                    }
                 }
             }
 
-            // No cache entry: Call API
             MytfgApi.ApiCallback cacheCallback = new MytfgApi.ApiCallback() {
                 @Override
                 public void callback(boolean success, JSONObject result, int responseCode, String resultStr) {

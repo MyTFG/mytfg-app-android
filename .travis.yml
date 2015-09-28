@@ -20,6 +20,11 @@ android:
     - extra-android-support
     ## Android Support Repository
     - extra-android-m2repository
+    ## Google Play Services Library
+    - extra-google-google_play_services
+    ## Goodle Android Repository
+    - extra-google-m2repository
+
 
 # decrypt release.keystore
 before_install:
