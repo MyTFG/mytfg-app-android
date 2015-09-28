@@ -16,7 +16,7 @@ public class GcmCallbackRegistration {
 
     private static void registerTerminal() {
         // Set callback for Terminal Pushs
-        MyTFG.gcmManager.setCallback("terminal", new GcmCallback() {
+        MyTFG.gcmManager.setClickCallback("terminal", new GcmCallback() {
             @Override
             public void callback(GcmNotification notification) {
                 String[] grouper = notification.getGrouper().split("-");

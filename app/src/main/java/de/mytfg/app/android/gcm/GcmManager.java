@@ -1,22 +1,9 @@
 package de.mytfg.app.android.gcm;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
-import android.util.Log;
-import android.widget.Toast;
 
 import java.util.Hashtable;
 
-import de.mytfg.app.android.R;
-import de.mytfg.app.android.slidemenu.MainActivity;
 import de.mytfg.app.android.utils.BiMap;
 
 /**
@@ -24,15 +11,20 @@ import de.mytfg.app.android.utils.BiMap;
  */
 public class GcmManager {
     private BiMap<Integer, GcmNotification> notificationIds;
-    private Hashtable<String, GcmCallback> callBacks;
+    private Hashtable<String, GcmCallback> clickCallbacks;
+    private Hashtable<String, GcmCallback> receiveCallbacks;
 
     public GcmManager () {
         notificationIds = new BiMap<>();
-        callBacks = new Hashtable<>();
+        clickCallbacks = new Hashtable<>();
     }
 
-    public void setCallback(String type, GcmCallback callback) {
-        callBacks.put(type, callback);
+    public void setClickCallback(String type, GcmCallback callback) {
+        clickCallbacks.put(type, callback);
+    }
+
+    public void setReceiveCallback(String type, GcmCallback callback) {
+        receiveCallbacks.put(type, callback);
     }
 
     public int notify(String from, Bundle data) {
@@ -48,13 +40,20 @@ public class GcmManager {
             notificationIds.add(id, notification);
         }
 
+        // Call on receive callback if existing
+        GcmCallback toCall = receiveCallbacks.get(notification.getType());
+        if (toCall != null) {
+            toCall.callback(notification);
+        }
+
         return id;
     }
 
     public void clicked(int id) {
+        // Call on click callback
         GcmNotification notification = notificationIds.getValue(id);
         if (notification != null) {
-            GcmCallback toCall = callBacks.get(notification.getType());
+            GcmCallback toCall = clickCallbacks.get(notification.getType());
             if (toCall != null) {
                 toCall.callback(notification);
             }
