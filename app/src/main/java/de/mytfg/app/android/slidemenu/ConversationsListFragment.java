@@ -42,13 +42,7 @@ public class ConversationsListFragment extends AbstractFragment {
         adapter = new ConversationsAdapter();
         recyclerView.setAdapter(adapter);
 
-        refresh();
-
-        return view;
-    }
-
-    public void refresh() {
-        conversations.getConversations(new Conversations.GetConversationsCallback() {
+        conversations.setOnConversationsReceived(new Conversations.OnConversationsReceived() {
             @Override
             public void callback(List<Conversation> list, boolean success) {
                 if (!success) {
@@ -59,6 +53,10 @@ public class ConversationsListFragment extends AbstractFragment {
                 }
             }
         });
+
+        conversations.refresh();
+
+        return view;
     }
 }
 

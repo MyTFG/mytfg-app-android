@@ -8,7 +8,9 @@ import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.api.MytfgApi;
 import de.mytfg.app.android.modulemanager.ModuleManager;
 import de.mytfg.app.android.modulemanager.Modules;
+import de.mytfg.app.android.modules.messagecenter.Conversations;
 import de.mytfg.app.android.modules.messagecenter.Messages;
+import de.mytfg.app.android.modules.messagecenter.objects.Conversation;
 import de.mytfg.app.android.slidemenu.MainActivity;
 import de.mytfg.app.android.slidemenu.items.Navigation;
 import de.mytfg.app.android.slidemenu.items.NavigationItem;
@@ -48,6 +50,22 @@ public class GcmCallbackRegistration {
                         messages.refresh();
                         if(MainActivity.isVisible() && MainActivity.navigation.getCurrentItem().getItem() == Navigation.ItemNames.CONVERSATION) {
                             MyTFG.gcmManager.hide(notification);
+                        }
+                    }
+                    Conversations conversations = (Conversations) MyTFG.moduleManager.getModule(Modules.CONVERSATIONS);
+                    if(conversations.getLastPulledConversations() != null) {
+                        boolean newConversation = true;
+                        for (Conversation conversation : conversations.getLastPulledConversations()) {
+                            if(conversation.getId() == conversationId) {
+                                newConversation = false;
+                                break;
+                            }
+                        }
+                        if(newConversation) {
+                            conversations.refresh();
+                            if(MainActivity.isVisible() && MainActivity.navigation.getCurrentItem().getItem() == Navigation.ItemNames.CONVERSATIONS_LIST) {
+                                MyTFG.gcmManager.hide(notification);
+                            }
                         }
                     }
                 }

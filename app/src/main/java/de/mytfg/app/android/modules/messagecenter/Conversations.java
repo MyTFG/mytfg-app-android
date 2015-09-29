@@ -18,17 +18,20 @@ import de.mytfg.app.android.modules.messagecenter.objects.Conversation;
 
 public class Conversations extends Module {
 
-    public interface GetConversationsCallback {
+    private OnConversationsReceived onConversationsReceived;
+    private List<Conversation> conversations;
+
+    public interface OnConversationsReceived {
         void callback(List<Conversation> conversations, boolean success);
     }
 
-    public void getConversations(final GetConversationsCallback callback) {
+    public void refresh() {
         ApiParams params = new ApiParams();
         MytfgApi.ApiCallback apiCallback = new MytfgApi.ApiCallback() {
             @Override
             public void callback(boolean success, JSONObject result, int responseCode, String resultStr) {
                 boolean error = false;
-                ArrayList<Conversation> conversations = new ArrayList<>();
+                conversations = new ArrayList<>();
                 if (success) {
                     try {
                         JSONArray conversationsArray = result.getJSONArray("conversations");
@@ -56,10 +59,21 @@ public class Conversations extends Module {
                     Log.e("API", "API call failed " + resultStr);
                     error = true;
                 }
-                callback.callback(conversations, !error);
+                onConversationsReceived.callback(conversations, !error);
             }
         };
         MytfgApi.call("ajax_message_list-conversations", params, apiCallback);
     }
 
+    public OnConversationsReceived getOnConversationsReceived() {
+        return onConversationsReceived;
+    }
+
+    public void setOnConversationsReceived(OnConversationsReceived onConversationsReceived) {
+        this.onConversationsReceived = onConversationsReceived;
+    }
+
+    public List<Conversation> getLastPulledConversations() {
+        return conversations;
+    }
 }
