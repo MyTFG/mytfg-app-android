@@ -93,9 +93,14 @@ public class ConversationFragment extends AbstractFragment {
 
     private void updateConversation(Conversation conversation) {
         conversationAdapter.setConversations(conversation);
-        MyTFG.gcmManager.hide("conversation-" + conversation.getId());
         ((MainActivity)MainActivity.context).getSupportActionBar().setTitle(conversation.getSubject());
         //TODO: mark read
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MyTFG.gcmManager.hide("conversation-" + messages.getConversationId());
     }
 
 }
