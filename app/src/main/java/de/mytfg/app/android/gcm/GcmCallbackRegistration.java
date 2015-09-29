@@ -48,9 +48,6 @@ public class GcmCallbackRegistration {
                     long conversationId = Long.parseLong(grouper[1]);
                     if(messages.getConversationId() == conversationId) {
                         messages.refresh();
-                        if(MainActivity.isVisible() && MainActivity.navigation.getCurrentItem().getItem() == Navigation.ItemNames.CONVERSATION) {
-                            MyTFG.gcmManager.hide(notification);
-                        }
                     }
                     Conversations conversations = (Conversations) MyTFG.moduleManager.getModule(Modules.CONVERSATIONS);
                     if(conversations.getLastPulledConversations() != null) {

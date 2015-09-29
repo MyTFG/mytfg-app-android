@@ -90,7 +90,9 @@ public class ConversationFragment extends AbstractFragment {
 
     private void updateConversation(Conversation conversation) {
         conversationAdapter.setConversations(conversation);
-        ((MainActivity)MainActivity.context).getSupportActionBar().setTitle(conversation.getSubject());
+        if(MainActivity.navigation.getCurrentItem().getItem() == this.item.getItem()) {
+            ((MainActivity)MainActivity.context).getSupportActionBar().setTitle(messages.getLastPulledConversation().getSubject());
+        }
         //TODO: mark read
     }
 

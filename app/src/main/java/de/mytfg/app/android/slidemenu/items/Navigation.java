@@ -71,8 +71,6 @@ public class Navigation {
 
     private LinkedList<NavigationCategory> categories;
 
-    private NavigationItem currentItem;
-
     /**
      * Creates a new Navigation. Only use one Instance.
      * @param mainContext The context of MainActivity.
@@ -205,8 +203,6 @@ public class Navigation {
             }
         }
 
-        currentItem = items.get(position);
-
         android.support.v4.app.FragmentTransaction ft = fragmentManager.beginTransaction();
 
         if (items.get(position).isHidden || forceBackStack) {
@@ -298,6 +294,7 @@ public class Navigation {
     }
 
     public NavigationItem getCurrentItem() {
-        return currentItem;
+        AbstractFragment current = (AbstractFragment) ((MainActivity) context).getSupportFragmentManager().findFragmentById(R.id.container);
+        return current.item;
     }
 }
