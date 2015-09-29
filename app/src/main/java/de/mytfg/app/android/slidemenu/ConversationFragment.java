@@ -25,8 +25,6 @@ import in.uncod.android.bypass.Bypass;
 
 public class ConversationFragment extends AbstractFragment {
 
-    private static final int MESSAGES_COUNT = 500;
-
     private View view;
     private RecyclerView recyclerView;
     private ConversationAdapter conversationAdapter;

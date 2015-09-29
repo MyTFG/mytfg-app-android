@@ -21,21 +21,10 @@ public class User extends ApiObject {
     public User(long id) {
         this.loaded = false;
         this.id = id;
-        this.load();
     }
 
     public User() {
 
-    }
-
-    private void load() {
-        // TODO: Load rest of user data from API
-        this.firstname = "";
-        this.lastname = "";
-        this.grade = "";
-        this.username = "";
-        this.rights = 0;
-        this.loaded = true;
     }
 
     public void readFromJson(JSONObject json) throws JSONException {

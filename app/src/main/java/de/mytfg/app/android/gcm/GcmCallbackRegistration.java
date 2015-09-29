@@ -16,6 +16,7 @@ import de.mytfg.app.android.slidemenu.items.Navigation;
  */
 public class GcmCallbackRegistration {
     public static void registerAll() {
+        registerMessageCenter();
         registerTerminal();
     }
 
@@ -34,6 +35,9 @@ public class GcmCallbackRegistration {
                 }
             }
         });
+    }
+
+    private static void registerMessageCenter() {
         // Set callback for Messages
         MyTFG.gcmManager.setReceiveCallback("message", new GcmCallback() {
             @Override
