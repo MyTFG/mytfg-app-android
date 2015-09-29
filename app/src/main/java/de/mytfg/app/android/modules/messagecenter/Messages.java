@@ -50,7 +50,7 @@ public class Messages extends Module {
                     }
                 } else {
                     error = true;
-                    if (!result.isNull("error")) {
+                    if (result != null && !result.isNull("error")) {
                         try {
                             Log.e("API", "Remote error: " + result.getString("error"));
                         } catch (JSONException e) {
