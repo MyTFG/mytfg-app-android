@@ -20,6 +20,7 @@ import de.mytfg.app.android.modules.general.User;
 import de.mytfg.app.android.modules.messagecenter.Messages;
 import de.mytfg.app.android.modules.messagecenter.objects.Conversation;
 import de.mytfg.app.android.modules.messagecenter.objects.Message;
+import de.mytfg.app.android.slidemenu.items.Navigation;
 import de.mytfg.app.android.utils.TimeUtils;
 import in.uncod.android.bypass.Bypass;
 
@@ -36,9 +37,12 @@ public class ConversationFragment extends AbstractFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.conversation_view_layout, container, false);
+        if (!MyTFG.isLoggedIn()) {
+            MainActivity.navigation.navigate(Navigation.ItemNames.SETTINGS);
+            return null;
+        }
 
-        //TODO: not logged in
+        view = inflater.inflate(R.layout.conversation_view_layout, container, false);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.messagesList);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(MyTFG.getAppContext());
@@ -81,6 +85,8 @@ public class ConversationFragment extends AbstractFragment {
             }
         });
         messages.refresh();
+
+        //TODO: hide keyboard on leave
 
         return view;
     }

@@ -32,6 +32,11 @@ public class ConversationsListFragment extends AbstractFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (!MyTFG.isLoggedIn()) {
+            MainActivity.navigation.navigate(Navigation.ItemNames.SETTINGS);
+            return null;
+        }
+
         view = inflater.inflate(R.layout.conversation_list_layout, container, false);
 
         conversations = (Conversations) MyTFG.moduleManager.getModule(Modules.CONVERSATIONS);
