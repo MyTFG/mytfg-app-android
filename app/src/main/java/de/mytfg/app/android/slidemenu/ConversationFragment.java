@@ -43,6 +43,7 @@ public class ConversationFragment extends AbstractFragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.messagesList);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(MyTFG.getAppContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        layoutManager.setReverseLayout(true);
         recyclerView.setLayoutManager(layoutManager);
         conversationAdapter = new ConversationAdapter();
         recyclerView.setAdapter(conversationAdapter);
@@ -86,12 +87,9 @@ public class ConversationFragment extends AbstractFragment {
 
     private void updateConversation(Conversation conversation) {
         conversationAdapter.setConversations(conversation);
-        recyclerView.scrollToPosition(conversationAdapter.getItemCount() - 1);
         MyTFG.gcmManager.hide("conversation-" + conversation.getId());
         ((MainActivity)MainActivity.context).getSupportActionBar().setTitle(conversation.getSubject());
         //TODO: mark read
-        //TODO: keep scroll position also with keyboard
-        //TODO: only scroll first time
     }
 
 }
@@ -117,7 +115,7 @@ class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapter.ViewH
 
     @Override
     public void onBindViewHolder(ConversationAdapter.ViewHolder holder, int position) {
-        Message message = conversation.getMessages().get(position);
+        Message message = getMessage(position);
         TextView author = (TextView) holder.view.findViewById(R.id.messageAuthor);
         if (message.getAuthor().getId() == MyTFG.getUserId()) {
             author.setText(MyTFG.getAppContext().getString(R.string.me));
@@ -129,6 +127,11 @@ class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapter.ViewH
         ((TextView)holder.view.findViewById(R.id.messageText)).setText(text);
         long timestamp = (long) message.getTimestamp();
         ((TextView)holder.view.findViewById(R.id.messageDate)).setText(TimeUtils.getDateStringShort(timestamp));
+    }
+
+    private Message getMessage(int i) {
+        i = (getItemCount() - 1) - i;
+        return conversation.getMessages().get(i);
     }
 
     @Override
