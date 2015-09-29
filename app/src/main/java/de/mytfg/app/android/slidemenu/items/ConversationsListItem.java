@@ -6,7 +6,6 @@ import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.R;
 import de.mytfg.app.android.slidemenu.AbstractFragment;
 import de.mytfg.app.android.slidemenu.ConversationsListFragment;
-import de.mytfg.app.android.slidemenu.StartFragment;
 
 public class ConversationsListItem extends NavigationItem {
 

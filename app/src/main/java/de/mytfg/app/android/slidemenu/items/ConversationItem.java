@@ -1,13 +1,11 @@
 package de.mytfg.app.android.slidemenu.items;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.R;
 import de.mytfg.app.android.slidemenu.AbstractFragment;
 import de.mytfg.app.android.slidemenu.ConversationFragment;
-import de.mytfg.app.android.slidemenu.ConversationsListFragment;
 
 public class ConversationItem extends NavigationItem {
 

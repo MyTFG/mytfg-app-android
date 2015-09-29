@@ -1,19 +1,15 @@
 package de.mytfg.app.android.gcm;
 
-import android.app.FragmentManager;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import de.mytfg.app.android.MyTFG;
-import de.mytfg.app.android.api.MytfgApi;
-import de.mytfg.app.android.modulemanager.ModuleManager;
 import de.mytfg.app.android.modulemanager.Modules;
 import de.mytfg.app.android.modules.messagecenter.Conversations;
 import de.mytfg.app.android.modules.messagecenter.Messages;
 import de.mytfg.app.android.modules.messagecenter.objects.Conversation;
 import de.mytfg.app.android.slidemenu.MainActivity;
 import de.mytfg.app.android.slidemenu.items.Navigation;
-import de.mytfg.app.android.slidemenu.items.NavigationItem;
 
 /**
  * Registers all GCM Events. Add your event here.

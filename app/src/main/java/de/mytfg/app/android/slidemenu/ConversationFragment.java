@@ -16,7 +16,6 @@ import android.widget.Toast;
 import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.R;
 import de.mytfg.app.android.modulemanager.Modules;
-import de.mytfg.app.android.modules.general.User;
 import de.mytfg.app.android.modules.messagecenter.Messages;
 import de.mytfg.app.android.modules.messagecenter.objects.Conversation;
 import de.mytfg.app.android.modules.messagecenter.objects.Message;
