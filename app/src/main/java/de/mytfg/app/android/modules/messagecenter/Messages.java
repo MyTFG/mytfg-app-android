@@ -85,8 +85,10 @@ public class Messages extends Module {
     }
 
     public void setConversationId(long conversationId) {
+        if(this.conversationId != conversationId) {
+            this.conversation = null;
+        }
         this.conversationId = conversationId;
-        this.conversation = null;
     }
 
     public OnConversationReceived getOnConversationReceived() {

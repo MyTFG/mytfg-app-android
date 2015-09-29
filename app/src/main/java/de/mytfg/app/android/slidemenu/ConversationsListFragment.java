@@ -59,7 +59,11 @@ public class ConversationsListFragment extends AbstractFragment {
             }
         });
 
-        conversations.refresh();
+        if (conversations.getLastPulledConversations() == null) {
+            conversations.refresh();
+        } else {
+            adapter.setConversations(conversations.getLastPulledConversations());
+        }
 
         view.findViewById(R.id.conversation_create).setOnClickListener(new View.OnClickListener() {
             @Override

@@ -74,14 +74,18 @@ public class ConversationFragment extends AbstractFragment {
         messages.setOnConversationReceived(new Messages.OnConversationReceived() {
             @Override
             public void callback(Conversation conversation, boolean success) {
-                if(!success) {
+                if (!success) {
                     Toast.makeText(MyTFG.getAppContext(), R.string.error_refreshing, Toast.LENGTH_LONG).show();
                 } else {
                     updateConversation(conversation);
                 }
             }
         });
-        messages.refresh();
+        if(messages.getLastPulledConversation() == null) {
+            messages.refresh();
+        } else {
+            updateConversation(messages.getLastPulledConversation());
+        }
 
         //TODO: hide keyboard on leave
 
