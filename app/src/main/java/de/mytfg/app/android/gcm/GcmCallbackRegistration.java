@@ -63,9 +63,6 @@ public class GcmCallbackRegistration {
                         }
                         if(newConversation) {
                             conversations.refresh();
-                            if(MainActivity.isVisible() && MainActivity.navigation.getCurrentItem().getItem() == Navigation.ItemNames.CONVERSATIONS_LIST) {
-                                MyTFG.gcmManager.hide(notification);
-                            }
                         }
                     }
                 }

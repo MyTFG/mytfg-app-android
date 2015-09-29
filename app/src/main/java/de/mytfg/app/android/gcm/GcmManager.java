@@ -46,12 +46,16 @@ public class GcmManager {
     public void hide(GcmNotification notification) {
         Integer id = notificationIds.getKey(notification);
 
-        Log.d("GCM", "I should hide");
         if (id != null) {
-            Log.d("GCM", "ID: " + id);
             NotificationManager notificationManager = (NotificationManager) MainActivity.context.getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.cancel(id);
         }
+    }
+
+    public void hide(String grouper) {
+        Bundle bundle = new Bundle();
+        bundle.putString("grouper", grouper);
+        hide(new GcmNotification(bundle));
     }
 
     public void notify(String from, Bundle data) {

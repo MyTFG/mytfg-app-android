@@ -86,6 +86,7 @@ public class ConversationFragment extends AbstractFragment {
     private void updateConversation(Conversation conversation) {
         conversationAdapter.setConversations(conversation); // TODO: thread safe? Also conversationslist
         recyclerView.scrollToPosition(conversationAdapter.getItemCount() - 1);
+        MyTFG.gcmManager.hide("conversation-" + conversation.getId());
         //TODO: mark read
         //TODO: keep scroll position also with keyboard
         //TODO: only scroll first time
