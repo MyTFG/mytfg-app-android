@@ -5,6 +5,9 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import de.mytfg.app.android.api.ApiParams;
 import de.mytfg.app.android.api.MytfgApi;
 import de.mytfg.app.android.modulemanager.Module;
@@ -13,10 +16,12 @@ import de.mytfg.app.android.modules.messagecenter.objects.Conversation;
 public class Messages extends Module {
 
     private final static int MESSAGE_COUNT = 500;
+    private final static int CONVERSATIONS_CACHE = 10;
 
     private long conversationId;
     private OnConversationReceived onConversationReceived;
-    private Conversation conversation;
+    private HashMap<Long, Conversation> conversations = new HashMap<>();
+    private HashMap<Long, Long> conversationsAge = new HashMap<>();
 
     public interface OnConversationReceived {
         void callback(Conversation conversation, boolean success);
@@ -36,8 +41,9 @@ public class Messages extends Module {
                 boolean error = false;
                 if(success) {
                     try {
-                        conversation = new Conversation();
+                        Conversation conversation = new Conversation();
                         conversation.readFromJson(result.getJSONObject("object"));
+                        conversations.put(conversation.getId(), conversation);
                     } catch (JSONException e) {
                         error = true;
                         Log.e("API", "Error parsing JSON!");
@@ -52,7 +58,7 @@ public class Messages extends Module {
                         }
                     }
                 }
-                onConversationReceived.callback(conversation, !error);
+                onConversationReceived.callback(getLastPulledConversation(), !error);
             }
         };
         MytfgApi.call("ajax_message_get-conversation", params, apiCallback);
@@ -85,10 +91,18 @@ public class Messages extends Module {
     }
 
     public void setConversationId(long conversationId) {
-        if(this.conversationId != conversationId) {
-            this.conversation = null;
+        if(conversationId != this.conversationId && conversations.size() >= CONVERSATIONS_CACHE && !conversations.containsKey(conversationId)) {
+            Map.Entry<Long, Long> oldest = null;
+            for(Map.Entry<Long, Long> entry : conversationsAge.entrySet()) {
+                if (oldest == null || oldest.getValue() > entry.getValue()) {
+                    oldest = entry;
+                }
+            }
+            conversationsAge.remove(oldest.getKey());
+            conversations.remove(oldest.getKey());
         }
         this.conversationId = conversationId;
+        conversationsAge.put(conversationId, System.currentTimeMillis());
     }
 
     public OnConversationReceived getOnConversationReceived() {
@@ -100,6 +114,6 @@ public class Messages extends Module {
     }
 
     public Conversation getLastPulledConversation() {
-        return conversation;
+        return conversations.get(conversationId);
     }
 }
