@@ -21,6 +21,7 @@ import de.mytfg.app.android.modules.messagecenter.Messages;
 import de.mytfg.app.android.modules.messagecenter.objects.Conversation;
 import de.mytfg.app.android.modules.messagecenter.objects.Message;
 import de.mytfg.app.android.utils.TimeUtils;
+import in.uncod.android.bypass.Bypass;
 
 public class ConversationFragment extends AbstractFragment {
 
@@ -84,9 +85,10 @@ public class ConversationFragment extends AbstractFragment {
     }
 
     private void updateConversation(Conversation conversation) {
-        conversationAdapter.setConversations(conversation); // TODO: thread safe? Also conversationslist
+        conversationAdapter.setConversations(conversation);
         recyclerView.scrollToPosition(conversationAdapter.getItemCount() - 1);
         MyTFG.gcmManager.hide("conversation-" + conversation.getId());
+        ((MainActivity)MainActivity.context).getSupportActionBar().setTitle(conversation.getSubject());
         //TODO: mark read
         //TODO: keep scroll position also with keyboard
         //TODO: only scroll first time
@@ -122,7 +124,9 @@ class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapter.ViewH
         } else {
             author.setText(message.getAuthor().getFirstname() + " " + message.getAuthor().getLastname());
         }
-        ((TextView)holder.view.findViewById(R.id.messageText)).setText(message.getText());
+        Bypass bypass = new Bypass(MyTFG.getAppContext());
+        CharSequence text = bypass.markdownToSpannable(message.getText().replace("\\n", "\n").replace("\n", "\n\n"));
+        ((TextView)holder.view.findViewById(R.id.messageText)).setText(text);
         long timestamp = (long) message.getTimestamp();
         ((TextView)holder.view.findViewById(R.id.messageDate)).setText(TimeUtils.getDateStringShort(timestamp));
     }

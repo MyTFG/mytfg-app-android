@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,6 +56,14 @@ public class ConversationsListFragment extends AbstractFragment {
         });
 
         conversations.refresh();
+
+        view.findViewById(R.id.conversation_create).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: create conversation
+                Toast.makeText(MyTFG.getAppContext(), "Not implemented yet!", Toast.LENGTH_LONG).show();
+            }
+        });
 
         return view;
     }
