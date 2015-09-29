@@ -12,9 +12,13 @@ import de.mytfg.app.android.modules.messagecenter.objects.Conversation;
 
 public class Messages extends Module {
 
-    private long conversationId;
+    private final static int MESSAGE_COUNT = 500;
 
-    public interface GetConversationCallback {
+    private long conversationId;
+    private OnConversationReceived onConversationReceived;
+    private Conversation conversation;
+
+    public interface OnConversationReceived {
         void callback(Conversation conversation, boolean success);
     }
 
@@ -22,15 +26,14 @@ public class Messages extends Module {
         void callback(boolean success);
     }
 
-    public void getConversation(final GetConversationCallback callback, int count) {
+    public void refresh() {
         ApiParams params = new ApiParams();
         params.addParam("id", String.valueOf(conversationId));
-        params.addParam("count", String.valueOf(count));
+        params.addParam("count", String.valueOf(MESSAGE_COUNT));
         MytfgApi.ApiCallback apiCallback = new MytfgApi.ApiCallback() {
             @Override
             public void callback(boolean success, JSONObject result, int responseCode, String resultStr) {
                 boolean error = false;
-                Conversation conversation = null;
                 if(success) {
                     try {
                         conversation = new Conversation();
@@ -49,7 +52,7 @@ public class Messages extends Module {
                         }
                     }
                 }
-                callback.callback(conversation, !error);
+                onConversationReceived.callback(conversation, !error);
             }
         };
         MytfgApi.call("ajax_message_get-conversation", params, apiCallback);
@@ -83,5 +86,18 @@ public class Messages extends Module {
 
     public void setConversationId(long conversationId) {
         this.conversationId = conversationId;
+        this.conversation = null;
+    }
+
+    public OnConversationReceived getOnConversationReceived() {
+        return onConversationReceived;
+    }
+
+    public void setOnConversationReceived(OnConversationReceived onConversationReceived) {
+        this.onConversationReceived = onConversationReceived;
+    }
+
+    public Conversation getLastPulledConversation() {
+        return conversation;
     }
 }

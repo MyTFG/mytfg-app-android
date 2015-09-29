@@ -10,13 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.R;
 import de.mytfg.app.android.modulemanager.Modules;
+import de.mytfg.app.android.modules.general.User;
 import de.mytfg.app.android.modules.messagecenter.Messages;
 import de.mytfg.app.android.modules.messagecenter.objects.Conversation;
 import de.mytfg.app.android.modules.messagecenter.objects.Message;
@@ -59,6 +59,7 @@ public class ConversationFragment extends AbstractFragment {
                             Toast.makeText(MyTFG.getAppContext(), R.string.error_sending, Toast.LENGTH_LONG).show();
                         } else {
                             messageEditText.setText("");
+                            messages.refresh();
                         }
                     }
                 }, text);
@@ -67,20 +68,27 @@ public class ConversationFragment extends AbstractFragment {
 
         messages = (Messages) MyTFG.moduleManager.getModule(Modules.CONVERSATION);
         messages.setConversationId(args.getLong("conversationId"));
-        messages.getConversation(new Messages.GetConversationCallback() {
+        messages.setOnConversationReceived(new Messages.OnConversationReceived() {
             @Override
             public void callback(Conversation conversation, boolean success) {
                 if(!success) {
                     Toast.makeText(MyTFG.getAppContext(), R.string.error_refreshing, Toast.LENGTH_LONG).show();
+                } else {
+                    updateConversation(conversation);
                 }
-                conversationAdapter.setConversations(conversation); // TODO: thread safe? Also conversationslist
-                recyclerView.scrollToPosition(conversationAdapter.getItemCount() - 1);
-                //TODO: mark read
-                //TODO: keep scroll position also with keyboard
             }
-        }, MESSAGES_COUNT);
+        });
+        messages.refresh();
 
         return view;
+    }
+
+    private void updateConversation(Conversation conversation) {
+        conversationAdapter.setConversations(conversation); // TODO: thread safe? Also conversationslist
+        recyclerView.scrollToPosition(conversationAdapter.getItemCount() - 1);
+        //TODO: mark read
+        //TODO: keep scroll position also with keyboard
+        //TODO: only scroll first time
     }
 
 }

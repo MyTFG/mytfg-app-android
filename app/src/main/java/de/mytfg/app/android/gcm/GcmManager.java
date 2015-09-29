@@ -9,11 +9,14 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Looper;
+import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import java.util.Hashtable;
 
+import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.R;
 import de.mytfg.app.android.slidemenu.MainActivity;
 import de.mytfg.app.android.utils.BiMap;
@@ -69,7 +72,7 @@ public class GcmManager {
         // Call on receive callback if existing
         GcmCallback toCall = receiveCallbacks.get(notification.getType());
         if (toCall != null) {
-            toCall.callback(notification);
+            call(toCall, notification);
         }
     }
 
@@ -79,9 +82,18 @@ public class GcmManager {
         if (notification != null) {
             GcmCallback toCall = clickCallbacks.get(notification.getType());
             if (toCall != null) {
-                toCall.callback(notification);
+                call(toCall, notification);
             }
         }
+    }
+
+    private void call(final GcmCallback callback, final GcmNotification notification) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                callback.callback(notification);
+            }
+        });
     }
 
     private void sendNotification(String message, String title, int id) {
