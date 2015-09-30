@@ -135,13 +135,18 @@ public class MyTFG extends Application {
         refreshPrefs();
     }
 
-    public static void setLoadingBarVisble(boolean visble) {
+    public static void setLoadingBarVisble(final boolean visble) {
         if (MainActivity.loadingBar != null) {
-            if (visble) {
-                MainActivity.loadingBar.setVisibility(View.VISIBLE);
-            } else {
-                MainActivity.loadingBar.setVisibility(View.GONE);
-            }
+            ((MainActivity)MainActivity.context).runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (visble) {
+                        MainActivity.loadingBar.setVisibility(View.VISIBLE);
+                    } else {
+                        MainActivity.loadingBar.setVisibility(View.GONE);
+                    }
+                }
+            });
         }
     }
 

@@ -6,6 +6,8 @@ package de.mytfg.app.android.modulemanager;
 public enum Modules {
     NOTIFICATIONS,
     TERMINALTOPICS,
+    CONVERSATIONS,
+    CONVERSATION,
     SETTINGS;
 
     public static int size = Modules.values().length;

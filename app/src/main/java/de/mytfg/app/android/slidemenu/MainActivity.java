@@ -20,7 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity
 
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
+    private static boolean isVisible;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,12 +167,14 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter("registrationComplete"));
+        isVisible = true;
     }
 
     @Override
     protected void onPause() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
         super.onPause();
+        isVisible = false;
     }
 
     /**
@@ -191,6 +195,10 @@ public class MainActivity extends AppCompatActivity
             return false;
         }
         return true;
+    }
+
+    public static boolean isVisible() {
+        return isVisible;
     }
 
     /**

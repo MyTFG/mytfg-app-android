@@ -195,6 +195,18 @@ public class StartFragment extends AbstractFragment {
                                 toast.show();
                             }
                             break;
+                        case "message":
+                            grouper = notify.grouper.split("-");
+                            if (grouper.length == 2 && grouper[0].equals("conversation")) {
+                                long conversationId = Long.parseLong(grouper[1]);
+                                Bundle args = new Bundle();
+                                args.putLong("conversationId", conversationId);
+                                MainActivity.navigation.navigate(Navigation.ItemNames.CONVERSATION, args);
+                            } else {
+                                Toast toast = Toast.makeText(MyTFG.getAppContext(), "Unknown Grouper", Toast.LENGTH_LONG);
+                                toast.show();
+                            }
+                            break;
                         default:
                             Toast toast = Toast.makeText(MyTFG.getAppContext(), "Not implemented yet", Toast.LENGTH_LONG);
                             toast.show();
