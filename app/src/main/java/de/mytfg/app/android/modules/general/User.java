@@ -3,13 +3,17 @@ package de.mytfg.app.android.modules.general;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.InvalidParameterException;
+import java.util.Map;
+import java.util.TreeMap;
+
 import de.mytfg.app.android.MyTFG;
 
 /**
  * Represents a MyTFG User.
  */
 public class User extends ApiObject {
-
+    // Object vars
     private long id;
     private String firstname;
     private String lastname;
@@ -18,16 +22,37 @@ public class User extends ApiObject {
     private int rights;
     private boolean loaded;
 
-    public User(long id) {
-        this.loaded = false;
-        this.id = id;
-    }
+    private static Map<Long, User> cache = new TreeMap<>();
 
-    public User() {
+    private User() {
 
     }
 
-    public void readFromJson(JSONObject json) throws JSONException {
+
+    public static User createFromJson(JSONObject json)
+            throws JSONException, InvalidParameterException {
+
+        if (json == null || !json.getString("type").equals("user")) {
+            throw new InvalidParameterException("Specified json-data does not represent user");
+        } else {
+            long id = json.getLong("id");
+            if (cache.containsKey(id)) {
+                User user = cache.get(id);
+                user.readFromJson(json);
+                return user;
+            } else {
+                // Create new User
+                User user = new User();
+                user.readFromJson(json);
+                User.cache.put(id, user);
+                return user;
+            }
+        }
+    }
+
+    private void readFromJson(JSONObject json)
+            throws JSONException, InvalidParameterException {
+
         if(!json.getString("type").equals("user")) {
             throw new IllegalArgumentException("Given JSON object does not represent an user!");
         }
@@ -71,10 +96,11 @@ public class User extends ApiObject {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof User)) {
-            return false;
-        } else {
-            return this.id == ((User)o).id;
-        }
+        return o instanceof User && this.id == ((User) o).id;
+    }
+
+    @Override
+    public String toString() {
+        return getFirstname() + " " + getLastname();
     }
 }

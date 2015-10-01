@@ -36,7 +36,7 @@ public class TerminalTopics extends Module {
     }
 
     public interface GetTopicsCallback {
-        public void callback(List<Topic> topics, boolean stillLoading);
+        void callback(List<Topic> topics, boolean stillLoading);
     }
 
     public void getTopics(GetTopicsCallback callback) {
@@ -64,9 +64,8 @@ public class TerminalTopics extends Module {
             public void callback(boolean success, JSONObject result, int responseCode, String resultStr) {
                 if (success) {
                     try {
-                        readTopics(result.getJSONArray("topics"));
+                        readTopics(result);
                         sendCallback(callbackf, false);
-                        return;
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -75,33 +74,17 @@ public class TerminalTopics extends Module {
                 }
             }
         };
-        MytfgApi.call("ajax_terminal_topics", params, callback);
+        MytfgApi.call("ajax_terminal_get-topics", params, callback);
 
         this.lastUpdate = System.currentTimeMillis();
     }
 
-    private void readTopics(JSONArray jsonTerminalEntries) throws JSONException {
+    private void readTopics(JSONObject result) throws JSONException {
         this.topics.clear();
-        for(int i = 0; i < jsonTerminalEntries.length(); i++) {
-            JSONObject obj = jsonTerminalEntries.getJSONObject(i);
-            Topic topic = new Topic(
-                    Long.parseLong(obj.getString("id")),
-                    obj.getString("title"),
-                    obj.getString("author"),
-                    Long.parseLong(obj.getString("created")),
-                    Long.parseLong(obj.getString("edited")),
-                    Long.parseLong(obj.getString("code")));
-
-            JSONArray flags = obj.getJSONArray("flags");
-            for (int j = 0; j < flags.length(); j++) {
-                topic.addFlag(Integer.parseInt(flags.getString(j)));
-            }
-
-            JSONArray workers = obj.getJSONArray("workers");
-            for (int j = 0; j < workers.length(); j++) {
-                topic.addWorker(Long.parseLong(workers.getString(j)));
-            }
-
+        JSONArray objects = result.getJSONArray("objects");
+        JSONObject references = result.getJSONObject("references");
+        for(int i = 0; i < objects.length(); i++) {
+            Topic topic = Topic.createFromJson(objects.getJSONObject(i), references);
             topics.add(topic);
         }
     }

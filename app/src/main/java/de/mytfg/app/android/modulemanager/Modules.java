@@ -6,6 +6,7 @@ package de.mytfg.app.android.modulemanager;
 public enum Modules {
     NOTIFICATIONS,
     TERMINALTOPICS,
+    TERMINALTOPIC,
     CONVERSATIONS,
     CONVERSATION,
     SETTINGS;

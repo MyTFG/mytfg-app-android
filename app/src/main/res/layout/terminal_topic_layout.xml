@@ -24,7 +24,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
 
-        android:id="@+id/replyButton"
+        android:id="@+id/terminalReplyButton"
         android:layout_alignBottom="@+id/respond_text"
         android:layout_marginBottom="5dp"
         android:layout_marginRight="5dp"

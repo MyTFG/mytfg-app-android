@@ -34,10 +34,11 @@ public class Conversations extends Module {
                 conversations = new ArrayList<>();
                 if (success) {
                     try {
-                        JSONArray conversationsArray = result.getJSONArray("conversations");
+                        JSONArray conversationsArray = result.getJSONArray("objects");
                         for(int i = 0; i < conversationsArray.length(); i++) {
-                            Conversation conversation = new Conversation();
-                            conversation.readFromJson(conversationsArray.getJSONObject(i));
+                            Conversation conversation = Conversation.createFromJson(
+                                    conversationsArray.getJSONObject(i), result.getJSONObject("references"));
+
                             conversations.add(conversation);
                         }
                         Collections.sort(conversations, new Comparator<Conversation>() {
