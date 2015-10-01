@@ -54,7 +54,9 @@ public class Messages extends Module {
                     }
                 } else {
                     error = true;
-                    if (result != null && !result.isNull("error")) {
+                    if(result == null) {
+                        Log.e("API", "Result is empty!");
+                    } else if (!result.isNull("error")) {
                         try {
                             Log.e("API", "Remote error: " + result.getString("error"));
                         } catch (JSONException e) {

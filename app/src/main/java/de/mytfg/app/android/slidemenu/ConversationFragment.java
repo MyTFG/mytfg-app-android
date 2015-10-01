@@ -70,7 +70,15 @@ public class ConversationFragment extends AbstractFragment {
         });
 
         messages = (Messages) MyTFG.moduleManager.getModule(Modules.CONVERSATION);
-        messages.setConversationId(args.getLong("conversationId"));
+        if(args.getLong("conversationId") == 0) {
+            if(savedInstanceState.getLong("conversationId") != 0) {
+                messages.setConversationId(savedInstanceState.getLong("conversationId"));
+            } else {
+                Log.e("Conversation", "No conversation id given!");
+            }
+        } else {
+            messages.setConversationId(args.getLong("conversationId"));
+        }
         messages.setOnConversationReceived(new Messages.OnConversationReceived() {
             @Override
             public void callback(Conversation conversation, boolean success) {

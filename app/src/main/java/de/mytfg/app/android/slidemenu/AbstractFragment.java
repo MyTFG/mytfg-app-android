@@ -21,4 +21,11 @@ public abstract class AbstractFragment extends Fragment {
             return args.getString("title", "");
         }
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putAll(args);
+    }
+
 }
