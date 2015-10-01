@@ -1,14 +1,8 @@
 package de.mytfg.app.android.slidemenu.items;
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
-
-import java.util.Map;
-
-import de.mytfg.app.android.R;
-import de.mytfg.app.android.slidemenu.MainActivity;
+import android.support.v4.app.Fragment;
 
 /**
  * Abstract class for Items in the Slide Menu.

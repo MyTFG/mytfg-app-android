@@ -5,7 +5,6 @@ import org.json.JSONObject;
 
 import java.security.InvalidParameterException;
 import java.util.Map;
-import java.util.Objects;
 import java.util.TreeMap;
 
 import de.mytfg.app.android.modules.general.ApiObject;

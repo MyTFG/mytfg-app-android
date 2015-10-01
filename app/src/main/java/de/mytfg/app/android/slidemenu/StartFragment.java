@@ -21,11 +21,11 @@ import java.util.List;
 
 import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.R;
-import de.mytfg.app.android.utils.TimeUtils;
 import de.mytfg.app.android.api.ApiCache;
 import de.mytfg.app.android.api.ApiParams;
 import de.mytfg.app.android.api.MytfgApi;
 import de.mytfg.app.android.slidemenu.items.Navigation;
+import de.mytfg.app.android.utils.TimeUtils;
 
 public class StartFragment extends AbstractFragment {
     View startview;

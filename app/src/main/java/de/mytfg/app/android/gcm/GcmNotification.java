@@ -1,7 +1,6 @@
 package de.mytfg.app.android.gcm;
 
 import android.os.Bundle;
-import android.util.Log;
 
 /**
  * Represents a GCM Notification.

@@ -6,7 +6,6 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,25 +16,21 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.R;
 import de.mytfg.app.android.api.ApiParams;
 import de.mytfg.app.android.api.MytfgApi;
-import de.mytfg.app.android.modulemanager.Module;
 import de.mytfg.app.android.modulemanager.Modules;
 import de.mytfg.app.android.modules.terminal.TerminalTopic;
 import de.mytfg.app.android.modules.terminal.objects.Review;
 import de.mytfg.app.android.modules.terminal.objects.Topic;
 import de.mytfg.app.android.slidemenu.items.Navigation;
 import de.mytfg.app.android.utils.TimeUtils;
-
 import in.uncod.android.bypass.Bypass;
 
 public class TerminalTopicFragment extends AbstractFragment {

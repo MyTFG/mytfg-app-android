@@ -3,7 +3,6 @@ package de.mytfg.app.android.slidemenu;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import de.mytfg.app.android.slidemenu.items.Navigation;
 import de.mytfg.app.android.slidemenu.items.NavigationItem;
 
 /**

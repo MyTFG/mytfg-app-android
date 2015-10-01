@@ -9,14 +9,12 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Looper;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import java.util.Hashtable;
 
-import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.R;
 import de.mytfg.app.android.slidemenu.MainActivity;
 import de.mytfg.app.android.utils.BiMap;

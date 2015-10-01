@@ -3,8 +3,8 @@ package de.mytfg.app.android.modulemanager;
 import de.mytfg.app.android.modules.messagecenter.Conversations;
 import de.mytfg.app.android.modules.messagecenter.Messages;
 import de.mytfg.app.android.modules.settings.Settings;
-import de.mytfg.app.android.modules.terminal.TerminalTopics;
 import de.mytfg.app.android.modules.terminal.TerminalTopic;
+import de.mytfg.app.android.modules.terminal.TerminalTopics;
 
 /**
  * A ModuleFactory to create Modules by ENUM.

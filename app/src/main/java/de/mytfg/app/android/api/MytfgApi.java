@@ -2,7 +2,6 @@ package de.mytfg.app.android.api;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.view.View;
 
 import org.json.JSONObject;
 
@@ -21,7 +20,6 @@ import java.util.Map;
 import javax.net.ssl.HttpsURLConnection;
 
 import de.mytfg.app.android.MyTFG;
-import de.mytfg.app.android.slidemenu.MainActivity;
 
 /**
  * This class is an abstract wrapper to access the MyTFG API.

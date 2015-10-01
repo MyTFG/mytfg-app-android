@@ -5,9 +5,6 @@ import android.support.v4.app.Fragment;
 import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.R;
 import de.mytfg.app.android.slidemenu.AbstractFragment;
-import de.mytfg.app.android.slidemenu.MainActivity;
-import de.mytfg.app.android.slidemenu.StartFragment;
-import de.mytfg.app.android.slidemenu.TerminalFragment;
 import de.mytfg.app.android.slidemenu.TerminalTopicFragment;
 
 /**

@@ -1,7 +1,7 @@
 package de.mytfg.app.android.utils;
 
-import java.util.TreeMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Maps key / value in both directions by using two HashMaps.
