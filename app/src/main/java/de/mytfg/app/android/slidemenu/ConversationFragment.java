@@ -82,7 +82,7 @@ public class ConversationFragment extends AbstractFragment {
             }
         });
         if(messages.getLastPulledConversation() == null) {
-            messages.refresh();
+            messages.refresh(true);
         } else {
             updateConversation(messages.getLastPulledConversation());
         }
@@ -109,7 +109,7 @@ public class ConversationFragment extends AbstractFragment {
 }
 
 class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapter.ViewHolder> {
-    private Conversation conversation = new Conversation();
+    private Conversation conversation;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public View view;
@@ -123,8 +123,7 @@ class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapter.ViewH
     public ConversationAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.conversation_message_view_layout, parent, false);
-        ViewHolder vh = new ViewHolder(v);
-        return vh;
+        return new ViewHolder(v);
     }
 
     @Override

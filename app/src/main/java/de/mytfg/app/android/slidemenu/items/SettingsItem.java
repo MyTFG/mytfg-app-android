@@ -5,8 +5,6 @@ import android.support.v4.app.Fragment;
 import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.R;
 import de.mytfg.app.android.slidemenu.AbstractFragment;
-import de.mytfg.app.android.slidemenu.LoginFragment;
-import de.mytfg.app.android.slidemenu.MainActivity;
 import de.mytfg.app.android.slidemenu.SettingsFragment;
 
 /**

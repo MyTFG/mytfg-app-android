@@ -5,23 +5,17 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.provider.Settings;
-import android.text.format.DateFormat;
-import android.widget.Toast;
-
 import android.view.View;
 import android.widget.Toast;
 
-import java.util.Calendar;
-import java.util.Locale;
-
-import org.acra.*;
-import org.acra.annotation.*;
+import org.acra.ACRA;
+import org.acra.ReportingInteractionMode;
+import org.acra.annotation.ReportsCrashes;
 import org.acra.sender.HttpSender;
 import org.json.JSONObject;
 
 import de.mytfg.app.android.api.ApiParams;
 import de.mytfg.app.android.api.MytfgApi;
-
 import de.mytfg.app.android.gcm.GcmManager;
 import de.mytfg.app.android.modulemanager.ModuleManager;
 import de.mytfg.app.android.slidemenu.MainActivity;

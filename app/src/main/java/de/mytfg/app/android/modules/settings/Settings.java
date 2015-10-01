@@ -7,7 +7,6 @@ import android.widget.ScrollView;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.R;
 import de.mytfg.app.android.modulemanager.Module;
 

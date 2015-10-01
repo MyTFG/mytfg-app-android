@@ -1,10 +1,8 @@
 package de.mytfg.app.android.modules.settings;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.LinearLayout;
 
 import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.R;

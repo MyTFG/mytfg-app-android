@@ -16,29 +16,26 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.R;
 import de.mytfg.app.android.api.ApiParams;
 import de.mytfg.app.android.api.MytfgApi;
+import de.mytfg.app.android.modulemanager.Modules;
+import de.mytfg.app.android.modules.terminal.TerminalTopic;
+import de.mytfg.app.android.modules.terminal.objects.Review;
+import de.mytfg.app.android.modules.terminal.objects.Topic;
 import de.mytfg.app.android.slidemenu.items.Navigation;
 import de.mytfg.app.android.utils.TimeUtils;
-
 import in.uncod.android.bypass.Bypass;
 
 public class TerminalTopicFragment extends AbstractFragment {
     View terminalentryview;
-    private String mytfg_login_user;
-    private String mytfg_login_token;
-    private String mytfg_login_device;
     private RecyclerView terminalTopicList;
-    private List<TerminalReview> terminalReviews = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,16 +52,14 @@ public class TerminalTopicFragment extends AbstractFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         terminalentryview = inflater.inflate(R.layout.terminal_topic_layout, container, false);
+        if (!verifyArgs()) {
+            return null;
+        }
         initialize();
         return terminalentryview;
     }
 
-    /**
-     * Loads the given topic.
-     * @param args Arguments required for loading.
-     */
-    public boolean setArgs(Bundle args) {
-        this.args = args;
+    private boolean verifyArgs() {
         long topicId = args.getLong("topic", 0);
         if (topicId == 0) {
             MainActivity.navigation.navigate(Navigation.ItemNames.TERMINAL);
@@ -75,14 +70,14 @@ public class TerminalTopicFragment extends AbstractFragment {
                 return false;
             }
         }
+        TerminalTopic terminalModule = (TerminalTopic) MyTFG.moduleManager.getModule(Modules.TERMINALTOPIC);
+        terminalModule.setId(topicId);
         return true;
     }
 
     public void initialize() {
         long topicId = args.getLong("topic", 0);
-        if (topicId == 0) {
-            return;
-        } else {
+        if (topicId != 0) {
             // terminalList displays terminalEntries
             terminalTopicList = (RecyclerView) terminalentryview.findViewById(R.id.terminalList);
             terminalTopicList.setHasFixedSize(true);
@@ -90,16 +85,14 @@ public class TerminalTopicFragment extends AbstractFragment {
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(terminalTopicList.getContext());
             terminalTopicList.setLayoutManager(linearLayoutManager);
 
-            ImageButton send = (ImageButton) terminalentryview.findViewById(R.id.messageReplyButton);
+            ImageButton send = (ImageButton) terminalentryview.findViewById(R.id.terminalReplyButton);
             send.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     final EditText response = (EditText) terminalentryview.findViewById(R.id.respond_text);
                     if (response.getText().length() > 0) {
                         ApiParams params = new ApiParams();
-                        params.addParam("mytfg_api_login_user", mytfg_login_user);
-                        params.addParam("mytfg_api_login_token", mytfg_login_token);
-                        params.addParam("mytfg_api_login_device", mytfg_login_device);
+                        params.doLogin();
                         params.addParam("topic", "" + args.getLong("topic"));
                         params.addParam("text", response.getText().toString());
                         params.addParam("isPrivate", "true");
@@ -138,84 +131,29 @@ public class TerminalTopicFragment extends AbstractFragment {
     }
 
     private void refreshTerminalTopic(final boolean scrollToBottom) {
-        ApiParams params = new ApiParams();
-        params.addParam("topic", "" + args.getLong("topic"));
-
-
-        MytfgApi.ApiCallback callback = new MytfgApi.ApiCallback() {
+        TerminalTopic terminalModule = (TerminalTopic) MyTFG.moduleManager.getModule(Modules.TERMINALTOPIC);
+        terminalModule.getTopic(new TerminalTopic.GetTopicCallback() {
             @Override
-            public void callback(boolean success, JSONObject result, int responseCode, String resultStr) {
-                Toast toast;
-                if (success) {
-                    try {
-                        String title = result.getString("title");
-                        args.putString("title", title);
-                        item.args.putString("title", title);
-                        ((MainActivity)MainActivity.context).getSupportActionBar().setTitle(title);
-                        displayTerminalReviews(result.getJSONArray("reviews"));
-                        if (scrollToBottom) {
-                            terminalTopicList.scrollToPosition(terminalReviews.size() - 1);
-                        }
-                        return;
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        toast = Toast.makeText(terminalentryview.getContext(), "Error parsing JSON", Toast.LENGTH_LONG);
-                    }
-                } else {
-                    String error = "";
-                    if(resultStr != null) {
-                        error = resultStr;
-                    }
-                    toast = Toast.makeText(terminalentryview.getContext(), "Fehlgeschlagen: " + responseCode
-                            + " (" + error + ")", Toast.LENGTH_LONG);
-                }
-                toast.show();
+            public void callback(Topic topic, boolean stillLoading) {
+                showTopic(topic);
             }
-        };
-        MytfgApi.call("ajax_terminal_topic", params, callback);
+        });
     }
 
-    private void displayTerminalReviews(JSONArray jsonTerminalReviews) throws JSONException {
-       terminalReviews = new ArrayList<>();
-        for(int i = 0; i < jsonTerminalReviews.length(); i++) {
-            JSONObject obj = jsonTerminalReviews.getJSONObject(i);
-            if (Integer.parseInt(obj.getString("type")) == 0) {
-                terminalReviews.add(new TerminalReview(
-                                obj.getString("authorname"),
-                                Long.parseLong(obj.getString("created")),
-                                Long.parseLong(obj.getString("edited")),
-                                Long.parseLong(obj.getString("id")),
-                                obj.getString("text"))
-                );
-            }
+    private void showTopic(Topic topic) {
+        if(MainActivity.navigation.getCurrentItem().getItem() == this.item.getItem()) {
+            ((MainActivity)MainActivity.context).getSupportActionBar().setTitle(topic.getTitle());
         }
-        RVAdapter adapter = new RVAdapter(terminalReviews);
+        RVAdapter adapter = new RVAdapter(topic.getReviews());
         terminalTopicList.setAdapter(adapter);
-    }
-
-    class TerminalReview {
-        String author;
-        long created;
-        long edited;
-        long id;
-        String text;
-
-        TerminalReview(String author, long created,
-                       long edited, long id, String text) {
-            this.author = author;
-            this.created = created;
-            this.edited = edited;
-            this.id = id;
-            this.text = text;
-        }
     }
 
     public class RVAdapter extends RecyclerView.Adapter<RVAdapter.TerminalTopicViewHolder>{
 
-        List<TerminalReview> terminalReviews;
+        List<Review> terminalReviews;
 
-        RVAdapter(List<TerminalReview> persons){
-            this.terminalReviews = persons;
+        RVAdapter(List<Review> reviews){
+            this.terminalReviews = reviews;
         }
 
         @Override
@@ -231,14 +169,14 @@ public class TerminalTopicFragment extends AbstractFragment {
 
         @Override
         public void onBindViewHolder(TerminalTopicViewHolder terminalTopicViewHolder, int i) {
-            String title = terminalReviews.get(i).author;
+            String title = terminalReviews.get(i).getAuthor().toString();
             terminalTopicViewHolder.titleText.setText(title);
 
-            String authorDateText = TimeUtils.getDateStringShort(terminalReviews.get(i).created);
+            String authorDateText = TimeUtils.getDateStringShort(terminalReviews.get(i).getCreated());
             terminalTopicViewHolder.authorDateText.setText(authorDateText);
 
             Bypass bypass = new Bypass(MyTFG.getAppContext());
-            CharSequence string = bypass.markdownToSpannable(terminalReviews.get(i).text);
+            CharSequence string = bypass.markdownToSpannable(terminalReviews.get(i).getText());
             terminalTopicViewHolder.mainText.setText(string);
             terminalTopicViewHolder.mainText.setMovementMethod(LinkMovementMethod.getInstance());
 

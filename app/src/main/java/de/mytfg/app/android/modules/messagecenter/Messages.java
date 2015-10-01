@@ -32,6 +32,9 @@ public class Messages extends Module {
     }
 
     public void refresh() {
+        refresh(false);
+    }
+    public void refresh(final boolean forceReload) {
         ApiParams params = new ApiParams();
         params.addParam("id", String.valueOf(conversationId));
         params.addParam("count", String.valueOf(MESSAGE_COUNT));
@@ -41,12 +44,13 @@ public class Messages extends Module {
                 boolean error = false;
                 if(success) {
                     try {
-                        Conversation conversation = new Conversation();
-                        conversation.readFromJson(result.getJSONObject("object"));
+                        Conversation conversation = Conversation.createFromJson(
+                                result.getJSONObject("object"), result.getJSONObject("references"));
+
                         conversations.put(conversation.getId(), conversation);
                     } catch (JSONException e) {
                         error = true;
-                        Log.e("API", "Error parsing JSON!");
+                        Log.e("API", "Error parsing JSON!", e);
                     }
                 } else {
                     error = true;
@@ -98,8 +102,10 @@ public class Messages extends Module {
                     oldest = entry;
                 }
             }
-            conversationsAge.remove(oldest.getKey());
-            conversations.remove(oldest.getKey());
+            if (oldest != null) {
+                conversationsAge.remove(oldest.getKey());
+                conversations.remove(oldest.getKey());
+            }
         }
         this.conversationId = conversationId;
         conversationsAge.put(conversationId, System.currentTimeMillis());
