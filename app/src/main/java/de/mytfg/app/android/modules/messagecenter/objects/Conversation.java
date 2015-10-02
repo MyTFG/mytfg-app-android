@@ -58,6 +58,9 @@ public class Conversation extends ApiObject {
         if(!json.getString("type").equals("conversation")) {
             throw new IllegalArgumentException("Given JSON object does not represent a conversation!");
         }
+
+        this.messages.clear();
+
         this.id = json.getLong("id");
         this.subject = json.getString("subject");
         this.lastMessageTimestamp = (float) json.getDouble("lastMessageTime");
