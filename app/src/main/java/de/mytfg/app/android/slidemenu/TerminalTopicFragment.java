@@ -40,12 +40,13 @@ public class TerminalTopicFragment extends AbstractFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-
+        inflater.inflate(R.menu.terminal_topic_menu, menu);
     }
 
     @Nullable
