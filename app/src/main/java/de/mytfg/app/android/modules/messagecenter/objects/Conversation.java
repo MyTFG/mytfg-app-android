@@ -9,6 +9,7 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -24,7 +25,7 @@ public class Conversation extends ApiObject {
     private User lastMessageAuthor;
     private User[] members; // TODO: groups
     private int messagecount;
-    private List<Message> messages;
+    private List<Message> messages = new LinkedList<>();
 
     private static Map<Long, Conversation> cache = new TreeMap<>();
 
