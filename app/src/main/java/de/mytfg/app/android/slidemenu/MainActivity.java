@@ -29,6 +29,8 @@ import de.mytfg.app.android.NavigationDrawerFragment;
 import de.mytfg.app.android.R;
 import de.mytfg.app.android.gcm.GcmCallbackRegistration;
 import de.mytfg.app.android.gcm.RegistrationIntentService;
+import de.mytfg.app.android.modulemanager.Modules;
+import de.mytfg.app.android.modules.terminal.TerminalTopic;
 import de.mytfg.app.android.slidemenu.items.Navigation;
 
 public class MainActivity extends AppCompatActivity
@@ -155,6 +157,17 @@ public class MainActivity extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_terminal_topic_details:
+                TerminalTopic module = (TerminalTopic) MyTFG.moduleManager.getModule(Modules.TERMINALTOPIC);
+                Bundle args = new Bundle();
+                args.putLong("topic", module.getId());
+                navigation.navigate(Navigation.ItemNames.TERMINAL_DETAIL, args);
+                break;
+        }
+
+
         return super.onOptionsItemSelected(item);
     }
 
