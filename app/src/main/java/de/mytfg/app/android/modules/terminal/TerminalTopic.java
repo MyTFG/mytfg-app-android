@@ -66,4 +66,8 @@ public class TerminalTopic extends Module {
         Log.d("TERMINAL-TOPIC", "Id set to " + id);
         this.id = id;
     }
+
+    public long getId() {
+        return this.id;
+    }
 }
