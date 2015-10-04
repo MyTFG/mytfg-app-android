@@ -47,4 +47,12 @@ public class ReviewType extends ApiObject {
         this.id = json.getInt("id");
         this.name = json.getString("name");
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

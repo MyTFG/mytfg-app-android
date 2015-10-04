@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        style="@style/cards"
+        android:id="@+id/terminalTopicView">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:background="@color/blue_dark"
+            android:id="@+id/terminal_topic_wrapper"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/author_date_text"
+                android:layout_alignParentTop="true"
+                android:textSize="@dimen/mytfg_text"
+            />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_below="@+id/author_date_text"
+                android:layout_height="wrap_content"
+                android:id="@+id/title_action"
+                android:textSize="@dimen/mytfg_text"
+                android:textStyle="italic" />
+
+
+        </RelativeLayout>
+
+
+    </android.support.v7.widget.CardView>
