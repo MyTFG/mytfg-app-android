@@ -1,7 +1,5 @@
 package de.mytfg.app.android.modules.terminal;
 
-import android.util.Log;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -48,7 +46,7 @@ public class TerminalTopic extends Module {
                         e.printStackTrace();
                     }
                 } else {
-                    Log.e("API", "API call failed " + resultStr);
+                    // TODO: Send error message to callback.
                 }
             }
         };
@@ -63,7 +61,6 @@ public class TerminalTopic extends Module {
     }
 
     public void setId(long id) {
-        Log.d("TERMINAL-TOPIC", "Id set to " + id);
         this.id = id;
     }
 
