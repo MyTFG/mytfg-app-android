@@ -3,6 +3,7 @@ package de.mytfg.app.android.slidemenu;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -146,7 +147,10 @@ public class TerminalDetailFragment extends AbstractFragment {
         row.addView(textView);
 
         TableRow.LayoutParams params = (TableRow.LayoutParams) textView.getLayoutParams();
-        params.span = colspan;
+        params.weight = colspan;
+        params.width = 0;
+        params.height = TableRow.LayoutParams.MATCH_PARENT;
+        textView.setGravity(Gravity.CENTER_VERTICAL);
         textView.setLayoutParams(params);
     }
 }

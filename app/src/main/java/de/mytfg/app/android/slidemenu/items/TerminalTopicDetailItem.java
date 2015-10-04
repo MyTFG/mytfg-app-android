@@ -15,7 +15,7 @@ public class TerminalTopicDetailItem extends NavigationItem {
         super(navigation);
         this.title = MyTFG.getAppContext().getString(R.string.title_terminal_detail);
         this.item = Navigation.ItemNames.TERMINAL_DETAIL;
-        this.parent = Navigation.ItemNames.TERMINAL_TOPIC;
+        this.parent = Navigation.ItemNames.TERMINAL;
     }
 
     @Override
