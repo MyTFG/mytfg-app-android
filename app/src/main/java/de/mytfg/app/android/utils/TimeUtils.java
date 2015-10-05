@@ -22,10 +22,14 @@ public class TimeUtils {
     }
 
     public static String getDateString(long timestamp) {
+        return TimeUtils.getDateString(timestamp, false);
+    }
+
+    public static String getDateString(long timestamp, boolean forceLong) {
         String datetime;
         Calendar calendar = Calendar.getInstance(Locale.ENGLISH);
         calendar.setTimeInMillis(timestamp * 1000);
-        if (calendar.get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR)) {
+        if (calendar.get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR) && !forceLong) {
             datetime = DateFormat.format("dd.MM.", calendar).toString();
         } else {
             datetime = DateFormat.format("dd.MM.yyyy", calendar).toString();

@@ -30,6 +30,7 @@ import de.mytfg.app.android.R;
 import de.mytfg.app.android.gcm.GcmCallbackRegistration;
 import de.mytfg.app.android.gcm.RegistrationIntentService;
 import de.mytfg.app.android.modulemanager.Modules;
+import de.mytfg.app.android.modules.terminal.TerminalCreator;
 import de.mytfg.app.android.modules.terminal.TerminalTopic;
 import de.mytfg.app.android.slidemenu.items.Navigation;
 
@@ -164,6 +165,11 @@ public class MainActivity extends AppCompatActivity
                 Bundle args = new Bundle();
                 args.putLong("topic", module.getId());
                 navigation.navigate(Navigation.ItemNames.TERMINAL_DETAIL, args);
+                break;
+
+            case R.id.action_terminal_topic_create_reset:
+                TerminalCreator creator = (TerminalCreator) MyTFG.moduleManager.getModule(Modules.TERMINALCREATOR);
+                creator.reset();
                 break;
         }
 

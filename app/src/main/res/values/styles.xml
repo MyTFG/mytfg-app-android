@@ -22,6 +22,10 @@
 
     </style>
 
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/orange_accent</item>
+    </style>
+
     <style name="Widget.AppTheme.Button" parent="Base.Widget.AppCompat.Button.Borderless">
         <!-- action bar background -->
         <item name="background">@drawable/action_bar</item>

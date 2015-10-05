@@ -26,7 +26,8 @@ public class Navigation {
         CONVERSATION,
         TERMINAL,
         TERMINAL_TOPIC,
-        TERMINAL_DETAIL
+        TERMINAL_DETAIL,
+        TERMINAL_CREATE
     }
 
     public enum Transition {
@@ -94,6 +95,7 @@ public class Navigation {
         NavigationItem conversation = new ConversationItem(this);
         NavigationItem terminaltopic = new TerminalTopicItem(this);
         NavigationItem terminaltopicdetail = new TerminalTopicDetailItem(this);
+        NavigationItem terminaltopiccreate = new TerminalTopicCreateItem(this);
         NavigationItem login = new LoginItem(this);
 
         mainCat.addItem(start);
@@ -105,6 +107,7 @@ public class Navigation {
         hiddenCat.addItem(terminaltopic);
         hiddenCat.addItem(login);
         hiddenCat.addItem(terminaltopicdetail);
+        hiddenCat.addItem(terminaltopiccreate);
 
         fragmentManager = ((MainActivity)context).getSupportFragmentManager();
 
