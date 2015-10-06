@@ -26,6 +26,7 @@ import android.widget.Switch;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -39,6 +40,7 @@ import de.mytfg.app.android.modules.general.User;
 import de.mytfg.app.android.modules.terminal.TerminalCreator;
 import de.mytfg.app.android.modules.terminal.objects.Flag;
 import de.mytfg.app.android.modules.terminal.objects.Topic;
+import de.mytfg.app.android.slidemenu.items.Navigation;
 import de.mytfg.app.android.utils.TimeUtils;
 
 /**
@@ -113,6 +115,22 @@ public class TerminalCreateFragment extends AbstractFragment {
                 update();
             }
         });
+
+        module.setOnCreateListener(new TerminalCreator.TerminalCreatorCallback() {
+            @Override
+            public void callback(boolean success, long id, String error) {
+                if (success) {
+                    MainActivity.navigation.navigate(Navigation.ItemNames.TERMINAL);
+                    Bundle params = new Bundle();
+                    params.putLong("topic", id);
+                    MainActivity.navigation.navigate(Navigation.ItemNames.TERMINAL_TOPIC, params);
+                    module.reset();
+                } else {
+                    Toast.makeText(createView.getContext(), error, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
         tabHost.setOnTabChangedListener(new AnimatedTabHostListener(createView.getContext(), tabHost));
 
         update();

@@ -44,6 +44,13 @@ public class TerminalCreator extends Module {
         }
     };
 
+    private TerminalCreatorCallback onCreate = new TerminalCreatorCallback() {
+        @Override
+        public void callback(boolean success, long id, String error) {
+
+        }
+    };
+
     public interface TerminalCreatorCallback {
         void callback(boolean success, long id, String error);
     }
@@ -56,13 +63,31 @@ public class TerminalCreator extends Module {
         this.onReset = listener;
     }
 
-    public void create(final TerminalCreatorCallback callback) {
+    public void setOnCreateListener(TerminalCreatorCallback listener) {
+        this.onCreate = listener;
+    }
+
+    private boolean check() {
+        return (!this.title.equals("")
+                && !this.text.equals(""));
+    }
+
+    public void create() {
+        final TerminalCreatorCallback callback = this.onCreate;
+        if (!check()) {
+            callback.callback(false, -1, "Titel und Text dürfen nicht leer sein.");
+            return;
+        }
         ApiParams params = new ApiParams();
         JSONObject json = new JSONObject();
         try {
             json.put("title", this.title);
             json.put("text", this.text);
-            json.put("deadline", this.deadline);
+            if (this.hasDeadline) {
+                json.put("deadline", this.deadline / 1000);
+            } else {
+                json.put("deadline", -1);
+            }
 
             JSONArray flags = new JSONArray();
             for (Flag flag : this.flags) {
@@ -91,7 +116,7 @@ public class TerminalCreator extends Module {
                 public void callback(boolean success, JSONObject result, int responseCode, String resultStr) {
                     try {
                         if (success) {
-                            callback.callback(true, result.getLong("id"), "");
+                            callback.callback(true, result.getLong("topicid"), "");
                         } else {
                             callback.callback(false, -1, result.getString("error"));
                         }

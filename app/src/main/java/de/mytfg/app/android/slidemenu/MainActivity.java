@@ -172,6 +172,11 @@ public class MainActivity extends AppCompatActivity
                 creator.reset();
                 break;
 
+            case R.id.action_terminal_topic_create_submit:
+                ((TerminalCreator) MyTFG.moduleManager.getModule(Modules.TERMINALCREATOR)).create();
+                break;
+
+
             case android.R.id.home:
                 if (navigation.getCurrentItem().getParent() != navigation.getCurrentItem().getItem()) {
                     this.onBackPressed();
