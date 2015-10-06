@@ -6,12 +6,15 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -21,9 +24,9 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TabHost;
+import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TextView;
 
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -63,6 +66,7 @@ public class TerminalCreateFragment extends AbstractFragment {
         createView = inflater.inflate(R.layout.terminal_create_layout, container, false);
 
         tabHost = (TabHost)createView.findViewById(R.id.tabHost);
+
         setup();
 
         return createView;
@@ -73,6 +77,8 @@ public class TerminalCreateFragment extends AbstractFragment {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.terminal_topic_create_menu, menu);
     }
+
+
 
     private void setup() {
         tabHost.setup();
@@ -101,26 +107,19 @@ public class TerminalCreateFragment extends AbstractFragment {
         tabHost.addTab(tab4);
         setupTab4();
 
-        tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-            @Override
-            public void onTabChanged(String s) {
-                InputMethodManager imm = (InputMethodManager) createView.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(createView.getWindowToken(), 0);
-            }
-        });
-
         module.setOnResetListener(new TerminalCreator.OnResetListener() {
             @Override
             public void onReset() {
                 update();
             }
         });
+        tabHost.setOnTabChangedListener(new AnimatedTabHostListener(createView.getContext(), tabHost));
 
         update();
     }
 
     private void update() {
-        EditText title = (EditText)createView.findViewById(R.id.edit_title);
+        EditText title = (EditText) createView.findViewById(R.id.edit_title);
         EditText text = (EditText)createView.findViewById(R.id.edit_text);
         Switch deadlineToggle = (Switch)createView.findViewById(R.id.deadlineSwitch);
         TextView deadline = (TextView)createView.findViewById(R.id.deadlineText);
@@ -352,4 +351,107 @@ public class TerminalCreateFragment extends AbstractFragment {
         }
     }
 
+
+    public class AnimatedTabHostListener implements OnTabChangeListener {
+
+        private static final int ANIMATION_TIME = 240;
+        private TabHost tabHost;
+        private View previousView;
+        private View currentView;
+        private GestureDetector gestureDetector;
+        private int currentTab;
+
+        /**
+         * Constructor that takes the TabHost as a parameter and sets previousView to the currentView at instantiation
+         *
+         * @param context
+         * @param tabHost
+         */
+        public AnimatedTabHostListener(Context context, TabHost tabHost) {
+            this.tabHost = tabHost;
+            this.previousView = tabHost.getCurrentView();
+        }
+
+        /**
+         * When tabs change we fetch the current view that we are animating to and animate it and the previous view in the
+         * appropriate directions.
+         */
+        @Override
+        public void onTabChanged(String tabId) {
+            // Hide Keyboard
+            InputMethodManager imm = (InputMethodManager)createView.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(createView.getWindowToken(), 0);
+
+
+            currentView = tabHost.getCurrentView();
+            if (tabHost.getCurrentTab() > currentTab) {
+                previousView.setAnimation(outToLeftAnimation());
+                currentView.setAnimation(inFromRightAnimation());
+            } else {
+                previousView.setAnimation(outToRightAnimation());
+                currentView.setAnimation(inFromLeftAnimation());
+            }
+            previousView = currentView;
+            currentTab = tabHost.getCurrentTab();
+        }
+
+        /**
+         * Custom animation that animates in from right
+         *
+         * @return Animation the Animation object
+         */
+        private Animation inFromRightAnimation() {
+            Animation inFromRight = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 1.0f,
+                    Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT,
+                    0.0f);
+            return setProperties(inFromRight);
+        }
+
+        /**
+         * Custom animation that animates out to the right
+         *
+         * @return Animation the Animation object
+         */
+        private Animation outToRightAnimation() {
+            Animation outToRight = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT,
+                    1.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f);
+            return setProperties(outToRight);
+        }
+
+        /**
+         * Custom animation that animates in from left
+         *
+         * @return Animation the Animation object
+         */
+        private Animation inFromLeftAnimation() {
+            Animation inFromLeft = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, -1.0f,
+                    Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT,
+                    0.0f);
+            return setProperties(inFromLeft);
+        }
+
+        /**
+         * Custom animation that animates out to the left
+         *
+         * @return Animation the Animation object
+         */
+        private Animation outToLeftAnimation() {
+            Animation outtoLeft = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT,
+                    -1.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f);
+            return setProperties(outtoLeft);
+        }
+
+        /**
+         * Helper method that sets some common properties
+         *
+         * @param animation
+         *            the animation to give common properties
+         * @return the animation with common properties
+         */
+        private Animation setProperties(Animation animation) {
+            animation.setDuration(ANIMATION_TIME);
+            animation.setInterpolator(new AccelerateInterpolator());
+            return animation;
+        }
+    }
 }
