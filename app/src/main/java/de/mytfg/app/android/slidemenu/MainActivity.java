@@ -171,6 +171,13 @@ public class MainActivity extends AppCompatActivity
                 TerminalCreator creator = (TerminalCreator) MyTFG.moduleManager.getModule(Modules.TERMINALCREATOR);
                 creator.reset();
                 break;
+
+            case android.R.id.home:
+                if (navigation.getCurrentItem().getParent() != navigation.getCurrentItem().getItem()) {
+                    this.onBackPressed();
+                    return true;
+                }
+                break;
         }
 
 
