@@ -3,6 +3,7 @@ package de.mytfg.app.android.modulemanager;
 import de.mytfg.app.android.modules.messagecenter.Conversations;
 import de.mytfg.app.android.modules.messagecenter.Messages;
 import de.mytfg.app.android.modules.settings.Settings;
+import de.mytfg.app.android.modules.terminal.TerminalCreator;
 import de.mytfg.app.android.modules.terminal.TerminalTopic;
 import de.mytfg.app.android.modules.terminal.TerminalTopics;
 
@@ -27,6 +28,8 @@ public class ModuleFactory {
                 return new TerminalTopics();
             case TERMINALTOPIC:
                 return new TerminalTopic();
+            case TERMINALCREATOR:
+                return new TerminalCreator();
             default:
                 ModuleFactory.error();
                 break;

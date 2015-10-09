@@ -40,7 +40,7 @@ public class TerminalFragment extends AbstractFragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-           MainActivity.navigation.navigate(Navigation.ItemNames.START, new Bundle(), Navigation.Transition.SLIDE, true);
+           MainActivity.navigation.navigate(Navigation.ItemNames.TERMINAL_CREATE);
             }
         });
 

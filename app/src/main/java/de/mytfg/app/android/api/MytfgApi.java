@@ -162,6 +162,7 @@ public class MytfgApi {
                     callback.callback(status, obj, responseCode, result);
                 } catch (Exception ex) {
                     Log.e("API", "Could not parse JSON result: " + ex.getMessage());
+                    Log.e("API", "Invalid result: " + result);
                     ex.printStackTrace();
                     callback.callback(false, null, responseCode, result);
                 }

@@ -64,6 +64,11 @@ public class Topic extends ApiObject {
             throw new IllegalArgumentException("Given JSON object does not represent Terminal Topic!");
         }
 
+        this.flags.clear();
+        this.reviews.clear();
+        this.workers.clear();
+        this.dependencies.clear();
+
         this.id = json.getLong("id");
         this.title = json.getString("title");
         this.code = json.getString("code");
@@ -165,5 +170,10 @@ public class Topic extends ApiObject {
 
     public long getLastUpdated() {
         return lastUpdated;
+    }
+
+    @Override
+    public String toString() {
+        return "#" + this.getId() + " - " + this.getTitle();
     }
 }
