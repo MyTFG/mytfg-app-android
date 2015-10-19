@@ -13,11 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,7 +30,6 @@ public class VPlanFragment extends AbstractFragment {
     private RecyclerView vPlanList_today;
     private RecyclerView vPlanList_tomorrow;
 
-    private static final int NUM_PAGES = 2;
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;
     private PagerTabStripV22 tabs;
@@ -94,7 +88,7 @@ public class VPlanFragment extends AbstractFragment {
 
         @Override
         public Object instantiateItem(ViewGroup collection, int position) {
-            View v = null;
+            View v;
             if (position == 0) {
                 v = ((MainActivity)MainActivity.context).findViewById(R.id.linearLayout_today);
             } else {
@@ -165,7 +159,6 @@ public class VPlanFragment extends AbstractFragment {
             this.vplanEntries = entries;
         }
 
-        // get position of item, 0 is vplan_info_view, > 0 are vplan_views
         @Override
         public int getItemViewType(int position) {
             return vplanEntries.get(position) instanceof VplanEntry ? 1 : 0;
