@@ -21,33 +21,33 @@
             android:background="@color/blue_dark"
             android:textColor="@color/white" />
 
-        <LinearLayout
-            android:id="@+id/linearLayout_today"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/layout_today"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent" >
 
             <android.support.v7.widget.RecyclerView
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/vPlanList_today"
+                android:scrollbars="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-        </LinearLayout>
+        </android.support.v4.widget.SwipeRefreshLayout>
 
-        <LinearLayout
-            android:id="@+id/linearLayout_tomorrow"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/layout_tomorrow"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent" >
 
             <android.support.v7.widget.RecyclerView
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/vPlanList_tomorrow"
+                android:scrollbars="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-        </LinearLayout>
+        </android.support.v4.widget.SwipeRefreshLayout>
 
     </android.support.v4.view.ViewPager>
 

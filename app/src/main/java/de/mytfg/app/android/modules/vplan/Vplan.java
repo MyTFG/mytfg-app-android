@@ -37,15 +37,20 @@ public class Vplan extends Module {
     }
 
     public void getPlan(boolean today, GetPlanCallback callback) {
+        getPlan(today, callback, false);
+    }
+
+    public void getPlan(boolean today, GetPlanCallback callback, boolean force) {
+        int interval = force ? 0 : updateInterval;
         if (today) {
-            updatePlan(callback, "today");
+            updatePlan(callback, "today", interval);
         } else {
-            updatePlan(callback, "tomorrow");
+            updatePlan(callback, "tomorrow", interval);
         }
 
     }
 
-    private void updatePlan(GetPlanCallback userCb, final String day) {
+    private void updatePlan(GetPlanCallback userCb, final String day, int interval) {
         final GetPlanCallback callbackf = userCb;
         ApiParams params = new ApiParams();
         params.addParam("day", day);
@@ -64,7 +69,7 @@ public class Vplan extends Module {
                 }
             }
         };
-        ApiCache.call("ajax_vplan_get", params, callback);
+        ApiCache.call("ajax_vplan_get", params, callback, interval);
     }
 
     private void sendCallback(GetPlanCallback callback, String day) {

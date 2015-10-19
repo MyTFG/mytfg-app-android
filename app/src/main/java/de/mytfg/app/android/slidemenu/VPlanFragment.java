@@ -1,10 +1,12 @@
 package de.mytfg.app.android.slidemenu;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.PagerTabStripV22;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,6 +36,9 @@ public class VPlanFragment extends AbstractFragment {
     private PagerAdapter mPagerAdapter;
     private PagerTabStripV22 tabs;
 
+    private SwipeRefreshLayout mSwipeRefreshLayout1;
+    private SwipeRefreshLayout mSwipeRefreshLayout2;
+
     private static String todayTitleDefault = "Heute";
     private static String tomorrowTitleDefault = "Morgen";
 
@@ -42,10 +47,25 @@ public class VPlanFragment extends AbstractFragment {
 
     private boolean multiClass = false;
 
+    private int loadingCount = 0;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         vplanview = inflater.inflate(R.layout.vplan_layout, container, false);
+
+        mSwipeRefreshLayout1 = (SwipeRefreshLayout) vplanview.findViewById(R.id.layout_today);
+        mSwipeRefreshLayout2 = (SwipeRefreshLayout) vplanview.findViewById(R.id.layout_tomorrow);
+
+        SwipeRefreshLayout.OnRefreshListener listener = new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshVPlanEntries(true);
+            }
+        };
+
+        mSwipeRefreshLayout1.setOnRefreshListener(listener);
+        mSwipeRefreshLayout2.setOnRefreshListener(listener);
 
         if (!MyTFG.isLoggedIn()) {
             MainActivity.navigation.navigate(Navigation.ItemNames.SETTINGS);
@@ -90,9 +110,9 @@ public class VPlanFragment extends AbstractFragment {
         public Object instantiateItem(ViewGroup collection, int position) {
             View v;
             if (position == 0) {
-                v = ((MainActivity)MainActivity.context).findViewById(R.id.linearLayout_today);
+                v = ((MainActivity)MainActivity.context).findViewById(R.id.layout_today);
             } else {
-                v = ((MainActivity)MainActivity.context).findViewById(R.id.linearLayout_tomorrow);
+                v = ((MainActivity)MainActivity.context).findViewById(R.id.layout_tomorrow);
             }
             return v;
         }
@@ -113,13 +133,21 @@ public class VPlanFragment extends AbstractFragment {
     }
 
     private void refreshVPlanEntries() {
+        refreshVPlanEntries(false);
+    }
+
+    private void refreshVPlanEntries(boolean force) {
         todayTitle = todayTitleDefault;
         tomorrowTitle = tomorrowTitleDefault;
+
+        loadingCount += 2;
 
         Vplan plan = (Vplan) MyTFG.moduleManager.getModule(Modules.VPLAN);
         plan.getPlan(true, new Vplan.GetPlanCallback() {
             @Override
             public void callback(String day, VplanInfo info, List<VplanEntry> entries) {
+                decreaseLoading();
+
                 List<VplanObject> objects = new LinkedList<>();
                 objects.add(info);
                 objects.addAll(entries);
@@ -130,12 +158,15 @@ public class VPlanFragment extends AbstractFragment {
 
                 RecyclerView today = (RecyclerView) vplanview.findViewById(R.id.vPlanList_today);
                 today.setAdapter(adapter);
+
+                loadingFinished();
             }
-        });
+        }, force);
 
         plan.getPlan(false, new Vplan.GetPlanCallback() {
             @Override
             public void callback(String day, VplanInfo info, List<VplanEntry> entries) {
+                decreaseLoading();
                 List<VplanObject> objects = new LinkedList<>();
                 objects.add(info);
                 objects.addAll(entries);
@@ -146,9 +177,23 @@ public class VPlanFragment extends AbstractFragment {
 
                 RecyclerView tomorrow = (RecyclerView) vplanview.findViewById(R.id.vPlanList_tomorrow);
                 tomorrow.setAdapter(adapter);
+                loadingFinished();
             }
-        });
+        }, force);
     }
+
+    private void decreaseLoading() {
+        loadingCount--;
+    }
+
+    private void loadingFinished() {
+        if (loadingCount <= 0) {
+            loadingCount = 0;
+            mSwipeRefreshLayout1.setRefreshing(false);
+            mSwipeRefreshLayout2.setRefreshing(false);
+        }
+    }
+
 
 
     public class RVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
