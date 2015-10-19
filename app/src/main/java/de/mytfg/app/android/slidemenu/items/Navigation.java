@@ -102,6 +102,7 @@ public class Navigation {
         NavigationItem login = new LoginItem(this);
 
         mainCat.addItem(start);
+        mainCat.addItem(vplan);
         mainCat.addItem(terminal);
         mainCat.addItem(conversationsList);
         mainCat.addItem(settings);
