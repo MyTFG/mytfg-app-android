@@ -1,6 +1,5 @@
 package de.mytfg.app.android.slidemenu;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
@@ -10,6 +9,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +20,7 @@ import java.util.List;
 
 import de.mytfg.app.android.MyTFG;
 import de.mytfg.app.android.R;
+import de.mytfg.app.android.api.MytfgApi;
 import de.mytfg.app.android.modulemanager.Modules;
 import de.mytfg.app.android.modules.vplan.Vplan;
 import de.mytfg.app.android.modules.vplan.objects.VplanEntry;
@@ -140,13 +141,12 @@ public class VPlanFragment extends AbstractFragment {
         todayTitle = todayTitleDefault;
         tomorrowTitle = tomorrowTitleDefault;
 
-        loadingCount += 2;
-
         Vplan plan = (Vplan) MyTFG.moduleManager.getModule(Modules.VPLAN);
         plan.getPlan(true, new Vplan.GetPlanCallback() {
             @Override
             public void callback(String day, VplanInfo info, List<VplanEntry> entries) {
-                decreaseLoading();
+                Log.d("REFRESH", "TODAY FINISHED");
+                increaseLoading();
 
                 List<VplanObject> objects = new LinkedList<>();
                 objects.add(info);
@@ -158,15 +158,14 @@ public class VPlanFragment extends AbstractFragment {
 
                 RecyclerView today = (RecyclerView) vplanview.findViewById(R.id.vPlanList_today);
                 today.setAdapter(adapter);
-
-                loadingFinished();
             }
         }, force);
 
         plan.getPlan(false, new Vplan.GetPlanCallback() {
             @Override
             public void callback(String day, VplanInfo info, List<VplanEntry> entries) {
-                decreaseLoading();
+                Log.d("REFRESH", "TOMORROW FINISHED");
+                increaseLoading();
                 List<VplanObject> objects = new LinkedList<>();
                 objects.add(info);
                 objects.addAll(entries);
@@ -177,17 +176,17 @@ public class VPlanFragment extends AbstractFragment {
 
                 RecyclerView tomorrow = (RecyclerView) vplanview.findViewById(R.id.vPlanList_tomorrow);
                 tomorrow.setAdapter(adapter);
-                loadingFinished();
             }
         }, force);
     }
 
-    private void decreaseLoading() {
-        loadingCount--;
+    private void increaseLoading() {
+        loadingCount++;
+        loadingFinished();
     }
 
     private void loadingFinished() {
-        if (loadingCount <= 0) {
+        if (loadingCount >= 2 && !MytfgApi.callInProgress()) {
             loadingCount = 0;
             mSwipeRefreshLayout1.setRefreshing(false);
             mSwipeRefreshLayout2.setRefreshing(false);
