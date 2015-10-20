@@ -106,7 +106,6 @@ public class Navigation {
         mainCat.addItem(terminal);
         mainCat.addItem(conversationsList);
         mainCat.addItem(settings);
-        mainCat.addItem(vplan);
 
         hiddenCat.addItem(conversation);
         hiddenCat.addItem(terminaltopic);
