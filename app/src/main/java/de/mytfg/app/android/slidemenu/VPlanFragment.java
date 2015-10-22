@@ -260,12 +260,16 @@ public class VPlanFragment extends AbstractFragment {
                     vPlanViewHolder.substitutionText.setVisibility(View.GONE);
                     vPlanViewHolder.substitutionTitle.setVisibility(View.GONE);
                 } else {
+                    vPlanViewHolder.substitutionText.setVisibility(View.VISIBLE);
+                    vPlanViewHolder.substitutionTitle.setVisibility(View.VISIBLE);
                     vPlanViewHolder.substitutionText.setText(substitution);
                 }
                 if (comment.equals("")) {
                     vPlanViewHolder.commentTitle.setVisibility(View.GONE);
                     vPlanViewHolder.commentText.setVisibility(View.GONE);
                 } else {
+                    vPlanViewHolder.commentTitle.setVisibility(View.VISIBLE);
+                    vPlanViewHolder.commentText.setVisibility(View.VISIBLE);
                     vPlanViewHolder.commentText.setText(comment);
                 }
             }
