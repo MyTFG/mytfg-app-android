@@ -256,8 +256,18 @@ public class VPlanFragment extends AbstractFragment {
                 // display entries
                 vPlanViewHolder.lessonText.setText(lesson);
                 vPlanViewHolder.regularText.setText(regular);
-                vPlanViewHolder.substitutionText.setText(substitution);
-                vPlanViewHolder.commentText.setText(comment);
+                if (substitution.equals("")) {
+                    vPlanViewHolder.substitutionText.setVisibility(View.GONE);
+                    vPlanViewHolder.substitutionTitle.setVisibility(View.GONE);
+                } else {
+                    vPlanViewHolder.substitutionText.setText(substitution);
+                }
+                if (comment.equals("")) {
+                    vPlanViewHolder.commentTitle.setVisibility(View.GONE);
+                    vPlanViewHolder.commentText.setVisibility(View.GONE);
+                } else {
+                    vPlanViewHolder.commentText.setText(comment);
+                }
             }
         }
 
@@ -272,7 +282,9 @@ public class VPlanFragment extends AbstractFragment {
             TextView lessonText;
             TextView regularText;
             TextView substitutionText;
+            TextView substitutionTitle;
             TextView commentText;
+            TextView commentTitle;
 
             VPlanViewHolder(View itemView) {
                 super(itemView);
@@ -281,7 +293,9 @@ public class VPlanFragment extends AbstractFragment {
                 lessonText = (TextView) itemView.findViewById(R.id.lesson_text);
                 regularText = (TextView) itemView.findViewById(R.id.regular_text);
                 substitutionText = (TextView) itemView.findViewById(R.id.substitution_text);
+                substitutionTitle = (TextView) itemView.findViewById(R.id.substitution_headline);
                 commentText = (TextView) itemView.findViewById(R.id.comment_text);
+                commentTitle = (TextView) itemView.findViewById(R.id.comment_headline);
             }
         }
 
