@@ -257,7 +257,7 @@ public class VPlanFragment extends AbstractFragment {
                 vPlanViewHolder.lessonText.setText(lesson);
                 vPlanViewHolder.regularText.setText(regular);
                 vPlanViewHolder.substitutionText.setText(substitution);
-                vPlanViewHolder.substitutionText.setText(comment);
+                vPlanViewHolder.commentText.setText(comment);
             }
         }
 
