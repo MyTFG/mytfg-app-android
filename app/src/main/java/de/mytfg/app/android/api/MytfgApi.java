@@ -54,6 +54,12 @@ public class MytfgApi {
         call(apiFunction, new ApiParams(), callback);
     }
 
+
+
+    public static boolean callInProgress() {
+        return RequestTask.activeCalls > 0;
+    }
+
     public interface ApiCallback {
         /**
          * Called by the call-Method when request finished.

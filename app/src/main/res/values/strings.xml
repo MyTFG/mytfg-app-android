@@ -12,6 +12,7 @@
     <string name="title_terminal_create">Neues Thema</string>
     <string name="title_info">Info</string>
     <string name="title_messages">Nachrichten</string>
+    <string name="title_vplan">Vertretungsplan</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -55,4 +56,11 @@
     <string name="me">Ich</string>
     <string name="error_sending">Fehler beim Senden!</string>
 
+    <!-- VPlan -->
+    <string name="regular_headline">Nach Plan:</string>
+    <string name="substitution_headline">Vertretung:</string>
+    <string name="comment_headline">Bemerkung:</string>
+    <string name="button_today">heute</string>
+    <string name="button_tomorrow">morgen</string>
+    <string name="vplan_info_headline">Informationen:</string>
 </resources>

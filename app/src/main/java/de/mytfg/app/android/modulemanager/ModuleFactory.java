@@ -6,6 +6,7 @@ import de.mytfg.app.android.modules.settings.Settings;
 import de.mytfg.app.android.modules.terminal.TerminalCreator;
 import de.mytfg.app.android.modules.terminal.TerminalTopic;
 import de.mytfg.app.android.modules.terminal.TerminalTopics;
+import de.mytfg.app.android.modules.vplan.Vplan;
 
 /**
  * A ModuleFactory to create Modules by ENUM.
@@ -30,6 +31,8 @@ public class ModuleFactory {
                 return new TerminalTopic();
             case TERMINALCREATOR:
                 return new TerminalCreator();
+            case VPLAN:
+                return new Vplan();
             default:
                 ModuleFactory.error();
                 break;

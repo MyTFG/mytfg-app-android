@@ -10,6 +10,7 @@ public enum Modules {
     TERMINALCREATOR,
     CONVERSATIONS,
     CONVERSATION,
+    VPLAN,
     SETTINGS;
 
     public static int size = Modules.values().length;

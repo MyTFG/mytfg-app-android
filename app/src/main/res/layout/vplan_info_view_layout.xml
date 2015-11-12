@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/vplanInfoView"
+    style="@style/cards">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blue_accent"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/vplan_info_headline"
+            android:text="@string/vplan_info_headline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/mytfg_header" />
+
+        <TextView
+            android:id="@+id/vplan_info"
+            android:paddingLeft="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/mytfg_text"/>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>
