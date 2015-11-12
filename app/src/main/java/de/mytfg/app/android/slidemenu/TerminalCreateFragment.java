@@ -4,18 +4,16 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.PagerTabStripV22;
+import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
@@ -23,8 +21,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Switch;
-import android.widget.TabHost;
-import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,7 +44,11 @@ import de.mytfg.app.android.utils.TimeUtils;
  */
 public class TerminalCreateFragment extends AbstractFragment {
     View createView;
-    TabHost tabHost;
+
+    private ViewPager mPager;
+    private PagerAdapter mPagerAdapter;
+    private PagerTabStripV22 tabs;
+
     final TerminalCreator module;
 
     public TerminalCreateFragment() {
@@ -67,8 +67,6 @@ public class TerminalCreateFragment extends AbstractFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         createView = inflater.inflate(R.layout.terminal_create_layout, container, false);
 
-        tabHost = (TabHost)createView.findViewById(R.id.tabHost);
-
         setup();
 
         return createView;
@@ -80,34 +78,77 @@ public class TerminalCreateFragment extends AbstractFragment {
         inflater.inflate(R.menu.terminal_topic_create_menu, menu);
     }
 
+    /**
+     * A Pager to slide the Terminal Creation pages.
+     */
+    public class TerminalPageAdapter extends PagerAdapter {
+        @Override
+        public int getCount() {
+            return 4;
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup collection, int position) {
+            View v;
+            switch (position) {
+                default:
+                case 0:
+                    v = ((MainActivity)MainActivity.context).findViewById(R.id.tab1);
+                    break;
+                case 1:
+                    v = ((MainActivity)MainActivity.context).findViewById(R.id.tab2);
+                    break;
+                case 2:
+                    v = ((MainActivity)MainActivity.context).findViewById(R.id.tab3);
+                    break;
+                case 3:
+                    v = ((MainActivity)MainActivity.context).findViewById(R.id.tab4);
+                    break;
+            }
+            return v;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                default:
+                case 0:
+                    return "Allgemeines";
+                case 1:
+                    return "Zusätzliches";
+                case 2:
+                    return "Bearbeiter";
+                case 3:
+                    return "Abhängigkeiten";
+            }
+        }
+
+        @Override
+        public boolean isViewFromObject(View arg0, Object arg1) {
+            return arg0 == ((View) arg1);
+        }
+
+        @Override
+        public void destroyItem(View container, int position, Object object) {
+            // Don't do anything
+            // ((ViewPager) container).removeView((View) object);
+        }
+    }
+
 
 
     private void setup() {
-        tabHost.setup();
-
-        TabHost.TabSpec tab1 = tabHost.newTabSpec("TAB1");
-        tab1.setIndicator("Allgemeines");
-        tab1.setContent(R.id.tab1);
-        tabHost.addTab(tab1);
         setupTab1();
-
-        TabHost.TabSpec tab2 = tabHost.newTabSpec("TAB2");
-        tab2.setIndicator("Zusätzliches");
-        tab2.setContent(R.id.tab2);
-        tabHost.addTab(tab2);
         setupTab2();
-
-        TabHost.TabSpec tab3 = tabHost.newTabSpec("TAB3");
-        tab3.setIndicator("Bearbeiter");
-        tab3.setContent(R.id.tab3);
-        tabHost.addTab(tab3);
         setupTab3();
-
-        TabHost.TabSpec tab4 = tabHost.newTabSpec("TAB4");
-        tab4.setIndicator("Abhängigkeiten");
-        tab4.setContent(R.id.tab4);
-        tabHost.addTab(tab4);
         setupTab4();
+
+        mPager = (ViewPager) createView.findViewById(R.id.terminal_create_pager);
+        mPagerAdapter = new TerminalPageAdapter();
+        mPager.setAdapter(mPagerAdapter);
+
+        tabs = (PagerTabStripV22) createView.findViewById(R.id.terminal_create_pager_header);
+        tabs.setTabIndicatorColor(MyTFG.color(R.color.orange_accent));
 
         module.setOnResetListener(new TerminalCreator.OnResetListener() {
             @Override
@@ -130,8 +171,6 @@ public class TerminalCreateFragment extends AbstractFragment {
                 }
             }
         });
-
-        tabHost.setOnTabChangedListener(new AnimatedTabHostListener(createView.getContext(), tabHost));
 
         update();
     }
@@ -370,106 +409,4 @@ public class TerminalCreateFragment extends AbstractFragment {
     }
 
 
-    public class AnimatedTabHostListener implements OnTabChangeListener {
-
-        private static final int ANIMATION_TIME = 240;
-        private TabHost tabHost;
-        private View previousView;
-        private View currentView;
-        private GestureDetector gestureDetector;
-        private int currentTab;
-
-        /**
-         * Constructor that takes the TabHost as a parameter and sets previousView to the currentView at instantiation
-         *
-         * @param context
-         * @param tabHost
-         */
-        public AnimatedTabHostListener(Context context, TabHost tabHost) {
-            this.tabHost = tabHost;
-            this.previousView = tabHost.getCurrentView();
-        }
-
-        /**
-         * When tabs change we fetch the current view that we are animating to and animate it and the previous view in the
-         * appropriate directions.
-         */
-        @Override
-        public void onTabChanged(String tabId) {
-            // Hide Keyboard
-            InputMethodManager imm = (InputMethodManager)createView.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(createView.getWindowToken(), 0);
-
-
-            currentView = tabHost.getCurrentView();
-            if (tabHost.getCurrentTab() > currentTab) {
-                previousView.setAnimation(outToLeftAnimation());
-                currentView.setAnimation(inFromRightAnimation());
-            } else {
-                previousView.setAnimation(outToRightAnimation());
-                currentView.setAnimation(inFromLeftAnimation());
-            }
-            previousView = currentView;
-            currentTab = tabHost.getCurrentTab();
-        }
-
-        /**
-         * Custom animation that animates in from right
-         *
-         * @return Animation the Animation object
-         */
-        private Animation inFromRightAnimation() {
-            Animation inFromRight = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 1.0f,
-                    Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT,
-                    0.0f);
-            return setProperties(inFromRight);
-        }
-
-        /**
-         * Custom animation that animates out to the right
-         *
-         * @return Animation the Animation object
-         */
-        private Animation outToRightAnimation() {
-            Animation outToRight = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT,
-                    1.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f);
-            return setProperties(outToRight);
-        }
-
-        /**
-         * Custom animation that animates in from left
-         *
-         * @return Animation the Animation object
-         */
-        private Animation inFromLeftAnimation() {
-            Animation inFromLeft = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, -1.0f,
-                    Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT,
-                    0.0f);
-            return setProperties(inFromLeft);
-        }
-
-        /**
-         * Custom animation that animates out to the left
-         *
-         * @return Animation the Animation object
-         */
-        private Animation outToLeftAnimation() {
-            Animation outtoLeft = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT,
-                    -1.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f);
-            return setProperties(outtoLeft);
-        }
-
-        /**
-         * Helper method that sets some common properties
-         *
-         * @param animation
-         *            the animation to give common properties
-         * @return the animation with common properties
-         */
-        private Animation setProperties(Animation animation) {
-            animation.setDuration(ANIMATION_TIME);
-            animation.setInterpolator(new AccelerateInterpolator());
-            return animation;
-        }
-    }
 }
