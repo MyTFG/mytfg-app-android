@@ -1,23 +1,31 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="AppTheme.Base"></style>
+
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowActionModeOverlay">true</item>
+
         <item name="settings_switch_layout">@style/setting_switch</item>
 
         <item name="actionBarStyle">@style/Widget.AppTheme.ActionBar</item>
         <item name="actionBarTheme">@style/ThemeOverlay.AppTheme.ActionBar</item>
         <item name="actionBarPopupTheme">@style/ThemeOverlay.AppTheme.PopupMenu</item>
 
-        <item name="android:windowBackground">@drawable/window_color</item>
-        <item name="android:textColorPrimary">#FFFFFF</item>
-        <item name="android:textColorSecondary">#FFFFFF</item>
-        <item name="android:textColorHint">#00014a</item>
-        <item name="android:textColorHighlight">#00014a</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:textColorPrimary">@color/gray</item>
+        <item name="android:textColorSecondary">@color/gray</item>
+        <item name="android:textColorHint">@color/blue_dark</item>
+        <item name="android:textColorHighlight">@color/blue_dark</item>
         <item name="android:textCursorDrawable">@null</item>
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/mytfg_header</item>
 
-        <item name="colorAccent">#FF7400</item>
+        <item name="colorAccent">@color/orange_accent</item>
+        <item name="colorPrimaryDark">@color/blue_dark</item>
+        <item name="colorPrimary">@color/blue_medium</item>
         <item name="android:buttonStyle">@style/Widget.AppTheme.Button</item>
 
     </style>
@@ -58,6 +66,12 @@
         <item name="android:colorBackground">@color/blue_medium</item>
         <!-- popup menu item text color -->
         <item name="android:textColorPrimary">#FFFFFF</item>
+    </style>
+
+    <style name="AppTheme.Toolbar.Base" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+    </style>
+
+    <style name="AppTheme.Toolbar" parent="AppTheme.Toolbar.Base">
     </style>
 
 </resources>

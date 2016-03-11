@@ -2,8 +2,11 @@ package de.mytfg.app.android.slidemenu.items;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
@@ -65,10 +68,9 @@ public class Navigation {
         }
     }
 
-    private ListView mDrawerListView;
+    private Menu mMainMenu;
+    private NavigationView mNavigationView;
     private DrawerLayout mDrawerLayout;
-    private NavigationDrawerFragment.NavigationDrawerCallbacks mCallbacks;
-    private View mFragmentContainerView;
 
     private final Context context;
     private FragmentManager fragmentManager;
@@ -83,8 +85,8 @@ public class Navigation {
         this.context = mainContext;
         categories = new LinkedList<>();
 
-        NavigationCategory mainCat = new NavigationCategory("Hauptkategorie");
-        NavigationCategory hiddenCat = new NavigationCategory("Hidden Kategorie", true);
+        final NavigationCategory mainCat = new NavigationCategory("Hauptkategorie");
+        final NavigationCategory hiddenCat = new NavigationCategory("Hidden Kategorie", true);
         categories.add(mainCat);
         categories.add(hiddenCat);
 
@@ -123,14 +125,30 @@ public class Navigation {
         });
     }
 
-    public void setNavigationDrawerParams(ListView mDrawerListView, DrawerLayout mDrawerLayout,
-                                          NavigationDrawerFragment.NavigationDrawerCallbacks mCallbacks,
-                                          View mFragmentContainerView) {
-        this.mDrawerListView = mDrawerListView;
-        this.mDrawerLayout = mDrawerLayout;
-        this.mCallbacks = mCallbacks;
-        this.mFragmentContainerView = mFragmentContainerView;
+    public void updateMenu() {
+        mMainMenu = mNavigationView.getMenu();
+        NavigationCategory cat = categories.get(0);
+        for (final NavigationItem item : cat.getItems()) {
+            final MenuItem menuItem = mMainMenu.add(item.getTitle());
+            menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem mi) {
+                    if (mi.getItemId() == menuItem.getItemId()) {
+                        navigate(item.getItem());
+                        return true;
+                    }
+                    return false;
+                }
+            });
+        }
 
+    }
+
+    public void setNavigationDrawerParams(DrawerLayout mDrawerLayout,
+                                          NavigationView navigationView) {
+        this.mNavigationView = navigationView;
+        this.mDrawerLayout = mDrawerLayout;
+        updateMenu();
     }
 
     protected Context getContext() {
@@ -235,6 +253,7 @@ public class Navigation {
         ((MainActivity)context).getSupportActionBar().setTitle(items.get(position).getTitle());
         ft.replace(R.id.container, items.get(position).load(args));
         ft.commit();
+        mDrawerLayout.closeDrawers();
     }
 
     /**
@@ -244,7 +263,7 @@ public class Navigation {
      */
     public int navigate(int position) {
         if (mDrawerLayout != null) {
-            mDrawerLayout.closeDrawer(mFragmentContainerView);
+            mDrawerLayout.closeDrawers();
         }
 
         LinkedList<NavigationItem> items = getItems(false);
@@ -253,9 +272,7 @@ public class Navigation {
     }
 
     public void highlightNavigation(Navigation.ItemNames item) {
-        if (mDrawerListView != null) {
-            mDrawerListView.setItemChecked(getItemPos(item), true);
-        }
+        // TODO: Highlight?
     }
 
     public int getItemPos(Navigation.ItemNames item) {
@@ -285,11 +302,12 @@ public class Navigation {
     }
 
     public void updateActionBarButton() {
-        if (((MainActivity) context).getSupportFragmentManager().getBackStackEntryCount() > 0) {
+        return;
+        /*if (((MainActivity) context).getSupportFragmentManager().getBackStackEntryCount() > 0) {
             ((MainActivity) context).getSupportActionBar().setHomeAsUpIndicator(context.getResources().getDrawable(R.drawable.ic_action_back));
         } else {
             ((MainActivity) context).getSupportActionBar().setHomeAsUpIndicator(context.getResources().getDrawable(R.mipmap.ic_launcher));
-        }
+        }*/
     }
 
     private void clearBackStack() {

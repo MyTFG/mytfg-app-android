@@ -8,11 +8,14 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -41,17 +44,16 @@ public class MainActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     /**
-     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
-     */
-    public static NavigationDrawerFragment mNavigationDrawerFragment;
-
-    /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
     public static Navigation navigation;
     public static Context context;
     public static ProgressBar loadingBar;
+    public static Toolbar toolbar;
+    private DrawerLayout drawerLayout;
+    public static NavigationView navigationView;
+    private static View fragmentView;
 
 
     private BroadcastReceiver mRegistrationBroadcastReceiver;
@@ -62,6 +64,26 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main);
+
+        fragmentView = findViewById(R.id.container);
+
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+
+        drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
+                this,
+                drawerLayout,
+                toolbar,
+                R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close
+        );
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+
         onNewIntent(getIntent());
 
         GcmCallbackRegistration.registerAll();
@@ -70,25 +92,8 @@ public class MainActivity extends AppCompatActivity
 
         navigation = new Navigation(this);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // Set Status Bar Color
-            Window window = getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(MyTFG.color(R.color.blue_dark));
-        };
-
-        setContentView(R.layout.activity_main);
         loadingBar = (ProgressBar) findViewById(R.id.loading_bar);
-
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
-
-        // Set up the drawer.
-        mNavigationDrawerFragment.setUp(
-                R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
 
         // Init GCM
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
@@ -112,6 +117,12 @@ public class MainActivity extends AppCompatActivity
         } else {
             Log.i("CPS", "Failed.");
         }
+
+        navigation.setNavigationDrawerParams(
+                drawerLayout,
+                navigationView
+        );
+        navigation.navigate(0);
     }
 
     protected void onNewIntent(Intent intent) {
@@ -153,14 +164,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
-            // Only show items in the action bar relevant to this screen
-            // if the drawer is not showing. Otherwise, let the drawer
-            // decide what to show in the action bar.
-            getMenuInflater().inflate(R.menu.main, menu);
-            restoreActionBar();
-            return true;
-        }
         return super.onCreateOptionsMenu(menu);
     }
 
