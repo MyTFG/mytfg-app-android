@@ -140,6 +140,8 @@ public class TerminalDetailFragment extends AbstractFragment {
         if (isTitle) {
             textView.setPaintFlags(Paint.FAKE_BOLD_TEXT_FLAG);
             textView.setBackgroundColor(MyTFG.color(R.color.blue_accent));
+        } else {
+            textView.setTextColor(MyTFG.color(R.color.blue_dark));
         }
         textView.setPadding(25, 25, 25, 25);
         textView.setText(text);
