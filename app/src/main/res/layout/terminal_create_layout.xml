@@ -20,7 +20,7 @@
             android:clipToPadding="false"
             android:padding="5dp"
             android:layout_gravity="top"
-            android:background="@color/blue_dark"
+            android:background="@color/blue_medium"
             android:textColor="@color/white" />
 
 

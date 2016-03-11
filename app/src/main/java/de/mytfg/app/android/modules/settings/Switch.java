@@ -40,7 +40,7 @@ public class Switch extends SettingsItem {
 
         android.widget.Switch sw = new android.widget.Switch(MainActivity.context);
 
-        sw.setTextColor(context.getResources().getColor(R.color.white));
+        sw.setTextColor(context.getResources().getColor(R.color.blue_dark));
         sw.setText(title);
         sw.setChecked(state);
         sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
