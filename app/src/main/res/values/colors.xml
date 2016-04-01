@@ -2,6 +2,7 @@
 <resources>
     <color name="blue_dark">#00014a</color>
     <color name="blue_medium">#394689</color>
+    <color name="blue_light">#7B7DD2</color>
     <color name="blue_accent">#111D5D</color>
     <color name="orange_accent">#FF7400</color>
     <color name="white">#FFFFFF</color>

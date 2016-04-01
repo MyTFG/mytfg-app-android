@@ -6,6 +6,7 @@
     android:layout_gravity="start"
     app:headerLayout="@layout/navigation_header"
     android:id="@+id/navigation_view"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    style="@style/AppTheme.Navi">
 
 </android.support.design.widget.NavigationView>

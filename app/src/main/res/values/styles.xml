@@ -14,7 +14,7 @@
         <item name="actionBarTheme">@style/ThemeOverlay.AppTheme.ActionBar</item>
         <item name="actionBarPopupTheme">@style/ThemeOverlay.AppTheme.PopupMenu</item>
 
-        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:windowBackground">@color/blue_light</item>
         <item name="android:textColorPrimary">@color/gray</item>
         <item name="android:textColorSecondary">@color/gray</item>
         <item name="android:textColorHint">@color/blue_dark</item>
@@ -44,7 +44,7 @@
 
     <style name="Widget.AppTheme.ActionBar" parent="Widget.AppCompat.ActionBar.Solid">
         <!-- action bar background -->
-        <item name="background">@drawable/action_bar</item>
+        <item name="background">@color/blue_dark</item>
         <!-- action bar elevation -->
         <item name="elevation">4dp</item>
     </style>
@@ -72,6 +72,10 @@
     </style>
 
     <style name="AppTheme.Toolbar" parent="AppTheme.Toolbar.Base">
+    </style>
+
+    <style name="AppTheme.Navi" parent="Widget.Design.NavigationView">
+        <item name="android:background">@color/white</item>
     </style>
 
 </resources>
