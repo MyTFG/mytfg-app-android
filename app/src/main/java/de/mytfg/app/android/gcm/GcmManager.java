@@ -56,7 +56,7 @@ public class GcmManager {
         hide(new GcmNotification(bundle));
     }
 
-    public void notify(String from, Bundle data) {
+    public void notify(Context context, String from, Bundle data) {
         GcmNotification notification = new GcmNotification(data);
 
         int id;
@@ -69,7 +69,7 @@ public class GcmManager {
             notificationIds.add(id, notification);
         }
 
-        this.sendNotification(data.getString("message"), data.getString("title"), id);
+        this.sendNotification(context, data.getString("message"), data.getString("title"), id);
 
         // Call on receive callback if existing
         GcmCallback toCall = receiveCallbacks.get(notification.getType());
@@ -98,19 +98,19 @@ public class GcmManager {
         });
     }
 
-    private void sendNotification(String message, String title, int id) {
+    private void sendNotification(Context context, String message, String title, int id) {
 
-        Intent intent = new Intent(MainActivity.context, MainActivity.class);
+        Intent intent = new Intent(context, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         intent.putExtra("notificationId", id);
-        PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.context, 0 /* Request code */, intent,
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0 /* Request code */, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-        Bitmap bm = BitmapFactory.decodeResource(MainActivity.context.getResources(), R.mipmap.ic_launcher);
+        Bitmap bm = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher);
 
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(MainActivity.context)
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
                 .setLargeIcon(bm)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(title)
@@ -122,7 +122,7 @@ public class GcmManager {
                 .setContentIntent(pendingIntent);
 
         NotificationManager notificationManager =
-                (NotificationManager) MainActivity.context.getSystemService(Context.NOTIFICATION_SERVICE);
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(id, notificationBuilder.build());
     }

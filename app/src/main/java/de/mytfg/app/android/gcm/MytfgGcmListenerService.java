@@ -24,6 +24,6 @@ public class MytfgGcmListenerService extends GcmListenerService {
     // [START receive_message]
     @Override
     public void onMessageReceived(String from, Bundle data) {
-        MyTFG.gcmManager.notify(from, data);
+        MyTFG.gcmManager.notify(this, from, data);
     }
 }
