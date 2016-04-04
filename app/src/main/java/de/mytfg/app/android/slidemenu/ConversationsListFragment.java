@@ -59,9 +59,7 @@ public class ConversationsListFragment extends AbstractFragment {
             }
         });
 
-        if (conversations.getLastPulledConversations() == null) {
-            conversations.refresh();
-        } else {
+        if (conversations.getLastPulledConversations() != null) {
             adapter.setConversations(conversations.getLastPulledConversations());
         }
 
@@ -74,6 +72,18 @@ public class ConversationsListFragment extends AbstractFragment {
         });
 
         return view;
+    }
+
+     @Override
+    public void onResume() {
+         super.onResume();
+         conversations.setAutoRefresh(true);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        conversations.setAutoRefresh(false);
     }
 }
 

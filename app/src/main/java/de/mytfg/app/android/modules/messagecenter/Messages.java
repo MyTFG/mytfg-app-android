@@ -18,10 +18,12 @@ public class Messages extends Module {
     private final static int MESSAGE_COUNT = 500;
     private final static int CONVERSATIONS_CACHE = 10;
 
-    private long conversationId;
+    private long currentConversationId;
     private OnConversationReceived onConversationReceived;
     private HashMap<Long, Conversation> conversations = new HashMap<>();
     private HashMap<Long, Long> conversationsAge = new HashMap<>();
+    private HashMap<Long, Boolean> fresh = new HashMap<>();
+    private boolean autoRefresh = false;
 
     public interface OnConversationReceived {
         void callback(Conversation conversation, boolean success);
@@ -32,11 +34,14 @@ public class Messages extends Module {
     }
 
     public void refresh() {
-        refresh(false);
+        if(fresh.get(currentConversationId) != new Boolean(true)) {
+            forceRefresh();
+        }
     }
-    public void refresh(final boolean forceReload) {
+
+    private void forceRefresh() {
         ApiParams params = new ApiParams();
-        params.addParam("id", String.valueOf(conversationId));
+        params.addParam("id", String.valueOf(currentConversationId));
         params.addParam("count", String.valueOf(MESSAGE_COUNT));
         MytfgApi.ApiCallback apiCallback = new MytfgApi.ApiCallback() {
             @Override
@@ -65,6 +70,9 @@ public class Messages extends Module {
                     }
                 }
                 onConversationReceived.callback(getLastPulledConversation(), !error);
+                if(!error) {
+                    fresh.put(currentConversationId, true);
+                }
             }
         };
         MytfgApi.call("ajax_message_get-conversation", params, apiCallback);
@@ -72,7 +80,7 @@ public class Messages extends Module {
 
     public void sendMessage(final SendMessageConfirmedCallback callback, String text) {
         ApiParams params = new ApiParams();
-        params.addParam("conversation", String.valueOf(conversationId));
+        params.addParam("conversation", String.valueOf(currentConversationId));
         params.addParam("message", text);
         MytfgApi.ApiCallback apiCallback = new MytfgApi.ApiCallback() {
             @Override
@@ -92,12 +100,20 @@ public class Messages extends Module {
         MytfgApi.call("ajax_message_new-answer", params, apiCallback);
     }
 
-    public long getConversationId() {
-        return conversationId;
+    public void invalidate(long conversationId) {
+        if(autoRefresh && conversationId == currentConversationId) {
+            forceRefresh();
+        } else {
+            fresh.put(conversationId, false);
+        }
     }
 
-    public void setConversationId(long conversationId) {
-        if(conversationId != this.conversationId && conversations.size() >= CONVERSATIONS_CACHE && !conversations.containsKey(conversationId)) {
+    public long getCurrentConversationId() {
+        return currentConversationId;
+    }
+
+    public void setCurrentConversationId(long currentConversationId) {
+        if(currentConversationId != this.currentConversationId && conversations.size() >= CONVERSATIONS_CACHE && !conversations.containsKey(currentConversationId)) {
             Map.Entry<Long, Long> oldest = null;
             for(Map.Entry<Long, Long> entry : conversationsAge.entrySet()) {
                 if (oldest == null || oldest.getValue() > entry.getValue()) {
@@ -109,8 +125,8 @@ public class Messages extends Module {
                 conversations.remove(oldest.getKey());
             }
         }
-        this.conversationId = conversationId;
-        conversationsAge.put(conversationId, System.currentTimeMillis());
+        this.currentConversationId = currentConversationId;
+        conversationsAge.put(currentConversationId, System.currentTimeMillis());
     }
 
     public OnConversationReceived getOnConversationReceived() {
@@ -122,6 +138,17 @@ public class Messages extends Module {
     }
 
     public Conversation getLastPulledConversation() {
-        return conversations.get(conversationId);
+        return conversations.get(currentConversationId);
+    }
+
+    public boolean isAutoRefresh() {
+        return autoRefresh;
+    }
+
+    public void setAutoRefresh(boolean autoRefresh) {
+        this.autoRefresh = autoRefresh;
+        if(autoRefresh) {
+            refresh();
+        }
     }
 }

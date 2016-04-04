@@ -72,12 +72,12 @@ public class ConversationFragment extends AbstractFragment {
         messages = (Messages) MyTFG.moduleManager.getModule(Modules.CONVERSATION);
         if(args.getLong("conversationId") == 0) {
             if(savedInstanceState.getLong("conversationId") != 0) {
-                messages.setConversationId(savedInstanceState.getLong("conversationId"));
+                messages.setCurrentConversationId(savedInstanceState.getLong("conversationId"));
             } else {
                 Log.e("Conversation", "No conversation id given!");
             }
         } else {
-            messages.setConversationId(args.getLong("conversationId"));
+            messages.setCurrentConversationId(args.getLong("conversationId"));
         }
         messages.setOnConversationReceived(new Messages.OnConversationReceived() {
             @Override
@@ -89,11 +89,10 @@ public class ConversationFragment extends AbstractFragment {
                 }
             }
         });
-        if(messages.getLastPulledConversation() == null) {
-            messages.refresh(true);
-        } else {
+        if(messages.getLastPulledConversation() != null) {
             updateConversation(messages.getLastPulledConversation());
         }
+        messages.setAutoRefresh(true);
 
         //TODO: hide keyboard on leave
 
@@ -111,7 +110,14 @@ public class ConversationFragment extends AbstractFragment {
     @Override
     public void onResume() {
         super.onResume();
-        MyTFG.gcmManager.hide("conversation-" + messages.getConversationId());
+        MyTFG.gcmManager.hide("conversation-" + messages.getCurrentConversationId());
+        messages.setAutoRefresh(true);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        messages.setAutoRefresh(false);
     }
 
 }

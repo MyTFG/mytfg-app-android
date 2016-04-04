@@ -20,12 +20,20 @@ public class Conversations extends Module {
 
     private OnConversationsReceived onConversationsReceived;
     private List<Conversation> conversations;
+    private boolean fresh = false;
+    private boolean autoRefresh = false;
 
     public interface OnConversationsReceived {
         void callback(List<Conversation> conversations, boolean success);
     }
 
     public void refresh() {
+        if(!fresh) {
+            forceRefresh();
+        }
+    }
+
+    private void forceRefresh() {
         ApiParams params = new ApiParams();
         MytfgApi.ApiCallback apiCallback = new MytfgApi.ApiCallback() {
             @Override
@@ -61,9 +69,20 @@ public class Conversations extends Module {
                     error = true;
                 }
                 onConversationsReceived.callback(conversations, !error);
+                if(!error) {
+                    fresh = true;
+                }
             }
         };
         MytfgApi.call("ajax_message_list-conversations", params, apiCallback);
+    }
+
+    public void invalidate() {
+        if(autoRefresh) {
+            forceRefresh();
+        } else {
+            fresh = false;
+        }
     }
 
     public OnConversationsReceived getOnConversationsReceived() {
@@ -76,5 +95,16 @@ public class Conversations extends Module {
 
     public List<Conversation> getLastPulledConversations() {
         return conversations;
+    }
+
+    public boolean isAutoRefresh() {
+        return autoRefresh;
+    }
+
+    public void setAutoRefresh(boolean autoRefresh) {
+        this.autoRefresh = autoRefresh;
+        if(autoRefresh) {
+            refresh();
+        }
     }
 }

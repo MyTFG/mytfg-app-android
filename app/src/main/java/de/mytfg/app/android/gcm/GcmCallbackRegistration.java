@@ -44,24 +44,11 @@ public class GcmCallbackRegistration {
             public void callback(GcmNotification notification) {
                 String[] grouper = notification.getGrouper().split("-");
                 if(grouper.length == 2 && grouper[0].equals("conversation")) {
-                    Messages messages = (Messages) MyTFG.moduleManager.getModule(Modules.CONVERSATION);
                     long conversationId = Long.parseLong(grouper[1]);
-                    if(messages.getConversationId() == conversationId) {
-                        messages.refresh();
-                    }
+                    Messages messages = (Messages) MyTFG.moduleManager.getModule(Modules.CONVERSATION);
+                    messages.invalidate(conversationId);
                     Conversations conversations = (Conversations) MyTFG.moduleManager.getModule(Modules.CONVERSATIONS);
-                    if(conversations.getLastPulledConversations() != null) {
-                        boolean newConversation = true;
-                        for (Conversation conversation : conversations.getLastPulledConversations()) {
-                            if(conversation.getId() == conversationId) {
-                                newConversation = false;
-                                break;
-                            }
-                        }
-                        if(newConversation) {
-                            conversations.refresh();
-                        }
-                    }
+                    conversations.invalidate();
                 }
             }
         });
